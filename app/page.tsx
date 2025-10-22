@@ -1,103 +1,72 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { useState, useCallback } from "react";
+import MuseumScene from "@/components/museum-scene";
+import InfoModal from "@/components/info-modal";
+import InstructionModal from "@/components/instruction-modal";
+import Minimap from "@/components/minimap";
+import type { ExhibitData } from "@/types/museum";
+
+export default function MuseumPage() {
+  const [selectedExhibit, setSelectedExhibit] = useState<ExhibitData | null>(
+    null
+  );
+  const [visitedExhibits, setVisitedExhibits] = useState<Set<string>>(
+    new Set()
+  );
+  const [showInstructions, setShowInstructions] = useState(true);
+
+  const handleExhibitView = useCallback((exhibit: ExhibitData) => {
+    setSelectedExhibit(exhibit);
+    setVisitedExhibits((prev) => new Set([...prev, exhibit.id]));
+  }, []);
+
+  const handleCloseModal = useCallback(() => {
+    setSelectedExhibit(null);
+  }, []);
+
+  const handleCloseInstructions = useCallback(() => {
+    setShowInstructions(false);
+  }, []);
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="min-h-screen bg-[#1a1a2e] flex flex-col">
+      <header className="bg-[#16213e] border-b border-[#0f3460] py-6 px-4">
+        <h1 className="text-3xl md:text-4xl font-bold text-center text-[#e8e8e8] tracking-tight">
+          BẢO TÀNG CHỦ NGHĨA XÃ HỘI KHOA HỌC
+        </h1>
+        <p className="text-center text-[#94a3b8] mt-2 text-sm">
+          Sử dụng phím mũi tên hoặc WASD để di chuyển • Nhấn E để xem nội dung
+        </p>
+      </header>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
+      <main className="flex-1 relative">
+        <MuseumScene
+          onExhibitInteract={handleExhibitView}
+          visitedExhibits={visitedExhibits}
+        />
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+      <InstructionModal
+        isOpen={showInstructions}
+        onClose={handleCloseInstructions}
+      />
+
+      <InfoModal
+        exhibit={selectedExhibit}
+        isOpen={!!selectedExhibit}
+        onClose={handleCloseModal}
+      />
+
+      {!showInstructions && <Minimap visitedExhibits={visitedExhibits} />}
+
+      {visitedExhibits.size > 0 && (
+        <div className="fixed bottom-4 right-4 bg-[#16213e] border border-[#0f3460] rounded-lg px-4 py-2 text-[#e8e8e8]">
+          <p className="text-sm">
+            Đã tham quan: {visitedExhibits.size}/3 khu trưng bày
+          </p>
+        </div>
+      )}
     </div>
   );
 }
