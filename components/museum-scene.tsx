@@ -26,45 +26,35 @@ export default function MuseumScene({
       const Phaser = await import("phaser");
 
       class MainScene extends Phaser.Scene {
-        private player!: PhaserType.Physics.Arcade.Sprite;
-        private cursors!: PhaserType.Types.Input.Keyboard.CursorKeys;
+        private player!: Phaser.Physics.Arcade.Sprite;
+        private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
         private wasd!: {
-          W: PhaserType.Input.Keyboard.Key;
-          A: PhaserType.Input.Keyboard.Key;
-          S: PhaserType.Input.Keyboard.Key;
-          D: PhaserType.Input.Keyboard.Key;
+          W: Phaser.Input.Keyboard.Key;
+          A: Phaser.Input.Keyboard.Key;
+          S: Phaser.Input.Keyboard.Key;
+          D: Phaser.Input.Keyboard.Key;
         };
-        private exhibits: PhaserType.Physics.Arcade.Sprite[] = [];
+        private exhibits: Phaser.Physics.Arcade.Sprite[] = [];
         private nearExhibit: ExhibitData | null = null;
-        private interactKey!: PhaserType.Input.Keyboard.Key;
-        private promptText!: PhaserType.GameObjects.Text;
-        private walls: PhaserType.GameObjects.Rectangle[] = [];
+        private interactKey!: Phaser.Input.Keyboard.Key;
+        private promptText!: Phaser.GameObjects.Text;
+        private walls: Phaser.GameObjects.Rectangle[] = [];
 
         constructor() {
           super({ key: "MainScene" });
         }
 
         preload() {
-          this.createPlayerGraphic();
+          this.load.image("player", "/public/sprites/character.jpg");
           this.createExhibitGraphics();
           this.createPlantGraphic();
           this.createBenchGraphic();
         }
 
-        createPlayerGraphic() {
-          const graphics = this.make.graphics({ x: 0, y: 0 });
-          graphics.fillStyle(0x4ade80, 1);
-          graphics.fillCircle(16, 16, 16);
-          graphics.fillStyle(0x22c55e, 1);
-          graphics.fillCircle(16, 12, 6);
-          graphics.generateTexture("player", 32, 32);
-          graphics.destroy();
-        }
-
         createExhibitGraphics() {
           const colors = [
-            0x3b82f6, 0x8b5cf6, 0x06b6d4, 0xef4444, 0xf97316, 0xdc2626, 0xf59e0b,
-            0x10b981, 0x14b8a6, 0x6366f1,
+            0x3b82f6, 0x8b5cf6, 0x06b6d4, 0xef4444, 0xf97316, 0xdc2626,
+            0xf59e0b, 0x10b981, 0x14b8a6, 0x6366f1,
           ];
 
           museumData.forEach((exhibit, index) => {
@@ -235,12 +225,17 @@ export default function MuseumScene({
               .setOrigin(0.5);
 
             this.add
-              .text(exhibit.position.x, exhibit.position.y + 100, exhibit.title, {
-                fontSize: "14px",
-                color: "#e8e8e8",
-                align: "center",
-                wordWrap: { width: 180 },
-              })
+              .text(
+                exhibit.position.x,
+                exhibit.position.y + 100,
+                exhibit.title,
+                {
+                  fontSize: "14px",
+                  color: "#e8e8e8",
+                  align: "center",
+                  wordWrap: { width: 180 },
+                }
+              )
               .setOrigin(0.5);
 
             const spotlight = this.add.circle(
@@ -260,6 +255,7 @@ export default function MuseumScene({
           });
 
           this.player = this.physics.add.sprite(150, 600, "player");
+          this.player.setScale(0.8);
           this.player.setCollideWorldBounds(true);
 
           this.walls.forEach((wall) => {
