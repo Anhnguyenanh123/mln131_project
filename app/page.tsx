@@ -49,7 +49,8 @@ export default function MuseumPage() {
         }, 0);
       }
     }
-  }, [currentPlayer]); // Removed allPlayers from dependencies to break the loop
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPlayer]);
 
   useEffect(() => {
     if (currentPlayer && !isLoadingPlayer.current && allPlayers.length > 0) {
@@ -119,11 +120,6 @@ export default function MuseumPage() {
     setShowInstructions(false);
   }, []);
 
-  const handleStartQuiz = useCallback((roomNumber: number) => {
-    setCurrentQuizRoom(roomNumber);
-    setShowQuiz(true);
-  }, []);
-
   const handleQuizPass = useCallback(() => {
     if (currentQuizRoom !== null) {
       setUnlockedRooms((prev) => {
@@ -148,7 +144,6 @@ export default function MuseumPage() {
   }, []);
 
   const handleDoorInteract = useCallback((roomNumber: number) => {
-    // The door leads to roomNumber, so we need to pass quiz for roomNumber - 1
     const quizRoomNumber = roomNumber - 1;
     setCurrentQuizRoom(quizRoomNumber);
     setShowQuiz(true);
