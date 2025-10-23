@@ -49,8 +49,7 @@ export default function MuseumPage() {
         }, 0);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPlayer]);
+  }, [currentPlayer]); // Removed allPlayers from dependencies to break the loop
 
   useEffect(() => {
     if (currentPlayer && !isLoadingPlayer.current && allPlayers.length > 0) {
@@ -148,6 +147,13 @@ export default function MuseumPage() {
     setShowInstructions(false);
   }, []);
 
+  const handleDoorInteract = useCallback((roomNumber: number) => {
+    // The door leads to roomNumber, so we need to pass quiz for roomNumber - 1
+    const quizRoomNumber = roomNumber - 1;
+    setCurrentQuizRoom(quizRoomNumber);
+    setShowQuiz(true);
+  }, []);
+
   if (showStartScreen) {
     return (
       <StartScreen
@@ -189,6 +195,7 @@ export default function MuseumPage() {
       <main className="flex-1 relative">
         <MuseumScene
           onExhibitInteract={handleExhibitView}
+          onDoorInteract={handleDoorInteract}
           visitedExhibits={visitedExhibits}
           unlockedRooms={unlockedRooms}
           username={currentPlayer || ""}
@@ -224,22 +231,6 @@ export default function MuseumPage() {
           visitedExhibits={visitedExhibits}
           unlockedRooms={unlockedRooms}
         />
-      )}
-
-      {!showInstructions && (
-        <div className="fixed bottom-4 left-4 space-y-2">
-          {Array.from(unlockedRooms)
-            .filter((room) => room <= 7)
-            .map((room) => (
-              <button
-                key={room}
-                onClick={() => handleStartQuiz(room)}
-                className="block w-full px-4 py-2 bg-[#16213e] border border-[#0f3460] rounded-lg text-[#e8e8e8] hover:bg-[#0f3460] transition-colors text-sm"
-              >
-                Quiz Phòng {room}
-              </button>
-            ))}
-        </div>
       )}
 
       {visitedExhibits.size > 0 && (
