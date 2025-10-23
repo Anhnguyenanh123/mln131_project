@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import MuseumScene from "@/components/museum-scene";
 import InfoModal from "@/components/info-modal";
 import InstructionModal from "@/components/instruction-modal";
 import QuizModal from "@/components/quiz-modal";
 import Minimap from "@/components/minimap";
-import type { ExhibitData } from "@/types/museum";
+import StartScreen from "@/components/start-screen";
+import type { ExhibitData, Player } from "@/types/museum";
 import { roomQuizzes } from "@/data/museum-data";
 
 export default function MuseumPage() {
@@ -16,31 +17,85 @@ export default function MuseumPage() {
   const [visitedExhibits, setVisitedExhibits] = useState<Set<string>>(
     new Set()
   );
-  const [showInstructions, setShowInstructions] = useState(true);
+  const [showInstructions, setShowInstructions] = useState(false);
   const [unlockedRooms, setUnlockedRooms] = useState<Set<number>>(new Set([1]));
   const [showQuiz, setShowQuiz] = useState(false);
   const [currentQuizRoom, setCurrentQuizRoom] = useState<number | null>(null);
 
-  // Load progress from localStorage
+  const [currentPlayer, setCurrentPlayer] = useState<string | null>(null);
+  const [allPlayers, setAllPlayers] = useState<Player[]>([]);
+  const [showStartScreen, setShowStartScreen] = useState(true);
+
+  const isLoadingPlayer = useRef(false);
+
   useEffect(() => {
-    const saved = localStorage.getItem("museum-progress");
-    if (saved) {
-      const data = JSON.parse(saved);
-      setUnlockedRooms(new Set(data.unlockedRooms || [1]));
-      setVisitedExhibits(new Set(data.visitedExhibits || []));
+    const playersData = localStorage.getItem("museum-players");
+    if (playersData) {
+      const players: Player[] = JSON.parse(playersData);
+      setAllPlayers(players);
     }
   }, []);
 
-  // Save progress to localStorage
   useEffect(() => {
-    localStorage.setItem(
-      "museum-progress",
-      JSON.stringify({
-        unlockedRooms: Array.from(unlockedRooms),
-        visitedExhibits: Array.from(visitedExhibits),
-      })
-    );
-  }, [unlockedRooms, visitedExhibits]);
+    if (currentPlayer && allPlayers.length > 0) {
+      const player = allPlayers.find((p) => p.username === currentPlayer);
+      if (player) {
+        isLoadingPlayer.current = true;
+        setUnlockedRooms(new Set(player.unlockedRooms));
+        setVisitedExhibits(new Set(player.visitedExhibits));
+        setShowInstructions(true);
+        setTimeout(() => {
+          isLoadingPlayer.current = false;
+        }, 0);
+      }
+    }
+  }, [currentPlayer]); // Removed allPlayers from dependencies to break the loop
+
+  useEffect(() => {
+    if (currentPlayer && !isLoadingPlayer.current && allPlayers.length > 0) {
+      const updatedPlayers = allPlayers.map((p) =>
+        p.username === currentPlayer
+          ? {
+              ...p,
+              unlockedRooms: Array.from(unlockedRooms),
+              visitedExhibits: Array.from(visitedExhibits),
+            }
+          : p
+      );
+
+      const hasChanged =
+        JSON.stringify(allPlayers) !== JSON.stringify(updatedPlayers);
+      if (hasChanged) {
+        setAllPlayers(updatedPlayers);
+        localStorage.setItem("museum-players", JSON.stringify(updatedPlayers));
+      }
+    }
+  }, [unlockedRooms, visitedExhibits, currentPlayer, allPlayers]);
+
+  const handleStartGame = useCallback(
+    (username: string) => {
+      const newPlayer: Player = {
+        username,
+        createdAt: new Date().toISOString(),
+        unlockedRooms: [1],
+        visitedExhibits: [],
+      };
+
+      const existingPlayers = allPlayers.filter((p) => p.username !== username);
+      const updatedPlayers = [...existingPlayers, newPlayer];
+
+      setAllPlayers(updatedPlayers);
+      localStorage.setItem("museum-players", JSON.stringify(updatedPlayers));
+      setCurrentPlayer(username);
+      setShowStartScreen(false);
+    },
+    [allPlayers]
+  );
+
+  const handleSelectPlayer = useCallback((username: string) => {
+    setCurrentPlayer(username);
+    setShowStartScreen(false);
+  }, []);
 
   const handleExhibitView = useCallback(
     (exhibit: ExhibitData) => {
@@ -86,15 +141,48 @@ export default function MuseumPage() {
     setCurrentQuizRoom(null);
   }, []);
 
+  const handleLogout = useCallback(() => {
+    setCurrentPlayer(null);
+    setShowStartScreen(true);
+    setShowInstructions(false);
+  }, []);
+
+  if (showStartScreen) {
+    return (
+      <StartScreen
+        onStart={handleStartGame}
+        existingPlayers={allPlayers}
+        onSelectPlayer={handleSelectPlayer}
+      />
+    );
+  }
+
   return (
     <div className="min-h-screen bg-[#1a1a2e] flex flex-col">
       <header className="bg-[#16213e] border-b border-[#0f3460] py-6 px-4">
-        <h1 className="text-3xl md:text-4xl font-bold text-center text-[#e8e8e8] tracking-tight">
-          BẢO TÀNG CHỦ NGHĨA XÃ HỘI KHOA HỌC
-        </h1>
-        <p className="text-center text-[#94a3b8] mt-2 text-sm">
-          Sử dụng phím mũi tên hoặc WASD để di chuyển • Nhấn E để xem nội dung
-        </p>
+        <div className="flex items-center justify-between max-w-7xl mx-auto">
+          <div className="flex-1">
+            <h1 className="text-3xl md:text-4xl font-bold text-center text-[#e8e8e8] tracking-tight">
+              BẢO TÀNG CHỦ NGHĨA XÃ HỘI KHOA HỌC
+            </h1>
+            <p className="text-center text-[#94a3b8] mt-2 text-sm">
+              Sử dụng phím mũi tên hoặc WASD để di chuyển • Nhấn E để xem nội
+              dung
+            </p>
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="text-right">
+              <p className="text-[#e8e8e8] font-semibold">{currentPlayer}</p>
+              <p className="text-[#94a3b8] text-xs">Người chơi</p>
+            </div>
+            <button
+              onClick={handleLogout}
+              className="px-4 py-2 bg-[#0f3460] hover:bg-[#1e3a5f] text-[#e8e8e8] rounded-lg text-sm transition-colors"
+            >
+              Đổi người chơi
+            </button>
+          </div>
+        </div>
       </header>
 
       <main className="flex-1 relative">
@@ -102,6 +190,7 @@ export default function MuseumPage() {
           onExhibitInteract={handleExhibitView}
           visitedExhibits={visitedExhibits}
           unlockedRooms={unlockedRooms}
+          username={currentPlayer || ""}
         />
       </main>
 
