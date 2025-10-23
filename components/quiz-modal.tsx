@@ -54,11 +54,9 @@ export default function QuizModal({
       setSelectedAnswer(null);
       setShowResult(false);
     } else {
-      // Quiz completed
       if (correctCount === questions.length) {
         onPass();
       } else {
-        // Failed - restart
         setCurrentQuestion(0);
         setSelectedAnswer(null);
         setShowResult(false);

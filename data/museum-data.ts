@@ -1,7 +1,6 @@
 import type { ExhibitData, RoomQuiz } from "@/types/museum";
 
 export const museumData: ExhibitData[] = [
-  // ROOM 1: Khởi nguồn & Nền tảng dân chủ XHCN
   {
     id: "room1-exhibit1",
     title: "Dòng thời gian hình thành & phát triển",
@@ -55,7 +54,6 @@ export const museumData: ExhibitData[] = [
 6. Tập trung dân chủ trong tổ chức bộ máy`,
   },
 
-  // ROOM 2: Bản chất và hình thức thực hiện dân chủ
   {
     id: "room2-exhibit1",
     title: "Bản chất của nền dân chủ XHCN Việt Nam",
@@ -94,7 +92,6 @@ Dân chủ không chỉ là mục tiêu (dân giàu, nước mạnh, dân chủ,
 **Nhân dân làm chủ:** là chủ thể quyền lực, thực hiện quyền làm chủ thông qua bầu cử, giám sát, phản biện, tham gia xây dựng chính sách.`,
   },
 
-  // ROOM 3: Nhà nước pháp quyền XHCN
   {
     id: "room3-exhibit1",
     title: "Khái niệm & giá trị cốt lõi",
@@ -142,7 +139,6 @@ Dân chủ không chỉ là mục tiêu (dân giàu, nước mạnh, dân chủ,
 • Đề cao trách nhiệm giải trình, minh bạch, kiểm soát quyền lực`,
   },
 
-  // ROOM 4: Phát huy dân chủ XHCN
   {
     id: "room4-exhibit1",
     title: "Xây dựng thể chế kinh tế thị trường",
@@ -194,7 +190,6 @@ Dân chủ không chỉ là mục tiêu (dân giàu, nước mạnh, dân chủ,
 • Vận động nhân dân thực hiện chủ trương, chính sách`,
   },
 
-  // ROOM 5: Phòng, chống tham nhũng
   {
     id: "room5-exhibit1",
     title: "Nhiệm vụ cấp bách và lâu dài",
@@ -249,7 +244,6 @@ Khi nhân dân tin tưởng vào sự công bằng và minh bạch, nền tảng
 "Dân biết, dân bàn, dân làm, dân kiểm tra, dân giám sát, dân thụ hưởng" là chuẩn mực dân chủ toàn diện.`,
   },
 
-  // ROOM 6: Đổi mới thể chế, chuyển đổi số
   {
     id: "room6-exhibit1",
     title: "Đổi mới thể chế – Nền tảng cho dân chủ",
@@ -306,7 +300,6 @@ Khi nhân dân tin tưởng vào sự công bằng và minh bạch, nền tảng
 • Tạo hệ sinh thái đổi mới sáng tạo`,
   },
 
-  // ROOM 7: Trách nhiệm công dân
   {
     id: "room7-exhibit1",
     title: "Chấp hành pháp luật về phòng, chống tham nhũng",
@@ -352,8 +345,6 @@ Người tố cáo được bảo vệ khỏi trả thù, trù dập, đồng th
 
 "Nhân dân không đứng ngoài cuộc – mà là người đồng hành, giám sát và kiến tạo Nhà nước liêm chính."`,
   },
-
-  // ROOM 8 & 9: Placeholders for future content
   {
     id: "room8-exhibit1",
     title: "Nội dung sẽ được cập nhật",
@@ -371,7 +362,6 @@ Người tố cáo được bảo vệ khỏi trả thù, trù dập, đồng th
 ];
 
 export const roomQuizzes: RoomQuiz[] = [
-  // Room 1 Quiz
   {
     roomNumber: 1,
     questions: [
@@ -407,7 +397,6 @@ export const roomQuizzes: RoomQuiz[] = [
       },
     ],
   },
-  // Room 2 Quiz
   {
     roomNumber: 2,
     questions: [
@@ -444,7 +433,6 @@ export const roomQuizzes: RoomQuiz[] = [
       },
     ],
   },
-  // Room 3 Quiz
   {
     roomNumber: 3,
     questions: [
@@ -481,7 +469,6 @@ export const roomQuizzes: RoomQuiz[] = [
       },
     ],
   },
-  // Room 4 Quiz
   {
     roomNumber: 4,
     questions: [
@@ -519,7 +506,7 @@ export const roomQuizzes: RoomQuiz[] = [
       },
     ],
   },
-  // Room 5 Quiz
+
   {
     roomNumber: 5,
     questions: [
@@ -557,7 +544,7 @@ export const roomQuizzes: RoomQuiz[] = [
       },
     ],
   },
-  // Room 6 Quiz
+
   {
     roomNumber: 6,
     questions: [
@@ -593,7 +580,7 @@ export const roomQuizzes: RoomQuiz[] = [
       },
     ],
   },
-  // Room 7 Quiz
+
   {
     roomNumber: 7,
     questions: [

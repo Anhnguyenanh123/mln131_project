@@ -49,7 +49,8 @@ export default function MuseumPage() {
         }, 0);
       }
     }
-  }, [currentPlayer]); // Removed allPlayers from dependencies to break the loop
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPlayer]);
 
   useEffect(() => {
     if (currentPlayer && !isLoadingPlayer.current && allPlayers.length > 0) {

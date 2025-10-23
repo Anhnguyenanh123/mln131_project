@@ -15,13 +15,13 @@ export default function Minimap({
   const [playerPos, setPlayerPos] = useState({ x: 150, y: 600 });
 
   useEffect(() => {
-    const handlePlayerMove = (event: CustomEvent) => {
-      setPlayerPos(event.detail);
+    const handlePlayerMove = (event: Event) => {
+      const customEvent = event as CustomEvent<{ x: number; y: number }>;
+      setPlayerPos(customEvent.detail);
     };
 
-    window.addEventListener("playerMove" as any, handlePlayerMove);
-    return () =>
-      window.removeEventListener("playerMove" as any, handlePlayerMove);
+    window.addEventListener("playerMove", handlePlayerMove);
+    return () => window.removeEventListener("playerMove", handlePlayerMove);
   }, []);
 
   const scaleX = 360 / 9000;
@@ -53,31 +53,31 @@ export default function Minimap({
             "#3b82f6",
             "#8b5cf6",
             "#06b6d4",
-            "#3b82f6", // Room 1
+            "#3b82f6",
             "#ef4444",
             "#f97316",
-            "#dc2626", // Room 2
+            "#dc2626",
             "#f59e0b",
             "#10b981",
             "#14b8a6",
-            "#f59e0b", // Room 3
+            "#f59e0b",
             "#6366f1",
             "#8b5cf6",
             "#06b6d4",
-            "#6366f1", // Room 4
+            "#6366f1",
             "#ec4899",
             "#f43f5e",
             "#db2777",
-            "#ec4899", // Room 5
+            "#ec4899",
             "#14b8a6",
             "#06b6d4",
             "#0891b2",
-            "#14b8a6", // Room 6
+            "#14b8a6",
             "#a855f7",
             "#9333ea",
-            "#7c3aed", // Room 7
-            "#64748b", // Room 8
-            "#475569", // Room 9
+            "#7c3aed",
+            "#64748b",
+            "#475569",
           ];
 
           return (

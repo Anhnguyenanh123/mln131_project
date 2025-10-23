@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { X } from "lucide-react";
 import type { ExhibitData } from "@/types/museum";
+import Image from "next/image";
 
 interface InfoModalProps {
   exhibit: ExhibitData | null;
@@ -52,7 +53,9 @@ export default function InfoModal({
         <div className="p-6 overflow-y-auto max-h-[calc(80vh-80px)]">
           {exhibit.image && (
             <div className="mb-6">
-              <img
+              <Image
+                width={800}
+                height={256}
                 src={exhibit.image || "/placeholder.svg"}
                 alt={exhibit.title}
                 className="w-full h-64 object-cover rounded-lg border-2 border-[#0f3460]"

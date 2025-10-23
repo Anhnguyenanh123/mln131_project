@@ -14,7 +14,6 @@ interface MuseumSceneProps {
 
 export default function MuseumScene({
   onExhibitInteract,
-  visitedExhibits,
   unlockedRooms,
   username,
 }: MuseumSceneProps) {
@@ -74,34 +73,11 @@ export default function MuseumScene({
 
         createExhibitGraphics() {
           const colors = [
-            0x3b82f6,
-            0x8b5cf6,
-            0x06b6d4,
-            0x3b82f6, // Room 1
-            0xef4444,
-            0xf97316,
-            0xdc2626, // Room 2
-            0xf59e0b,
-            0x10b981,
-            0x14b8a6,
-            0xf59e0b, // Room 3
-            0x6366f1,
-            0x8b5cf6,
-            0x06b6d4,
-            0x6366f1, // Room 4
-            0xec4899,
-            0xf43f5e,
-            0xdb2777,
-            0xec4899, // Room 5
-            0x14b8a6,
-            0x06b6d4,
-            0x0891b2,
-            0x14b8a6, // Room 6
-            0xa855f7,
-            0x9333ea,
-            0x7c3aed, // Room 7
-            0x64748b, // Room 8
-            0x475569, // Room 9
+            0x3b82f6, 0x8b5cf6, 0x06b6d4, 0x3b82f6, 0xef4444, 0xf97316,
+            0xdc2626, 0xf59e0b, 0x10b981, 0x14b8a6, 0xf59e0b, 0x6366f1,
+            0x8b5cf6, 0x06b6d4, 0x6366f1, 0xec4899, 0xf43f5e, 0xdb2777,
+            0xec4899, 0x14b8a6, 0x06b6d4, 0x0891b2, 0x14b8a6, 0xa855f7,
+            0x9333ea, 0x7c3aed, 0x64748b, 0x475569,
           ];
 
           museumData.forEach((exhibit, index) => {
@@ -188,15 +164,13 @@ export default function MuseumScene({
           for (let i = 1; i <= 8; i++) {
             const x = i * 1000;
 
-            // Create walls that cover entire height except door opening (y=500-700)
-            this.createWall(x, 250, 40, 460, 0x1e293b); // Top section: y=20 to y=480
-            this.createWall(x, 950, 40, 460, 0x1e293b); // Bottom section: y=720 to y=1180
+            this.createWall(x, 250, 40, 460, 0x1e293b);
+            this.createWall(x, 950, 40, 460, 0x1e293b);
 
-            // If room is locked, add door sprite and collision in the opening
             if (!unlockedRooms.has(i + 1)) {
               const door = this.add.sprite(x, 600, "locked-door");
+              door.setDepth(1);
 
-              // Door collision blocks the opening at y=500-700
               const doorCollision = this.add.rectangle(
                 x,
                 600,
@@ -475,7 +449,7 @@ export default function MuseumScene({
       phaserGameRef.current?.destroy(true);
       phaserGameRef.current = null;
     };
-  }, [onExhibitInteract, unlockedRooms]);
+  }, [onExhibitInteract, unlockedRooms, username]);
 
   return <div ref={gameRef} className="w-full h-full" />;
 }
