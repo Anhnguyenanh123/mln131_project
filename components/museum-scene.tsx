@@ -18,57 +18,57 @@ export default function MuseumScene({
   username,
 }: MuseumSceneProps) {
   const gameRef = useRef<HTMLDivElement>(null);
-  const phaserGameRef = useRef<PhaserType.Game | null>(null);
+  const phaserGameRef = useRef<Phaser.Game | null>(null);
+  const initializedRef = useRef(false);
   const playerPositionRef = useRef<{ x: number; y: number }>({
     x: 150,
     y: 600,
   });
 
   useEffect(() => {
-    if (!gameRef.current || phaserGameRef.current) return;
+    if (!gameRef.current || phaserGameRef.current || initializedRef.current)
+      return;
+    initializedRef.current = true;
 
     let cancelled = false;
 
-    const init = async () => {
-      const Phaser: typeof import("phaser") = await import("phaser");
+    let game: PhaserType.Game | null = null;
+
+    (async () => {
+      const Phaser = await import("phaser");
+      if (cancelled) return;
 
       class MainScene extends Phaser.Scene {
-        private player!: Phaser.Physics.Arcade.Sprite;
-        private playerNameText!: Phaser.GameObjects.Text;
-        private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
+        private player!: PhaserType.Physics.Arcade.Sprite;
+        private playerNameText!: PhaserType.GameObjects.Text;
+        private cursors!: PhaserType.Types.Input.Keyboard.CursorKeys;
         private wasd!: {
-          W: Phaser.Input.Keyboard.Key;
-          A: Phaser.Input.Keyboard.Key;
-          S: Phaser.Input.Keyboard.Key;
-          D: Phaser.Input.Keyboard.Key;
+          W: PhaserType.Input.Keyboard.Key;
+          A: PhaserType.Input.Keyboard.Key;
+          S: PhaserType.Input.Keyboard.Key;
+          D: PhaserType.Input.Keyboard.Key;
         };
-        private exhibits: Phaser.Physics.Arcade.Sprite[] = [];
+        private exhibits: PhaserType.Physics.Arcade.Sprite[] = [];
         private nearExhibit: ExhibitData | null = null;
-        private interactKey!: Phaser.Input.Keyboard.Key;
-        private promptText!: Phaser.GameObjects.Text;
-        private walls: Phaser.GameObjects.Rectangle[] = [];
-        private lockedDoors: Phaser.GameObjects.Rectangle[] = [];
+        private interactKey!: PhaserType.Input.Keyboard.Key;
+        private promptText!: PhaserType.GameObjects.Text;
+        private walls: PhaserType.GameObjects.Rectangle[] = [];
+        private lockedDoors: PhaserType.GameObjects.Rectangle[] = [];
 
         constructor() {
           super({ key: "MainScene" });
         }
 
         preload() {
-          this.createPlayerGraphic();
+          this.load.spritesheet("player", "/sprites/Adam_run.png", {
+            frameWidth: 16,
+            frameHeight: 16,
+          });
+
           this.createExhibitGraphics();
           this.createPlantGraphic();
           this.createBenchGraphic();
           this.createLockedDoorGraphic();
-        }
-
-        createPlayerGraphic() {
-          const graphics = this.make.graphics({ x: 0, y: 0 });
-          graphics.fillStyle(0x4ade80, 1);
-          graphics.fillCircle(16, 16, 16);
-          graphics.fillStyle(0x22c55e, 1);
-          graphics.fillCircle(16, 12, 6);
-          graphics.generateTexture("player", 32, 32);
-          graphics.destroy();
         }
 
         createExhibitGraphics() {
@@ -169,7 +169,6 @@ export default function MuseumScene({
 
             if (!unlockedRooms.has(i + 1)) {
               const door = this.add.sprite(x, 600, "locked-door");
-              door.setDepth(1);
 
               const doorCollision = this.add.rectangle(
                 x,
@@ -284,6 +283,73 @@ export default function MuseumScene({
             "player"
           );
           this.player.setCollideWorldBounds(true);
+          this.player.setScale(2);
+
+          this.anims.create({
+            key: "walk-down",
+            frames: this.anims.generateFrameNumbers("player", {
+              start: 0,
+              end: 2,
+            }),
+            frameRate: 8,
+            repeat: -1,
+          });
+
+          this.anims.create({
+            key: "walk-left",
+            frames: this.anims.generateFrameNumbers("player", {
+              start: 12,
+              end: 14,
+            }),
+            frameRate: 8,
+            repeat: -1,
+          });
+
+          this.anims.create({
+            key: "walk-right",
+            frames: this.anims.generateFrameNumbers("player", {
+              start: 24,
+              end: 26,
+            }),
+            frameRate: 8,
+            repeat: -1,
+          });
+
+          this.anims.create({
+            key: "walk-up",
+            frames: this.anims.generateFrameNumbers("player", {
+              start: 36,
+              end: 38,
+            }),
+            frameRate: 8,
+            repeat: -1,
+          });
+
+          this.anims.create({
+            key: "idle-down",
+            frames: [{ key: "player", frame: 1 }],
+            frameRate: 1,
+          });
+
+          this.anims.create({
+            key: "idle-left",
+            frames: [{ key: "player", frame: 13 }],
+            frameRate: 1,
+          });
+
+          this.anims.create({
+            key: "idle-right",
+            frames: [{ key: "player", frame: 25 }],
+            frameRate: 1,
+          });
+
+          this.anims.create({
+            key: "idle-up",
+            frames: [{ key: "player", frame: 37 }],
+            frameRate: 1,
+          });
+
+          this.player.anims.play("idle-down");
 
           this.playerNameText = this.add
             .text(this.player.x, this.player.y + 30, username, {
@@ -369,22 +435,52 @@ export default function MuseumScene({
         }
 
         update() {
+          let lastDirection = "down";
+          if (this.player.anims.currentAnim) {
+            const animKey = this.player.anims.currentAnim.key;
+            if (animKey.includes("up")) lastDirection = "up";
+            else if (animKey.includes("down")) lastDirection = "down";
+            else if (animKey.includes("left")) lastDirection = "left";
+            else if (animKey.includes("right")) lastDirection = "right";
+          }
+
           this.player.setVelocity(0);
 
           const speed = 250;
+          let isMoving = false;
+
           if (this.cursors.left.isDown || this.wasd.A.isDown) {
             this.player.setVelocityX(-speed);
+            this.player.anims.play("walk-left", true);
+            isMoving = true;
           } else if (this.cursors.right.isDown || this.wasd.D.isDown) {
             this.player.setVelocityX(speed);
+            this.player.anims.play("walk-right", true);
+            isMoving = true;
           }
 
           if (this.cursors.up.isDown || this.wasd.W.isDown) {
             this.player.setVelocityY(-speed);
+            if (!isMoving) {
+              this.player.anims.play("walk-up", true);
+            }
+            isMoving = true;
           } else if (this.cursors.down.isDown || this.wasd.S.isDown) {
             this.player.setVelocityY(speed);
+            if (!isMoving) {
+              this.player.anims.play("walk-down", true);
+            }
+            isMoving = true;
+          }
+
+          if (!isMoving) {
+            this.player.anims.play(`idle-${lastDirection}`, true);
           }
 
           this.playerNameText.setPosition(this.player.x, this.player.y + 30);
+          this.playerNameText.setText(
+            (window as any).currentUsername ?? username
+          );
 
           this.nearExhibit = null;
           this.exhibits.forEach((exhibit) => {
@@ -435,21 +531,24 @@ export default function MuseumScene({
         backgroundColor: "#1a1a2e",
       };
 
-      if (cancelled) return;
-      const game = new Phaser.Game(config);
+      game = new Phaser.Game(config);
       phaserGameRef.current = game;
 
-      window.handleExhibitInteract = onExhibitInteract;
-    };
-
-    init();
+      (window as any).handleExhibitInteract = onExhibitInteract;
+      (window as any).currentUsername = username;
+    })();
 
     return () => {
       cancelled = true;
       phaserGameRef.current?.destroy(true);
       phaserGameRef.current = null;
+      initializedRef.current = false;
     };
-  }, [onExhibitInteract, unlockedRooms, username]);
+  }, []);
+
+  useEffect(() => {
+    (window as any).currentUsername = username;
+  }, [username]);
 
   return <div ref={gameRef} className="w-full h-full" />;
 }
