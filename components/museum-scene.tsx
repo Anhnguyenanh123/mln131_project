@@ -7,7 +7,6 @@ import { museumData } from "@/data/museum-data";
 
 interface MuseumSceneProps {
   onExhibitInteract: (exhibit: ExhibitData) => void;
-  onDoorInteract: (roomNumber: number) => void;
   visitedExhibits: Set<string>;
   unlockedRooms: Set<number>;
   username: string;
@@ -15,7 +14,6 @@ interface MuseumSceneProps {
 
 export default function MuseumScene({
   onExhibitInteract,
-  onDoorInteract,
   unlockedRooms,
   username,
 }: MuseumSceneProps) {
@@ -52,7 +50,6 @@ export default function MuseumScene({
         };
         private exhibits: PhaserType.Physics.Arcade.Sprite[] = [];
         private nearExhibit: ExhibitData | null = null;
-        private nearDoorRoom: number | null = null;
         private interactKey!: PhaserType.Input.Keyboard.Key;
         private promptText!: PhaserType.GameObjects.Text;
         private walls: PhaserType.GameObjects.Rectangle[] = [];
@@ -182,7 +179,6 @@ export default function MuseumScene({
                 0
               );
               this.physics.add.existing(doorCollision, true);
-              doorCollision.setData("doorRoom", i + 1); // door leads to room i+1
               this.lockedDoors.push(doorCollision);
 
               this.add
@@ -405,9 +401,7 @@ export default function MuseumScene({
           });
 
           this.interactKey.on("down", () => {
-            if (this.nearDoorRoom !== null) {
-              onDoorInteract(this.nearDoorRoom);
-            } else if (this.nearExhibit) {
+            if (this.nearExhibit) {
               window.handleExhibitInteract?.(this.nearExhibit);
             }
           });
@@ -488,7 +482,6 @@ export default function MuseumScene({
             (window as any).currentUsername ?? username
           );
 
-          // Exhibit proximity detection
           this.nearExhibit = null;
           this.exhibits.forEach((exhibit) => {
             const distance = Phaser.Math.Distance.Between(
@@ -502,34 +495,8 @@ export default function MuseumScene({
             }
           });
 
-          // Door proximity detection
-          this.nearDoorRoom = null;
-          for (const door of this.lockedDoors) {
-            const distance = Phaser.Math.Distance.Between(
-              this.player.x,
-              this.player.y,
-              door.x,
-              door.y
-            );
-            if (distance < 150) {
-              this.nearDoorRoom = door.getData("doorRoom") as number;
-              break;
-            }
-          }
-
-          // Prompt logic: prefer door prompt if near a door
-          if (this.nearDoorRoom !== null) {
+          if (this.nearExhibit) {
             this.promptText.setVisible(true);
-            this.promptText.setText(
-              "Press E to pop up question to open the door"
-            );
-            this.promptText.setPosition(
-              this.cameras.main.width / 2,
-              this.cameras.main.height - 60
-            );
-          } else if (this.nearExhibit) {
-            this.promptText.setVisible(true);
-            this.promptText.setText("Nhấn E để xem nội dung");
             this.promptText.setPosition(
               this.cameras.main.width / 2,
               this.cameras.main.height - 60
