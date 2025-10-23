@@ -17,7 +17,7 @@ export default function InstructionModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
       <div className="bg-[#16213e] border-2 border-[#0f3460] rounded-lg shadow-2xl max-w-2xl w-full mx-4 overflow-hidden">
-        <div className="bg-linear-to-r from-[#0f3460] to-[#16213e] px-6 py-4 flex items-center justify-between border-b border-[#0f3460]">
+        <div className="bg-liniear-to-r from-[#0f3460] to-[#16213e] px-6 py-4 flex items-center justify-between border-b border-[#0f3460]">
           <h2 className="text-2xl font-bold text-[#e8e8e8]">
             Chào mừng đến với Bảo tàng!
           </h2>
