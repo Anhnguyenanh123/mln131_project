@@ -13,12 +13,14 @@ interface PictureModalProps {
   isOpen: boolean;
   onClose: () => void;
   imagePath: string;
+  caption?: string;
 }
 
 export default function PictureModal({
   isOpen,
   onClose,
   imagePath,
+  caption,
 }: PictureModalProps) {
   const [imageError, setImageError] = useState(false);
 
@@ -58,6 +60,14 @@ export default function PictureModal({
             </div>
           )}
         </div>
+        {caption && (
+          <div className="px-6 pb-4">
+            <div className="bg-gray-50 rounded-lg p-4 border-l-4 border-blue-500">
+              <h4 className="font-semibold text-gray-800 mb-2">Chú thích:</h4>
+              <p className="text-gray-700 leading-relaxed">{caption}</p>
+            </div>
+          </div>
+        )}
         <div className="text-center text-sm text-gray-600 mt-4">
           Nhấn ESC hoặc click bên ngoài để đóng
         </div>

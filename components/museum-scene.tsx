@@ -7,14 +7,14 @@ import type { ExhibitData } from "@/types/museum";
 import { museumData } from "@/data/museum-data";
 import PictureModal from "@/components/picture-modal";
 
-declare global {
-  interface Window {
-    handleExhibitInteract?: (exhibit: ExhibitData) => void;
-    handleDoorInteract?: (roomNumber: number) => void;
-    showPictureModal?: (imagePath: string) => void;
-    unlockRoom?: (roomNumber: number) => void;
-  }
-}
+// declare global {
+//   interface Window {
+//     handleExhibitInteract?: (exhibit: ExhibitData) => void;
+//     handleDoorInteract?: (roomNumber: number) => void;
+//     showPictureModal?: (imagePath: string, caption: string) => void;
+//     unlockRoom?: (roomNumber: number) => void;
+//   }
+// }
 
 interface MuseumSceneProps {
   onExhibitInteract: (exhibit: ExhibitData) => void;
@@ -35,6 +35,7 @@ export default function MuseumScene({
   const phaserGameRef = useRef<any>(null);
   const [pictureModalOpen, setPictureModalOpen] = useState(false);
   const [currentPicture, setCurrentPicture] = useState<string>("");
+  const [currentCaption, setCurrentCaption] = useState<string>("");
   const playerPositionRef = useRef<{ x: number; y: number }>({
     x: 100,
     y: 480,
@@ -57,7 +58,7 @@ export default function MuseumScene({
       };
       private nearExhibit: ExhibitData | null = null;
       private nearLockedDoor: number | null = null;
-      private nearPicture: { id: number; imagePath: string } | null = null;
+      private nearPicture: { id: number; imagePath: string; caption: string } | null = null;
       private nearInfoPoint: ExhibitData | null = null;
       private interactKey!: Phaser.Input.Keyboard.Key;
       private promptText!: Phaser.GameObjects.Text;
@@ -71,6 +72,7 @@ export default function MuseumScene({
         collision: Phaser.GameObjects.Rectangle;
         id: number;
         imagePath: string;
+        caption: string;
       }[] = [];
       private infoPoints: {
         collision: Phaser.GameObjects.Rectangle;
@@ -592,11 +594,11 @@ export default function MuseumScene({
 
         this.interactKey.on("down", () => {
           if (this.nearInfoPoint !== null) {
-            window.handleExhibitInteract?.(this.nearInfoPoint);
+            (window as any).handleExhibitInteract?.(this.nearInfoPoint);
           } else if (this.nearPicture !== null) {
-            this.showPictureModal(this.nearPicture.imagePath);
+            this.showPictureModal(this.nearPicture.imagePath, this.nearPicture.caption);
           } else if (this.nearLockedDoor !== null) {
-            window.handleDoorInteract?.(this.nearLockedDoor);
+            (window as any).handleDoorInteract?.(this.nearLockedDoor);
           }
         });
 
@@ -724,17 +726,43 @@ export default function MuseumScene({
             y: 100,
             id: 1,
             imagePath: "/pic/r1-e1.webp",
+            caption: "Lao động và bóc lột trong chế độ tư bản. Hình ảnh thể hiện sự tương phản giữa giai cấp tư sản và giai cấp vô sản trong xã hội tư bản."
           },
-          { x: sectionWidth * 1.5, y: 100, id: 2, imagePath: "/pic/r1-e2.jpg" },
-          { x: sectionWidth * 2.5, y: 100, id: 3, imagePath: "/pic/r1-e3.jpg" },
+          { 
+            x: sectionWidth * 1.5, 
+            y: 100, 
+            id: 2, 
+            imagePath: "/pic/r1-e2.jpg",
+            caption: "Đại hội lần thứ nhất của Đảng Cộng sản Việt Nam năm 1935. Sự kiện quan trọng trong lịch sử cách mạng Việt Nam."
+          },
+          { 
+            x: sectionWidth * 2.5, 
+            y: 100, 
+            id: 3, 
+            imagePath: "/pic/r1-e3.jpg",
+            caption: "Chủ tịch Hồ Chí Minh - người anh hùng dân tộc và nhà cách mạng vĩ đại, người sáng lập Đảng Cộng sản Việt Nam."
+          },
           {
             x: sectionWidth * 3.5,
             y: 100,
             id: 4,
             imagePath: "/pic/r1-e4.webp",
+            caption: "Sự phát triển của lực lượng sản xuất và quan hệ sản xuất. Minh họa cho quy luật cơ bản của sự phát triển xã hội loài người."
           },
-          { x: sectionWidth * 4.5, y: 100, id: 5, imagePath: "/pic/r2-e1.jpg" },
-          { x: sectionWidth * 5.5, y: 100, id: 6, imagePath: "/pic/r2-e2.jpg" },
+          { 
+            x: sectionWidth * 4.5, 
+            y: 100, 
+            id: 5, 
+            imagePath: "/pic/r2-e1.jpg",
+            caption: "Cuộc cách mạng Tháng Mười Nga 1917. Sự kiện lịch sử đánh dấu sự ra đời của nhà nước xã hội chủ nghĩa đầu tiên trên thế giới."
+          },
+          { 
+            x: sectionWidth * 5.5, 
+            y: 100, 
+            id: 6, 
+            imagePath: "/pic/r2-e2.jpg",
+            caption: "Mác-Lênin chủ nghĩa và sự vận dụng sáng tạo trong điều kiện cụ thể của Việt Nam."
+          },
         ];
 
         picturePositions.forEach((pos) => {
@@ -752,6 +780,7 @@ export default function MuseumScene({
             collision: collision,
             id: pos.id,
             imagePath: pos.imagePath,
+            caption: pos.caption,
           });
         });
       }
@@ -833,10 +862,10 @@ export default function MuseumScene({
         });
       }
 
-      showPictureModal(imagePath: string) {
+      showPictureModal(imagePath: string, caption: string) {
         this.scene.pause();
 
-        window.showPictureModal?.(imagePath);
+        (window as any).showPictureModal?.(imagePath, caption);
       }
 
       createBackToRoom1Button(x: number, y: number, fromRoom: number) {
@@ -1364,7 +1393,7 @@ export default function MuseumScene({
           );
 
           if (distance < 80) {
-            this.nearPicture = { id: picture.id, imagePath: picture.imagePath };
+            this.nearPicture = { id: picture.id, imagePath: picture.imagePath, caption: picture.caption };
             break;
           }
         }
@@ -1456,15 +1485,16 @@ export default function MuseumScene({
     const game = new Phaser.Game(config);
     phaserGameRef.current = game;
 
-    window.handleExhibitInteract = onExhibitInteract;
-    window.handleDoorInteract = onDoorInteract;
-    window.showPictureModal = (imagePath: string) => {
+    (window as any).handleExhibitInteract = onExhibitInteract;
+    (window as any).handleDoorInteract = onDoorInteract;
+    (window as any).showPictureModal = (imagePath: string, caption: string) => {
       setCurrentPicture(imagePath);
+      setCurrentCaption(caption);
       setPictureModalOpen(true);
     };
     (window as any).playerPositionRef = playerPositionRef;
     (window as any).unlockedRooms = unlockedRooms;
-    window.unlockRoom = (roomNumber: number) => {
+    (window as any).unlockRoom = (roomNumber: number) => {
       const scene = game.scene.getScene("MainScene") as MainScene;
       if (scene && scene.unlockRoom) {
         scene.unlockRoom(roomNumber);
@@ -1500,6 +1530,7 @@ export default function MuseumScene({
         isOpen={pictureModalOpen}
         onClose={handlePictureModalClose}
         imagePath={currentPicture}
+        caption={currentCaption}
       />
     </>
   );
