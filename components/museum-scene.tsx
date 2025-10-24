@@ -49,22 +49,19 @@ export default function MuseumScene({
         S: Phaser.Input.Keyboard.Key;
         D: Phaser.Input.Keyboard.Key;
       };
-      private exhibits: Phaser.Physics.Arcade.Sprite[] = [];
-      private nearExhibit: ExhibitData | null = null;
-      private nearLockedDoor: number | null = null;
       private nearColumn: { roomNumber: number; title: string } | null = null;
       private interactKey!: Phaser.Input.Keyboard.Key;
       private promptText!: Phaser.GameObjects.Text;
       private walls: Phaser.GameObjects.Rectangle[] = [];
-      private lockedDoors: {
-        collision: Phaser.GameObjects.Rectangle;
-        roomNumber: number;
-      }[] = [];
       private columns: {
         collision: Phaser.GameObjects.Rectangle;
         roomNumber: number;
         title: string;
       }[] = [];
+      private roomBorders: {
+        room2Border: Phaser.GameObjects.Rectangle;
+        room3Border: Phaser.GameObjects.Rectangle;
+      } | null = null;
       private map!: Phaser.Tilemaps.Tilemap;
       private layer1!: Phaser.Tilemaps.TilemapLayer;
       private layer2!: Phaser.Tilemaps.TilemapLayer;
@@ -95,42 +92,8 @@ export default function MuseumScene({
         this.load.image("Dungeon_Tileset", "/tiles/Dungeon_Tileset.png");
         this.load.image("antarcticbees_interior", "/tiles/antarcticbees_interior_free_sample-export.png");
 
-        this.createExhibitGraphics();
         this.createPlantGraphic();
         this.createBenchGraphic();
-        this.createLockedDoorGraphic();
-      }
-
-      createExhibitGraphics() {
-        const colors = [
-          0x3b82f6, 0x8b5cf6, 0x06b6d4, 0x3b82f6, 0xef4444, 0xf97316, 0xdc2626,
-          0xf59e0b, 0x10b981, 0x14b8a6, 0xf59e0b, 0x6366f1, 0x8b5cf6, 0x06b6d4,
-          0x6366f1, 0xec4899, 0xf43f5e, 0xdb2777, 0xec4899, 0x14b8a6, 0x06b6d4,
-          0x0891b2, 0x14b8a6, 0xa855f7, 0x9333ea, 0x7c3aed, 0x64748b, 0x475569,
-        ];
-
-        museumData.forEach((exhibit, index) => {
-          const graphics = this.make.graphics({ x: 0, y: 0 });
-
-          graphics.fillStyle(0x8b7355, 1);
-          graphics.fillRect(0, 0, 140, 160);
-
-          if (exhibit.image) {
-            graphics.fillStyle(colors[index], 1);
-            graphics.fillRect(10, 10, 120, 120);
-          } else {
-            graphics.fillStyle(0xf5f5f5, 1);
-            graphics.fillRect(10, 10, 120, 120);
-            graphics.fillStyle(colors[index], 0.3);
-            graphics.fillRect(10, 10, 120, 120);
-          }
-
-          graphics.fillStyle(0xf5f5f5, 1);
-          graphics.fillRect(10, 135, 120, 20);
-
-          graphics.generateTexture(`exhibit-${exhibit.id}`, 140, 160);
-          graphics.destroy();
-        });
       }
 
       createPlantGraphic() {
@@ -153,16 +116,6 @@ export default function MuseumScene({
         graphics.fillStyle(0x654321, 1);
         graphics.fillRect(0, 0, 80, 10);
         graphics.generateTexture("bench", 80, 30);
-        graphics.destroy();
-      }
-
-      createLockedDoorGraphic() {
-        const graphics = this.make.graphics({ x: 0, y: 0 });
-        graphics.fillStyle(0x7f1d1d, 1);
-        graphics.fillRect(0, 0, 40, 200);
-        graphics.fillStyle(0xfbbf24, 1);
-        graphics.fillCircle(30, 100, 8);
-        graphics.generateTexture("locked-door", 40, 200);
         graphics.destroy();
       }
 
@@ -199,29 +152,11 @@ export default function MuseumScene({
         this.layer1.setDepth(2);
 
         this.map2 = this.make.tilemap({ key: "map2" });
-        console.log('Map2 created:', this.map2);
-        console.log('Map2 tilesets available:', this.map2.tilesets);
-        
-        const map2tileset = this.map2.addTilesetImage("Dungeon_Tileset", "Dungeon_Tileset")!;
-        console.log('Map2 tileset added:', map2tileset);
-        
-        console.log('Map2 tilemap:', this.map2);
-        console.log('Map2 tileset:', map2tileset);
-        console.log('Map1 width:', this.map.widthInPixels);
+
 
         this.map2floor = this.map2.createLayer("Floor0", [map2tileset], this.map.widthInPixels, 0)!;
         this.map2wall = this.map2.createLayer("Floor1", [map2tileset], this.map.widthInPixels, 0)!;
         
-        console.log('Map2 layers created:', {
-          floor: this.map2floor,
-          wall: this.map2wall
-        });
-        
-        console.log('Map2 dimensions:', {
-          width: this.map2.widthInPixels,
-          height: this.map2.heightInPixels,
-          offset: this.map.widthInPixels
-        });
 
         this.map2floor.setVisible(true);
         this.map2wall.setVisible(true);
@@ -229,7 +164,6 @@ export default function MuseumScene({
         this.map2floor.setDepth(3);
         this.map2wall.setDepth(4);
 
-        // Debug: Add a colored rectangle to show map2 area
         this.add.rectangle(
           this.map.widthInPixels + this.map2.widthInPixels/2, 
           this.map2.heightInPixels/2, 
@@ -239,13 +173,10 @@ export default function MuseumScene({
           0.3
         ).setDepth(6);
 
-        // Create Map3
         this.map3 = this.make.tilemap({ key: "map3" });
-        console.log('Map3 created:', this.map3);
-        console.log('Map3 tilesets available:', this.map3.tilesets);
         
         const map3tileset = this.map3.addTilesetImage("antarcticbees_interior_free_sample-export", "antarcticbees_interior")!;
-        console.log('Map3 tileset added:', map3tileset);
+
         
         const map3OffsetX = this.map.widthInPixels + this.map2.widthInPixels;
         
@@ -253,17 +184,6 @@ export default function MuseumScene({
         this.map3floor2 = this.map3.createLayer("floor2", [map3tileset], map3OffsetX, 0)!;
         this.map3wall = this.map3.createLayer("wall", [map3tileset], map3OffsetX, 0)!;
         
-        console.log('Map3 layers created:', {
-          floor1: this.map3floor1,
-          floor2: this.map3floor2,
-          wall: this.map3wall
-        });
-        
-        console.log('Map3 dimensions:', {
-          width: this.map3.widthInPixels,
-          height: this.map3.heightInPixels,
-          offset: map3OffsetX
-        });
 
         this.map3floor1.setVisible(true);
         this.map3floor2.setVisible(true);
@@ -273,7 +193,6 @@ export default function MuseumScene({
         this.map3floor2.setDepth(6);
         this.map3wall.setDepth(7);
 
-        // Debug: Add a colored rectangle to show map3 area
         this.add.rectangle(
           map3OffsetX + this.map3.widthInPixels/2, 
           this.map3.heightInPixels/2, 
@@ -343,70 +262,14 @@ export default function MuseumScene({
           this.createColumn(pos.x, pos.y, pos.roomNumber, pos.title);
         });
 
-        const connectionDoorX = this.map.widthInPixels - 20;
-        const connectionDoor = this.add.rectangle(connectionDoorX, 400, 40, 100, 0x8b4513);
-        connectionDoor.setDepth(5);
-        this.physics.add.existing(connectionDoor, true);
-        this.add
-          .text(connectionDoorX, 320, `TO ROOM 2`, {
-            fontSize: "14px",
-            color: "#fbbf24",
-            fontStyle: "bold",
-            align: "center",
-          })
-          .setOrigin(0.5)
-          .setDepth(6);
-
-        if (!unlockedRooms.has(3)) {
-          const door = this.add.sprite(this.map.widthInPixels + this.map2.widthInPixels - 20, 400, "locked-door");
-          door.setDepth(5);
-
-          const doorCollision = this.add.rectangle(
-            this.map.widthInPixels + this.map2.widthInPixels - 20,
-            400,
-            40,
-            100,
-            0xff0000,
-            0
-          );
-          this.physics.add.existing(doorCollision, true);
-          this.lockedDoors.push({
-            collision: doorCollision,
-            roomNumber: 3,
-          });
-
-          this.add
-            .text(this.map.widthInPixels + this.map2.widthInPixels - 60, 320, `ROOM 3\nLOCKED`, {
-              fontSize: "14px",
-              color: "#fbbf24",
-              fontStyle: "bold",
-              align: "center",
-            })
-            .setOrigin(0.5)
-            .setDepth(6);
-        }
-
-        museumData.forEach((exhibit) => {
-          const exhibitSprite = this.physics.add.sprite(
-            exhibit.position.x,
-            exhibit.position.y,
-            `exhibit-${exhibit.id}`
-          );
-          exhibitSprite.setImmovable(true);
-
-          const mappedRoom = getRoomNumberByX(exhibit.position.x);
-          const exhibitForModal = { ...exhibit, roomNumber: mappedRoom };
-
-          exhibitSprite.setData("exhibitData", exhibitForModal);
-          exhibitSprite.setDepth(5);
-          this.exhibits.push(exhibitSprite);
-        });
+        this.createRoomBorders();
 
         this.player = this.physics.add.sprite(
           playerPositionRef.current.x,
           playerPositionRef.current.y,
           "player"
         );
+
         this.player.setCollideWorldBounds(true);
         this.player.setScale(2);
         this.player.setDepth(10);
@@ -486,10 +349,6 @@ export default function MuseumScene({
           })
           .setOrigin(0.5);
 
-        this.lockedDoors.forEach((door) => {
-          this.physics.add.collider(this.player, door.collision);
-        });
-
         this.cameras.main.setBounds(
           0,
           0,
@@ -520,16 +379,8 @@ export default function MuseumScene({
           .setVisible(false)
           .setScrollFactor(0);
 
-        this.exhibits.forEach((exhibit) => {
-          this.physics.add.overlap(this.player, exhibit, () => {
-            this.nearExhibit = exhibit.getData("exhibitData");
-          });
-        });
-
         this.interactKey.on("down", () => {
-          if (this.nearLockedDoor !== null) {
-            window.handleDoorInteract?.(this.nearLockedDoor);
-          } else if (this.nearColumn !== null) {
+          if (this.nearColumn !== null) {
             const column = this.nearColumn as {
               roomNumber: number;
               title: string;
@@ -537,10 +388,21 @@ export default function MuseumScene({
             alert(
               `Đây là ${column.title}\nPhòng ${column.roomNumber} - Thông tin chi tiết`
             );
-          } else if (this.nearExhibit) {
-            window.handleExhibitInteract?.(this.nearExhibit);
           }
         });
+
+        if (this.roomBorders) {
+
+          
+          if (this.roomBorders.room2Border && this.roomBorders.room2Border.body) {
+            this.physics.add.collider(this.player, this.roomBorders.room2Border);
+          }
+          if (this.roomBorders.room3Border && this.roomBorders.room3Border.body) {
+            this.physics.add.collider(this.player, this.roomBorders.room3Border);
+          }
+        } else {
+          console.log("Room borders not found!");
+        }
       }
 
       createColumn(x: number, y: number, roomNumber: number, title: string) {
@@ -570,6 +432,75 @@ export default function MuseumScene({
           .setDepth(4);
       }
 
+      createRoomBorders() {
+        const room2BorderX = this.map.widthInPixels;
+        const room2BorderY = this.map.heightInPixels / 2;
+        const room2Border = this.add.rectangle(
+          room2BorderX, 
+          room2BorderY, 
+          20, 
+          this.map.heightInPixels, 
+          0xff0000, 
+          0 
+        );
+        this.physics.add.existing(room2Border, true);
+
+        const room3BorderX = this.map.widthInPixels + this.map2.widthInPixels;
+        const room3BorderY = this.map2.heightInPixels / 2;
+        const room3Border = this.add.rectangle(
+          room3BorderX, 
+          room3BorderY, 
+          20, 
+          this.map2.heightInPixels, 
+          0xff0000, 
+          0 
+        );
+        this.physics.add.existing(room3Border, true);
+
+        this.roomBorders = {
+          room2Border,
+          room3Border
+        };
+
+
+
+        this.add.text(room2BorderX - 50, room2BorderY - 100, "ROOM 2\nLOCKED\nComplete Quiz to Enter", {
+          fontSize: "16px",
+          color: "#ff0000",
+          fontStyle: "bold",
+          align: "center",
+        }).setOrigin(0.5).setDepth(10);
+
+        this.add.text(room3BorderX - 50, room3BorderY - 100, "ROOM 3\nLOCKED\nComplete Quiz to Enter", {
+          fontSize: "16px", 
+          color: "#ff0000",
+          fontStyle: "bold",
+          align: "center",
+        }).setOrigin(0.5).setDepth(10);
+      }
+
+      unlockRoom(roomNumber: number) {
+        if (!this.roomBorders) return;
+        
+        if (roomNumber === 2) {
+          this.roomBorders.room2Border.destroy();
+          this.add.text(this.map.widthInPixels - 50, this.map.heightInPixels / 2 - 100, "ROOM 2\nUNLOCKED!", {
+            fontSize: "16px",
+            color: "#00ff00", 
+            fontStyle: "bold",
+            align: "center",
+          }).setOrigin(0.5).setDepth(10);
+        } else if (roomNumber === 3) {
+          this.roomBorders.room3Border.destroy();
+          this.add.text(this.map.widthInPixels + this.map2.widthInPixels - 50, this.map2.heightInPixels / 2 - 100, "ROOM 3\nUNLOCKED!", {
+            fontSize: "16px",
+            color: "#00ff00",
+            fontStyle: "bold", 
+            align: "center",
+          }).setOrigin(0.5).setDepth(10);
+        }
+      }
+
       addPlant(x: number, y: number) {
         const plant = this.add.sprite(x, y, "plant");
         plant.setDepth(2);
@@ -581,6 +512,11 @@ export default function MuseumScene({
       }
 
       update() {
+        if (!this.player) {
+          console.error("Player not found in update!");
+          return;
+        }
+
         let lastDirection = "down";
         if (this.player.anims.currentAnim) {
           const animKey = this.player.anims.currentAnim.key;
@@ -625,19 +561,6 @@ export default function MuseumScene({
 
         this.playerNameText.setPosition(this.player.x, this.player.y + 30);
 
-        this.nearExhibit = null;
-        this.exhibits.forEach((exhibit) => {
-          const distance = Phaser.Math.Distance.Between(
-            this.player.x,
-            this.player.y,
-            exhibit.x,
-            exhibit.y
-          );
-          if (distance < 150) {
-            this.nearExhibit = exhibit.getData("exhibitData");
-          }
-        });
-
         this.nearColumn = null;
         this.columns.forEach((column) => {
           const distance = Phaser.Math.Distance.Between(
@@ -654,29 +577,7 @@ export default function MuseumScene({
           }
         });
 
-        this.nearLockedDoor = null;
-        this.lockedDoors.forEach((door) => {
-          const distance = Phaser.Math.Distance.Between(
-            this.player.x,
-            this.player.y,
-            door.collision.x,
-            door.collision.y
-          );
-          if (distance < 150) {
-            this.nearLockedDoor = door.roomNumber;
-          }
-        });
-
-        if (this.nearLockedDoor !== null) {
-          this.promptText.setText(
-            `Nhấn E để làm quiz mở Phòng ${this.nearLockedDoor}`
-          );
-          this.promptText.setVisible(true);
-          this.promptText.setPosition(
-            this.cameras.main.width / 2,
-            this.cameras.main.height - 60
-          );
-        } else if (this.nearColumn !== null) {
+        if (this.nearColumn !== null) {
           const column = this.nearColumn as {
             roomNumber: number;
             title: string;
@@ -684,13 +585,6 @@ export default function MuseumScene({
           this.promptText.setText(
             `Nhấn E để xem thông tin phòng ${column.roomNumber}`
           );
-          this.promptText.setVisible(true);
-          this.promptText.setPosition(
-            this.cameras.main.width / 2,
-            this.cameras.main.height - 60
-          );
-        } else if (this.nearExhibit) {
-          this.promptText.setText("Nhấn E để xem nội dung");
           this.promptText.setVisible(true);
           this.promptText.setPosition(
             this.cameras.main.width / 2,
@@ -731,6 +625,12 @@ export default function MuseumScene({
 
     window.handleExhibitInteract = onExhibitInteract;
     window.handleDoorInteract = onDoorInteract;
+    window.unlockRoom = (roomNumber: number) => {
+      const scene = game.scene.getScene('MainScene') as MainScene;
+      if (scene && scene.unlockRoom) {
+        scene.unlockRoom(roomNumber);
+      }
+    };
 
     return () => {
       game.destroy(true);
