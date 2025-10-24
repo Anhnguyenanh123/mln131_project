@@ -24,23 +24,23 @@ export default function Minimap({
     return () => window.removeEventListener("playerMove", handlePlayerMove);
   }, []);
 
-  const scaleX = 360 / 9000;
+  const scaleX = 360 / 3000;
   const scaleY = 90 / 1200;
 
   return (
     <div className="fixed top-20 right-4 bg-[#16213e]/90 border-2 border-[#0f3460] rounded-lg p-3 backdrop-blur-sm max-w-[400px]">
       <h3 className="text-xs font-semibold text-[#e8e8e8] mb-2 text-center">
-        Bản đồ bảo tàng (9 phòng)
+        Bản đồ bảo tàng (3 phòng)
       </h3>
       <div className="relative w-[360px] h-[90px] bg-[#1a1a2e] rounded border border-[#0f3460]">
         <div className="absolute inset-1 border border-[#374151] rounded" />
 
-        {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+        {[1, 2].map((i) => (
           <div
             key={i}
             className="absolute top-2 bottom-2 w-[2px]"
             style={{
-              left: `${i * 40}px`,
+              left: `${i * 120}px`,
               backgroundColor: unlockedRooms.has(i + 1) ? "#374151" : "#7f1d1d",
             }}
           />
@@ -139,48 +139,6 @@ export default function Minimap({
             }`}
           >
             Phòng 3: Pháp quyền {unlockedRooms.has(3) ? "✓" : "🔒"}
-          </div>
-          <div
-            className={`font-semibold ${
-              unlockedRooms.has(4) ? "text-[#6366f1]" : "text-[#64748b]"
-            }`}
-          >
-            Phòng 4: Phát huy {unlockedRooms.has(4) ? "✓" : "🔒"}
-          </div>
-          <div
-            className={`font-semibold ${
-              unlockedRooms.has(5) ? "text-[#ec4899]" : "text-[#64748b]"
-            }`}
-          >
-            Phòng 5: Chống tham nhũng {unlockedRooms.has(5) ? "✓" : "🔒"}
-          </div>
-          <div
-            className={`font-semibold ${
-              unlockedRooms.has(6) ? "text-[#14b8a6]" : "text-[#64748b]"
-            }`}
-          >
-            Phòng 6: Đổi mới {unlockedRooms.has(6) ? "✓" : "🔒"}
-          </div>
-          <div
-            className={`font-semibold ${
-              unlockedRooms.has(7) ? "text-[#a855f7]" : "text-[#64748b]"
-            }`}
-          >
-            Phòng 7: Trách nhiệm {unlockedRooms.has(7) ? "✓" : "🔒"}
-          </div>
-          <div
-            className={`font-semibold ${
-              unlockedRooms.has(8) ? "text-[#64748b]" : "text-[#475569]"
-            }`}
-          >
-            Phòng 8: Đang xây dựng {unlockedRooms.has(8) ? "✓" : "🔒"}
-          </div>
-          <div
-            className={`font-semibold ${
-              unlockedRooms.has(9) ? "text-[#475569]" : "text-[#334155]"
-            }`}
-          >
-            Phòng 9: Đang xây dựng {unlockedRooms.has(9) ? "✓" : "🔒"}
           </div>
         </div>
       </div>
