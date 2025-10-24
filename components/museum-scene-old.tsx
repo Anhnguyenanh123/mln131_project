@@ -30,8 +30,8 @@ export default function MuseumScene({
   const gameRef = useRef<HTMLDivElement>(null);
   const phaserGameRef = useRef<any>(null);
   const playerPositionRef = useRef<{ x: number; y: number }>({
-    x: 100,
-    y: 480,
+    x: 150,
+    y: 600,
   });
 
   useEffect(() => {
@@ -52,18 +52,12 @@ export default function MuseumScene({
       private exhibits: Phaser.Physics.Arcade.Sprite[] = [];
       private nearExhibit: ExhibitData | null = null;
       private nearLockedDoor: number | null = null;
-      private nearColumn: { roomNumber: number; title: string } | null = null;
       private interactKey!: Phaser.Input.Keyboard.Key;
       private promptText!: Phaser.GameObjects.Text;
       private walls: Phaser.GameObjects.Rectangle[] = [];
       private lockedDoors: {
         collision: Phaser.GameObjects.Rectangle;
         roomNumber: number;
-      }[] = [];
-      private columns: {
-        collision: Phaser.GameObjects.Rectangle;
-        roomNumber: number;
-        title: string;
       }[] = [];
       private map!: Phaser.Tilemaps.Tilemap;
       private layer1!: Phaser.Tilemaps.TilemapLayer;
@@ -87,7 +81,7 @@ export default function MuseumScene({
         this.createExhibitGraphics();
         this.createPlantGraphic();
         this.createBenchGraphic();
-        this.createLockedDoorGraphic();
+        this.createInfoBoardGraphic();
       }
 
       createExhibitGraphics() {
@@ -155,6 +149,18 @@ export default function MuseumScene({
         graphics.destroy();
       }
 
+      createInfoBoardGraphic() {
+        const graphics = this.make.graphics({ x: 0, y: 0 });
+        graphics.fillStyle(0x8b4513, 1);
+        graphics.fillRect(0, 0, 120, 80);
+        graphics.fillStyle(0xf5f5f5, 1);
+        graphics.fillRect(5, 5, 110, 70);
+        graphics.fillStyle(0x374151, 1);
+        graphics.fillRect(10, 10, 100, 60);
+        graphics.generateTexture("info-board", 120, 80);
+        graphics.destroy();
+      }
+
       create() {
         this.map = this.make.tilemap({ key: "map1" });
         const tileset1 = this.map.addTilesetImage("room", "room")!;
@@ -184,21 +190,38 @@ export default function MuseumScene({
           .setOrigin(0.5)
           .setDepth(10);
 
-        const columnPositions = [
-          { x: 250, y: 250, roomNumber: 1, title: "KHỞI NGUỒN\n& NỀN TẢNG" },
-          { x: 450, y: 250, roomNumber: 2, title: "BẢN CHẤT\n& HÌNH THỨC" },
-          { x: 650, y: 250, roomNumber: 3, title: "NHÀ NƯỚC\nPHÁP QUYỀN" },
-          { x: 950, y: 250, roomNumber: 4, title: "PHÁT HUY\nDÂN CHỦ" },
-          { x: 1150, y: 250, roomNumber: 5, title: "PHÒNG CHỐNG\nTHAM NHŨNG" },
-          { x: 250, y: 550, roomNumber: 6, title: "ĐỔI MỚI &\nCHUYỂN ĐỔI SỐ" },
-          { x: 450, y: 550, roomNumber: 7, title: "TRÁCH NHIỆM\nCÔNG DÂN" },
-          { x: 650, y: 550, roomNumber: 8, title: "ĐANG\nXÂY DỰNG" },
-          { x: 950, y: 550, roomNumber: 9, title: "ĐANG\nXÂY DỰNG" },
-          { x: 1150, y: 550, roomNumber: 10, title: "ĐANG\nXÂY DỰNG" }
+        const infoBoardPositions = [
+          { x: 250, y: 250, title: "KHỞI NGUỒN\n& NỀN TẢNG" },
+          { x: 450, y: 250, title: "BẢN CHẤT\n& HÌNH THỨC" },
+          { x: 650, y: 250, title: "NHÀ NƯỚC\nPHÁP QUYỀN" },
+          { x: 950, y: 250, title: "PHÁT HUY\nDÂN CHỦ" },
+          { x: 1150, y: 250, title: "PHÒNG CHỐNG\nTHAM NHŨNG" },
+          { x: 250, y: 550, title: "ĐỔI MỚI &\nCHUYỂN ĐỔI SỐ" },
+          { x: 450, y: 550, title: "TRÁCH NHIỆM\nCÔNG DÂN" },
+          { x: 650, y: 550, title: "ĐANG\nXÂY DỰNG" },
+          { x: 950, y: 550, title: "ĐANG\nXÂY DỰNG" },
+          { x: 1150, y: 550, title: "ĐANG\nXÂY DỰNG" }
         ];
 
-        columnPositions.forEach(pos => {
-          this.createColumn(pos.x, pos.y, pos.roomNumber, pos.title);
+        infoBoardPositions.forEach(pos => {
+          this.createInfoBoard(pos.x, pos.y, pos.title);
+        });
+
+        const plantPositions = [
+          { x: 180, y: 180 }, { x: 320, y: 180 },
+          { x: 380, y: 180 }, { x: 520, y: 180 },
+          { x: 580, y: 180 }, { x: 720, y: 180 },
+          { x: 880, y: 180 }, { x: 1020, y: 180 },
+          { x: 1080, y: 180 }, { x: 1220, y: 180 },
+          { x: 180, y: 620 }, { x: 320, y: 620 },
+          { x: 380, y: 620 }, { x: 520, y: 620 },
+          { x: 580, y: 620 }, { x: 720, y: 620 },
+          { x: 880, y: 620 }, { x: 1020, y: 620 },
+          { x: 1080, y: 620 }, { x: 1220, y: 620 }
+        ];
+
+        plantPositions.forEach(pos => {
+          this.addPlant(pos.x, pos.y);
         });
 
         const benchPositions = [
@@ -373,35 +396,20 @@ export default function MuseumScene({
         this.interactKey.on("down", () => {
           if (this.nearLockedDoor !== null) {
             window.handleDoorInteract?.(this.nearLockedDoor);
-          } else if (this.nearColumn !== null) {
-            const column = this.nearColumn as { roomNumber: number; title: string };
-            alert(`Đây là ${column.title}\nPhòng ${column.roomNumber} - Thông tin chi tiết`);
           } else if (this.nearExhibit) {
             window.handleExhibitInteract?.(this.nearExhibit);
           }
         });
       }
 
-      createColumn(x: number, y: number, roomNumber: number, title: string) {
-        const pillar = this.add.rectangle(x, y, 60, 60, 0x8b7355);
-        this.add.rectangle(x, y, 50, 50, 0xa67c52);
-        this.add.rectangle(x, y, 40, 40, 0xd4af37);
-        pillar.setDepth(3);
-        
-        const columnCollision = this.add.rectangle(x, y, 60, 60, 0xff0000, 0);
-        this.physics.add.existing(columnCollision, true);
-        this.walls.push(columnCollision);
-        
-        this.columns.push({
-          collision: columnCollision,
-          roomNumber: roomNumber,
-          title: title
-        });
+      createInfoBoard(x: number, y: number, title: string) {
+        const board = this.add.sprite(x, y, "info-board");
+        board.setDepth(3);
         
         this.add
-          .text(x, y + 50, title, {
-            fontSize: "10px",
-            color: "#fbbf24",
+          .text(x, y, title, {
+            fontSize: "12px",
+            color: "#ffffff",
             fontStyle: "bold",
             align: "center",
           })
@@ -417,6 +425,215 @@ export default function MuseumScene({
       addBench(x: number, y: number) {
         const bench = this.add.sprite(x, y, "bench");
         bench.setDepth(2);
+      }
+
+          const roomLabels = [
+            "PHÒNG 1: KHỞI NGUỒN & NỀN TẢNG",
+            "PHÒNG 2: BẢN CHẤT & HÌNH THỨC",
+            "PHÒNG 3: NHÀ NƯỚC PHÁP QUYỀN",
+            "PHÒNG 4: PHÁT HUY DÂN CHỦ",
+            "PHÒNG 5: PHÒNG CHỐNG THAM NHŨNG",
+            "PHÒNG 6: ĐỔI MỚI & CHUYỂN ĐỔI SỐ",
+            "PHÒNG 7: TRÁCH NHIỆM CÔNG DÂN",
+            "PHÒNG 8: ĐANG XÂY DỰNG",
+            "PHÒNG 9: ĐANG XÂY DỰNG",
+          ];
+
+          this.add
+            .text(
+              exhibit.position.x,
+              exhibit.position.y - 120,
+              roomLabels[exhibit.roomNumber - 1],
+              {
+                fontSize: "18px",
+                color: "#fbbf24",
+                fontStyle: "bold",
+              }
+            )
+            .setOrigin(0.5);
+
+          this.add
+            .text(exhibit.position.x, exhibit.position.y + 100, exhibit.title, {
+              fontSize: "13px",
+              color: "#e8e8e8",
+              align: "center",
+              wordWrap: { width: 180 },
+            })
+            .setOrigin(0.5);
+
+          const spotlight = this.add.circle(
+            exhibit.position.x,
+            exhibit.position.y,
+            120,
+            0xffffff,
+            0.1
+          );
+          this.tweens.add({
+            targets: spotlight,
+            alpha: 0.2,
+            duration: 2000,
+            yoyo: true,
+            repeat: -1,
+          });
+        });
+
+        this.player = this.physics.add.sprite(
+          playerPositionRef.current.x,
+          playerPositionRef.current.y,
+          "player"
+        );
+        this.player.setCollideWorldBounds(true);
+        this.player.setScale(2);
+
+        this.anims.create({
+          key: "walk-down",
+          frames: this.anims.generateFrameNumbers("player", {
+            start: 0,
+            end: 2,
+          }),
+          frameRate: 8,
+          repeat: -1,
+        });
+
+        this.anims.create({
+          key: "walk-left",
+          frames: this.anims.generateFrameNumbers("player", {
+            start: 12,
+            end: 14,
+          }),
+          frameRate: 8,
+          repeat: -1,
+        });
+
+        this.anims.create({
+          key: "walk-right",
+          frames: this.anims.generateFrameNumbers("player", {
+            start: 24,
+            end: 26,
+          }),
+          frameRate: 8,
+          repeat: -1,
+        });
+
+        this.anims.create({
+          key: "walk-up",
+          frames: this.anims.generateFrameNumbers("player", {
+            start: 36,
+            end: 38,
+          }),
+          frameRate: 8,
+          repeat: -1,
+        });
+
+        this.anims.create({
+          key: "idle-down",
+          frames: [{ key: "player", frame: 1 }],
+          frameRate: 1,
+        });
+
+        this.anims.create({
+          key: "idle-left",
+          frames: [{ key: "player", frame: 13 }],
+          frameRate: 1,
+        });
+
+        this.anims.create({
+          key: "idle-right",
+          frames: [{ key: "player", frame: 25 }],
+          frameRate: 1,
+        });
+
+        this.anims.create({
+          key: "idle-up",
+          frames: [{ key: "player", frame: 37 }],
+          frameRate: 1,
+        });
+
+        this.player.anims.play("idle-down");
+
+        this.playerNameText = this.add
+          .text(this.player.x, this.player.y + 30, username, {
+            fontSize: "14px",
+            color: "#ffffff",
+            backgroundColor: "#000000",
+            padding: { x: 6, y: 3 },
+          })
+          .setOrigin(0.5);
+
+        this.walls.forEach((wall) => {
+          this.physics.add.collider(this.player, wall);
+        });
+
+        this.lockedDoors.forEach((door) => {
+          this.physics.add.collider(this.player, door.collision);
+        });
+
+        this.cameras.main.setBounds(0, 0, 3000, 1200);
+        this.cameras.main.startFollow(this.player, true, 0.1, 0.1);
+        this.cameras.main.setZoom(1);
+
+        this.cursors = this.input.keyboard!.createCursorKeys();
+        this.wasd = {
+          W: this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.W),
+          A: this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.A),
+          S: this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.S),
+          D: this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.D),
+        };
+        this.interactKey = this.input.keyboard!.addKey(
+          Phaser.Input.Keyboard.KeyCodes.E
+        );
+
+        this.promptText = this.add
+          .text(0, 0, "Nhấn E để xem nội dung", {
+            fontSize: "18px",
+            color: "#ffffff",
+            backgroundColor: "#000000",
+            padding: { x: 12, y: 6 },
+          })
+          .setOrigin(0.5)
+          .setVisible(false)
+          .setScrollFactor(0);
+
+        this.exhibits.forEach((exhibit) => {
+          this.physics.add.overlap(this.player, exhibit, () => {
+            this.nearExhibit = exhibit.getData("exhibitData");
+          });
+        });
+
+        this.interactKey.on("down", () => {
+          if (this.nearLockedDoor !== null) {
+            window.handleDoorInteract?.(this.nearLockedDoor);
+          } else if (this.nearExhibit) {
+            window.handleExhibitInteract?.(this.nearExhibit);
+          }
+        });
+      }
+
+      createWall(
+        x: number,
+        y: number,
+        width: number,
+        height: number,
+        color: number
+      ) {
+        const wall = this.add.rectangle(x, y, width, height, color);
+        this.physics.add.existing(wall, true);
+        this.walls.push(wall);
+      }
+
+      createPillar(x: number, y: number) {
+        const pillar = this.add.rectangle(x, y, 60, 60, 0x1e293b);
+        this.add.rectangle(x, y, 50, 50, 0x374151);
+        this.physics.add.existing(pillar, true);
+        this.walls.push(pillar);
+      }
+
+      addPlant(x: number, y: number) {
+        this.add.sprite(x, y, "plant");
+      }
+
+      addBench(x: number, y: number) {
+        this.add.sprite(x, y, "bench");
       }
 
       update() {
@@ -477,22 +694,6 @@ export default function MuseumScene({
           }
         });
 
-        this.nearColumn = null;
-        this.columns.forEach((column) => {
-          const distance = Phaser.Math.Distance.Between(
-            this.player.x,
-            this.player.y,
-            column.collision.x,
-            column.collision.y
-          );
-          if (distance < 100) {
-            this.nearColumn = {
-              roomNumber: column.roomNumber,
-              title: column.title
-            };
-          }
-        });
-
         this.nearLockedDoor = null;
         this.lockedDoors.forEach((door) => {
           const distance = Phaser.Math.Distance.Between(
@@ -510,14 +711,6 @@ export default function MuseumScene({
           this.promptText.setText(
             `Nhấn E để làm quiz mở Phòng ${this.nearLockedDoor}`
           );
-          this.promptText.setVisible(true);
-          this.promptText.setPosition(
-            this.cameras.main.width / 2,
-            this.cameras.main.height - 60
-          );
-        } else if (this.nearColumn !== null) {
-          const column = this.nearColumn as { roomNumber: number; title: string };
-          this.promptText.setText(`Nhấn E để xem thông tin phòng ${column.roomNumber}`);
           this.promptText.setVisible(true);
           this.promptText.setPosition(
             this.cameras.main.width / 2,
