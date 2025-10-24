@@ -142,30 +142,30 @@ export default function MuseumScene({
       }
 
       create() {
-        this.physics.world.setBounds(0, 0, 9000, 1200);
+        this.physics.world.setBounds(0, 0, 3000, 1200);
 
-        for (let x = 0; x < 9000; x += 120) {
+        for (let x = 0; x < 3000; x += 120) {
           for (let y = 0; y < 1200; y += 120) {
             const baseColor = (x + y) % 240 === 0 ? 0x374151 : 0x2d3748;
             this.add.rectangle(x + 60, y + 60, 118, 118, baseColor);
           }
         }
 
-        this.add.rectangle(4500, 100, 800, 80, 0x0f3460);
+        this.add.rectangle(1500, 100, 800, 80, 0x0f3460);
         this.add
-          .text(4500, 100, "BẢO TÀNG KHOA HỌC CHÍNH TRỊ", {
+          .text(1500, 100, "BẢO TÀNG KHOA HỌC CHÍNH TRỊ", {
             fontSize: "32px",
             color: "#e8e8e8",
             fontStyle: "bold",
           })
           .setOrigin(0.5);
 
-        this.createWall(4500, 20, 9000, 40, 0x1e293b);
-        this.createWall(4500, 1180, 9000, 40, 0x1e293b);
+        this.createWall(1500, 20, 3000, 40, 0x1e293b);
+        this.createWall(1500, 1180, 3000, 40, 0x1e293b);
         this.createWall(20, 600, 40, 1200, 0x1e293b);
-        this.createWall(8980, 600, 40, 1200, 0x1e293b);
+        this.createWall(2980, 600, 40, 1200, 0x1e293b);
 
-        for (let i = 1; i <= 8; i++) {
+        for (let i = 1; i <= 2; i++) {
           const x = i * 1000;
 
           this.createWall(x, 250, 40, 460, 0x1e293b);
@@ -174,19 +174,9 @@ export default function MuseumScene({
           if (!unlockedRooms.has(i + 1)) {
             const door = this.add.sprite(x, 600, "locked-door");
 
-            const doorCollision = this.add.rectangle(
-              x,
-              600,
-              40,
-              200,
-              0xff0000,
-              0
-            );
+            const doorCollision = this.add.rectangle(x, 600, 40, 200, 0xff0000, 0);
             this.physics.add.existing(doorCollision, true);
-            this.lockedDoors.push({
-              collision: doorCollision,
-              roomNumber: i + 1,
-            });
+            this.lockedDoors.push({ collision: doorCollision, roomNumber: i + 1 });
 
             this.add
               .text(x, 500, `PHÒNG ${i + 1}\nĐANG KHÓA`, {
@@ -199,7 +189,7 @@ export default function MuseumScene({
           }
         }
 
-        for (let room = 0; room < 9; room++) {
+        for (let room = 0; room < 3; room++) {
           const baseX = room * 1000;
           this.createPillar(baseX + 250, 250);
           this.createPillar(baseX + 250, 950);
@@ -370,7 +360,7 @@ export default function MuseumScene({
           this.physics.add.collider(this.player, door.collision);
         });
 
-        this.cameras.main.setBounds(0, 0, 9000, 1200);
+        this.cameras.main.setBounds(0, 0, 3000, 1200);
         this.cameras.main.startFollow(this.player, true, 0.1, 0.1);
         this.cameras.main.setZoom(1);
 

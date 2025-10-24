@@ -230,7 +230,7 @@ export default function MuseumPage() {
 
       {visitedExhibits.size > 0 && (
         <div className="fixed bottom-4 right-4 bg-[#16213e] border border-[#0f3460] rounded-lg px-4 py-2 text-[#e8e8e8]">
-          <p className="text-sm">Phòng đã mở: {unlockedRooms.size}/9</p>
+          <p className="text-sm">Phòng đã mở: {unlockedRooms.size}/3</p>
           <p className="text-sm">
             Đã tham quan: {visitedExhibits.size} khu trưng bày
           </p>
