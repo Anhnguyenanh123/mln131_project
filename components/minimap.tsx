@@ -24,15 +24,15 @@ export default function Minimap({
     return () => window.removeEventListener("playerMove", handlePlayerMove);
   }, []);
 
-  const scaleX = 360 / 3000;
-  const scaleY = 90 / 1200;
+  const scaleX = 480 / 4320; // 480px width for 3 maps (4320px total)
+  const scaleY = 110 / 960;  // 110px height for 960px map height
 
   return (
-    <div className="fixed top-20 right-4 bg-[#16213e]/90 border-2 border-[#0f3460] rounded-lg p-3 backdrop-blur-sm max-w-[400px]">
+    <div className="fixed top-20 right-4 bg-[#16213e]/90 border-2 border-[#0f3460] rounded-lg p-3 backdrop-blur-sm max-w-[520px]">
       <h3 className="text-xs font-semibold text-[#e8e8e8] mb-2 text-center">
         Bản đồ bảo tàng (3 phòng)
       </h3>
-      <div className="relative w-[360px] h-[90px] bg-[#1a1a2e] rounded border border-[#0f3460]">
+      <div className="relative w-[480px] h-[110px] bg-[#1a1a2e] rounded border border-[#0f3460]">
         <div className="absolute inset-1 border border-[#374151] rounded" />
 
         {[1, 2].map((i) => (
@@ -40,7 +40,7 @@ export default function Minimap({
             key={i}
             className="absolute top-2 bottom-2 w-[2px]"
             style={{
-              left: `${i * 120}px`,
+              left: `${i * 160}px`, // 480px / 3 maps = 160px per map
               backgroundColor: unlockedRooms.has(i + 1) ? "#374151" : "#7f1d1d",
             }}
           />
