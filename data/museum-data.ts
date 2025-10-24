@@ -115,7 +115,12 @@ export const roomQuizzes: RoomQuiz[] = [
       },
       {
         question: "Đại hội nào khởi xướng Đổi mới, nhấn mạnh phát huy dân chủ?",
-        options: ["Đại hội V", "Đại hội VI (1986)", "Đại hội VII", "Đại hội VIII"],
+        options: [
+          "Đại hội V",
+          "Đại hội VI (1986)",
+          "Đại hội VII",
+          "Đại hội VIII",
+        ],
         correctAnswer: 1,
       },
       {
@@ -145,7 +150,12 @@ export const roomQuizzes: RoomQuiz[] = [
       },
       {
         question: "Dân chủ gián tiếp được thực hiện thông qua cơ quan nào?",
-        options: ["Chính phủ", "Quốc hội và Hội đồng nhân dân", "Các tổ chức xã hội", "Cơ quan hành pháp"],
+        options: [
+          "Chính phủ",
+          "Quốc hội và Hội đồng nhân dân",
+          "Các tổ chức xã hội",
+          "Cơ quan hành pháp",
+        ],
         correctAnswer: 1,
       },
       {
@@ -165,7 +175,8 @@ export const roomQuizzes: RoomQuiz[] = [
     roomNumber: 3,
     questions: [
       {
-        question: '"Thượng tôn pháp luật" trong Nhà nước pháp quyền nghĩa là gì?',
+        question:
+          '"Thượng tôn pháp luật" trong Nhà nước pháp quyền nghĩa là gì?',
         options: [
           "Luật phục tùng cơ quan hành pháp",
           "Pháp luật giữ vị trí tối thượng trong điều chỉnh quan hệ xã hội",

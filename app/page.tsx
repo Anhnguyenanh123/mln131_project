@@ -5,6 +5,7 @@ import MuseumScene from "@/components/museum-scene";
 import InfoModal from "@/components/info-modal";
 import InstructionModal from "@/components/instruction-modal";
 import QuizModal from "@/components/quiz-modal";
+import CongratsModal from "@/components/congrats-modal";
 import Minimap from "@/components/minimap";
 import StartScreen from "@/components/start-screen";
 import type { ExhibitData, Player } from "@/types/museum";
@@ -25,6 +26,7 @@ export default function MuseumPage() {
   const [currentPlayer, setCurrentPlayer] = useState<string | null>(null);
   const [allPlayers, setAllPlayers] = useState<Player[]>([]);
   const [showStartScreen, setShowStartScreen] = useState(true);
+  const [showCongrats, setShowCongrats] = useState(false);
 
   const isLoadingPlayer = useRef(false);
 
@@ -123,7 +125,11 @@ export default function MuseumPage() {
   const handleQuizPass = useCallback(() => {
     if (currentQuizRoom !== null) {
       setUnlockedRooms((prev) => {
-        const newUnlocked = new Set([...prev, currentQuizRoom + 1]);
+        const nextRoom = currentQuizRoom + 1;
+        const newUnlocked = new Set([...prev, nextRoom]);
+        if (newUnlocked.size >= 3) {
+          setShowCongrats(true);
+        }
         return newUnlocked;
       });
       setShowQuiz(false);
@@ -236,6 +242,13 @@ export default function MuseumPage() {
           </p>
         </div>
       )}
+
+      <CongratsModal
+        isOpen={showCongrats}
+        unlockedCount={unlockedRooms.size}
+        visitedCount={visitedExhibits.size}
+        onClose={() => setShowCongrats(false)}
+      />
     </div>
   );
 }
