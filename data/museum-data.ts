@@ -1,363 +1,297 @@
 import type { ExhibitData, RoomQuiz } from "@/types/museum";
 
 export const museumData: ExhibitData[] = [
+  // 🏛 PHÒNG 1: SỰ HÌNH THÀNH NỀN DÂN CHỦ XHCN Ở VIỆT NAM
   {
     id: "room1-exhibit1",
-    title: "Dòng thời gian hình thành & phát triển",
+    title: "Khởi nguồn sau 1945",
     position: { x: 300, y: 300 },
     roomNumber: 1,
-    image: "/room1-timeline.jpg",
-    content: `**1945-1976:** Sau Cách mạng Tháng Tám 1945, nước ta xác lập chế độ dân chủ nhân dân; đến năm 1976 thống nhất đất nước, tên nước là Cộng hòa xã hội chủ nghĩa Việt Nam.
-
-**1986 – Bước ngoặt Đổi mới:** Đại hội VI (1986) đề ra đường lối đổi mới toàn diện, nhấn mạnh phát huy dân chủ như động lực phát triển.
-
-**Quan điểm hiện nay:** Dân chủ được xác định là đặc trưng của CNXH Việt Nam (do nhân dân làm chủ), và được đưa vào mục tiêu tổng quát "Dân giàu, nước mạnh, dân chủ, công bằng, văn minh".`,
+    content: `Sau Cách mạng Tháng Tám 1945, chế độ dân chủ nhân dân được xác lập – đặt nền móng đầu tiên cho dân chủ xã hội chủ nghĩa ở Việt Nam.`,
   },
   {
     id: "room1-exhibit2",
-    title: "Dân chủ: mục tiêu, bản chất, động lực",
+    title: "Giai đoạn 1976",
     position: { x: 300, y: 600 },
     roomNumber: 1,
-    content: `**Mục tiêu:** Dân chủ là một thành tố trong mục tiêu tổng quát của cách mạng Việt Nam.
-
-**Bản chất:** Do nhân dân làm chủ, quyền lực thuộc về nhân dân.
-
-**Động lực:** Dân chủ phát huy sức mạnh của nhân dân, của toàn dân tộc, tạo xung lực cho phát triển.
-
-**Gắn với pháp luật:** Dân chủ gắn kỷ luật, kỷ cương và phải được thể chế hóa bằng pháp luật.
-
-"NƯỚC TA LÀ NƯỚC DÂN CHỦ... Nói tóm lại quyền lực và lực lượng đều ở dân." - Hồ Chí Minh`,
+    content: `Năm 1976, đất nước thống nhất và mang tên **Cộng hòa Xã hội Chủ Nghĩa Việt Nam**.  
+Khái niệm “dân chủ XHCN” chưa phổ biến, mà thường dùng “chế độ làm chủ tập thể” gắn với “chuyên chính vô sản”.`,
   },
   {
     id: "room1-exhibit3",
-    title: "Cơ chế thực hiện dân chủ",
+    title: "Nhận thức ban đầu",
     position: { x: 300, y: 900 },
     roomNumber: 1,
-    content: `**Dân chủ gián tiếp (đại diện):** Nhân dân bầu ra Quốc hội – cơ quan quyền lực nhà nước cao nhất, nhiệm kỳ 5 năm.
-
-**Dân chủ trực tiếp:** Nhân dân được thông tin về hoạt động của Nhà nước; được bàn bạc công việc Nhà nước và cộng đồng; được quyết định các vấn đề dân chủ ở cơ sở; kiểm tra, giám sát hoạt động cơ quan Nhà nước.`,
+    content: `Trong giai đoạn đầu, mối quan hệ giữa dân chủ xã hội chủ nghĩa và nhà nước pháp quyền chưa được xác định rõ ràng; nhiều lĩnh vực như dân sinh, dân trí, dân quyền chưa được đặt đúng vị trí.`,
   },
   {
     id: "room1-exhibit4",
-    title: "Liên hệ dân chủ ↔ nhà nước pháp quyền",
+    title: "Thực tiễn hạn chế",
     position: { x: 700, y: 600 },
     roomNumber: 1,
-    image: "/room1-relationship.jpg",
-    content: `**Nhà nước pháp quyền:** Thượng tôn pháp luật, hướng tới phúc lợi cho mọi người, tạo điều kiện để cá nhân tự do – bình đẳng – phát huy năng lực.
-
-**6 đặc điểm trọng tâm:**
-1. Của dân – do dân – vì dân
-2. Hiến pháp, pháp luật tối thượng
-3. Thống nhất quyền lực kèm phân công – phối hợp – kiểm soát
-4. Đảng Cộng sản Việt Nam lãnh đạo
-5. Tôn trọng quyền con người
-6. Tập trung dân chủ trong tổ chức bộ máy`,
+    content: `Dân chủ còn mang tính lý luận, thiếu cơ chế cụ thể để thực thi trong thời kỳ quá độ; các điều kiện kinh tế – xã hội – pháp lý còn chưa hoàn thiện.`,
   },
 
+  // 🏛 PHÒNG 2: BƯỚC NGOẶT ĐỔI MỚI 1986
   {
     id: "room2-exhibit1",
-    title: "Bản chất của nền dân chủ XHCN Việt Nam",
+    title: "Đại hội VI của Đảng (1986)",
     position: { x: 1300, y: 300 },
     roomNumber: 2,
-    image: "/room2-essence.jpg",
-    content: `Dân chủ xã hội chủ nghĩa ở Việt Nam là nền dân chủ "do nhân dân làm chủ, quyền lực thuộc về nhân dân".
-
-Dân chủ không chỉ là mục tiêu (dân giàu, nước mạnh, dân chủ, công bằng, văn minh), mà còn là động lực phát triển. Dân chủ gắn liền với pháp luật, kỷ luật và kỷ cương, được thể chế hóa và bảo đảm bằng Hiến pháp.
-
-"Nước ta là nước dân chủ. Bao nhiêu lợi ích đều là vì dân, bao nhiêu quyền hạn đều là của dân... Nói tóm lại, quyền hành và lực lượng đều ở nơi dân." - Hồ Chí Minh`,
+    content: `Đại hội VI (1986) đề ra **đường lối đổi mới toàn diện**, nhấn mạnh dân chủ là **động lực phát triển** của đất nước.`,
   },
   {
     id: "room2-exhibit2",
-    title: "Hai hình thức dân chủ: Trực tiếp và Gián tiếp",
+    title: "Tư tưởng 'Lấy dân làm gốc'",
     position: { x: 1300, y: 600 },
     roomNumber: 2,
-    content: `**Dân chủ gián tiếp (dân chủ đại diện):**
-• Nhân dân ủy quyền cho các cơ quan đại diện (Quốc hội, Hội đồng nhân dân các cấp)
-• Quốc hội là cơ quan quyền lực nhà nước cao nhất, hoạt động theo nhiệm kỳ 5 năm
-
-**Dân chủ trực tiếp:**
-• Nhân dân trực tiếp tham gia quản lý xã hội: bàn bạc, góp ý, giám sát, biểu quyết
-• Hình thức thể hiện: "Dân biết, dân bàn, dân làm, dân kiểm tra"`,
+    content: `Đảng khẳng định: *“Cách mạng là sự nghiệp của quần chúng”*; chỉ khi nhân dân được làm chủ thật sự, mới tạo được phong trào cách mạng mạnh mẽ.`,
   },
   {
     id: "room2-exhibit3",
-    title: "Đảng lãnh đạo – Nhân dân làm chủ – Nhà nước quản lý",
+    title: "Vai trò của dân chủ trong đổi mới",
     position: { x: 1300, y: 900 },
     roomNumber: 2,
-    image: "/room2-triangle.jpg",
-    content: `**Đảng lãnh đạo:** đảm bảo định hướng chính trị đúng đắn, lãnh đạo nhà nước và xã hội bằng đường lối, chủ trương.
-
-**Nhà nước quản lý:** sử dụng pháp luật làm công cụ để điều hành xã hội, bảo đảm kỷ cương, công bằng.
-
-**Nhân dân làm chủ:** là chủ thể quyền lực, thực hiện quyền làm chủ thông qua bầu cử, giám sát, phản biện, tham gia xây dựng chính sách.`,
+    content: `Dân chủ được coi là **nguồn sức mạnh nội sinh**, là nền tảng để đổi mới hệ thống chính trị, kinh tế, văn hóa, xã hội.`,
+  },
+  {
+    id: "room2-exhibit4",
+    title: "Thành tựu sau hơn 30 năm",
+    position: { x: 1700, y: 600 },
+    roomNumber: 2,
+    content: `Nhận thức về dân chủ ngày càng hoàn thiện, được thể chế hóa trong các văn kiện Đảng; dân chủ trở thành **mục tiêu, bản chất và động lực của CNXH Việt Nam.**`,
   },
 
+  // ⚖️ PHÒNG 3: BẢN CHẤT CỦA DÂN CHỦ XHCN Ở VIỆT NAM
   {
     id: "room3-exhibit1",
-    title: "Khái niệm & giá trị cốt lõi",
+    title: "Quan điểm Hồ Chí Minh",
     position: { x: 2300, y: 300 },
     roomNumber: 3,
-    image: "/room3-concept.jpg",
-    content: `Nhà nước pháp quyền là mô hình nhà nước thượng tôn pháp luật, hướng tới phúc lợi cho mọi người, tạo điều kiện để cá nhân tự do, bình đẳng, phát huy năng lực.
-
-Ở Việt Nam: "Xây dựng Nhà nước pháp quyền Việt Nam của dân, do dân, vì dân; quản lý xã hội bằng pháp luật; mọi cơ quan, tổ chức, cán bộ, công chức, công dân có nghĩa vụ chấp hành Hiến pháp và pháp luật."`,
+    content: `"Nước ta là nước dân chủ. Bao nhiêu lợi ích đều vì dân, bao nhiêu quyền hạn đều là của dân."  
+→ Khẳng định quyền lực tối cao thuộc về nhân dân.`,
   },
   {
     id: "room3-exhibit2",
-    title: "6 đặc điểm cốt lõi",
+    title: "Nội dung bản chất",
     position: { x: 2300, y: 600 },
     roomNumber: 3,
-    content: `1. **Của dân, do dân, vì dân:** Nhà nước do nhân dân lao động làm chủ
-2. **Hiến pháp & pháp luật tối thượng:** Pháp luật ở vị trí tối thượng
-3. **Quyền lực thống nhất + phân công – phối hợp – kiểm soát**
-4. **Đảng Cộng sản Việt Nam lãnh đạo**
-5. **Tôn trọng quyền con người:** Con người là chủ thể, trung tâm của phát triển
-6. **Nguyên tắc tập trung dân chủ trong tổ chức bộ máy**`,
+    content: `- **Mục tiêu:** Dân giàu, nước mạnh, công bằng, văn minh.  
+- **Bản chất:** Quyền lực thuộc về nhân dân.  
+- **Động lực:** Phát huy sức mạnh toàn dân.  
+- **Pháp luật:** Dân chủ phải gắn kỷ cương, luật pháp.`,
   },
   {
     id: "room3-exhibit3",
-    title: "Cơ chế vận hành",
+    title: "Cơ sở thực hiện",
     position: { x: 2300, y: 900 },
     roomNumber: 3,
-    content: `**Thượng tôn Hiến pháp & pháp luật:** Mọi cơ quan, tổ chức, cán bộ, công chức, công dân phải chấp hành.
-
-**Phân công quyền lực:** Lập pháp – hành pháp – tư pháp phối hợp & kiểm soát lẫn nhau.
-
-**Mối quan hệ:** Đảng định hướng chính trị → Nhà nước cụ thể hóa bằng pháp luật → Nhân dân thực hành quyền làm chủ và giám sát.`,
+    content: `Dựa vào Nhà nước XHCN và sự tham gia tích cực của nhân dân; mọi quyền lực đều bắt nguồn từ dân và do dân ủy quyền.`,
   },
   {
     id: "room3-exhibit4",
-    title: "Liên hệ thực tiễn & yêu cầu hiện nay",
+    title: "Hình thức thực hiện dân chủ",
     position: { x: 2700, y: 600 },
     roomNumber: 3,
-    image: "/room3-practice.jpg",
-    content: `**Yêu cầu:**
-• Hoàn thiện thể chế kinh tế thị trường định hướng XHCN
-• Xây dựng Đảng trong sạch, vững mạnh
-• Xây dựng Nhà nước pháp quyền vững mạnh
-• Tôn trọng, bảo đảm quyền con người
-• Đề cao trách nhiệm giải trình, minh bạch, kiểm soát quyền lực`,
+    content: `**Dân chủ gián tiếp:** Thông qua Quốc hội, HĐND, các cơ quan đại diện.  
+**Dân chủ trực tiếp:** Nhân dân bàn bạc, giám sát, kiểm tra.  
+Phương châm: *“Dân biết, dân bàn, dân làm, dân kiểm tra.”*`,
   },
 
+  // ⚖️ PHÒNG 4: DÂN CHỦ TRONG THỰC TIỄN XÂY DỰNG XHCN
   {
     id: "room4-exhibit1",
-    title: "Xây dựng thể chế kinh tế thị trường",
+    title: "Quyền làm chủ được mở rộng",
     position: { x: 3300, y: 300 },
     roomNumber: 4,
-    content: `Phát huy dân chủ gắn liền với việc xây dựng thể chế kinh tế thị trường định hướng XHCN – một nền kinh tế nhiều thành phần, vận hành theo quy luật thị trường nhưng có định hướng xã hội.
-
-**Mục tiêu:**
-• Mọi chủ thể kinh tế được tự do kinh doanh hợp pháp
-• Nhà nước điều tiết bằng pháp luật, chiến lược và quy hoạch
-• Thúc đẩy công khai, minh bạch, trách nhiệm giải trình`,
+    content: `Dân chủ ngày càng được thể chế hóa, mở rộng trên mọi lĩnh vực – chính trị, kinh tế, văn hóa, xã hội.`,
   },
   {
     id: "room4-exhibit2",
-    title: "Xây dựng Đảng trong sạch, vững mạnh",
+    title: "Ý thức và trách nhiệm công dân",
     position: { x: 3300, y: 600 },
     roomNumber: 4,
-    image: "/room4-party.jpg",
-    content: `Đảng Cộng sản Việt Nam là nhân tố quyết định thành công của dân chủ xã hội chủ nghĩa.
-
-**Cần tiếp tục:**
-• Xây dựng Đảng trong sạch, vững mạnh về chính trị, tư tưởng, tổ chức và đạo đức
-• Thực hiện nghiêm cơ chế tự phê bình và phê bình
-• Phát huy vai trò tiên phong, gương mẫu của cán bộ, đảng viên`,
+    content: `Nhân dân ngày càng có ý thức làm chủ, tinh thần trách nhiệm với đất nước, tham gia quản lý xã hội.`,
   },
   {
     id: "room4-exhibit3",
-    title: "Xây dựng Nhà nước pháp quyền vững mạnh",
+    title: "Dân chủ và pháp luật",
     position: { x: 3300, y: 900 },
     roomNumber: 4,
-    content: `**Trọng tâm:**
-• Hoàn thiện hệ thống pháp luật đồng bộ, công khai, minh bạch
-• Cải cách thể chế và phương thức hoạt động của bộ máy nhà nước
-• Xây dựng đội ngũ cán bộ, công chức có năng lực, đạo đức
-• Phòng chống tham nhũng, lãng phí
-• Đặt nhân dân ở vị trí trung tâm của quản lý xã hội`,
+    content: `Dân chủ phải gắn liền với pháp luật, kỷ cương; mọi quyền dân chủ đều được luật hóa và bảo đảm thực thi.`,
   },
   {
     id: "room4-exhibit4",
-    title: "Phát huy vai trò các tổ chức chính trị – xã hội",
+    title: "Khó khăn, thách thức hiện nay",
     position: { x: 3700, y: 600 },
     roomNumber: 4,
-    image: "/room4-organizations.jpg",
-    content: `Các tổ chức Mặt trận Tổ quốc, Công đoàn, Đoàn Thanh niên, Hội Liên hiệp Phụ nữ là cầu nối giữa Đảng – Nhà nước – Nhân dân.
-
-**Vai trò:**
-• Đại diện cho tiếng nói, nguyện vọng của các tầng lớp nhân dân
-• Tham gia giám sát, phản biện xã hội
-• Vận động nhân dân thực hiện chủ trương, chính sách`,
+    content: `Kinh tế kém phát triển, hậu quả chiến tranh; tiêu cực xã hội, “diễn biến hòa bình”; dân chủ ở một số nơi còn hình thức, thiếu hiệu quả.`,
   },
 
+  // 🏛 PHÒNG 5: NHÀ NƯỚC PHÁP QUYỀN XÃ HỘI CHỦ NGHĨA – QUAN NIỆM
   {
     id: "room5-exhibit1",
-    title: "Nhiệm vụ cấp bách và lâu dài",
+    title: "Khái niệm chung",
     position: { x: 4300, y: 300 },
     roomNumber: 5,
-    image: "/room5-anticorruption.jpg",
-    content: `Phòng, chống tham nhũng, lãng phí, thực hành tiết kiệm là nhiệm vụ cấp bách, thường xuyên và lâu dài.
-
-**Các định hướng:**
-• Hoàn thiện thể chế để ngăn ngừa tham nhũng
-• Tăng cường công khai, minh bạch trong quản lý tài chính công
-• Nâng cao trách nhiệm giải trình của cán bộ, công chức
-• Xây dựng văn hóa liêm chính trong Đảng và toàn xã hội
-
-"Cán bộ là cái gốc của mọi công việc." - Hồ Chí Minh`,
+    content: `Nhà nước pháp quyền là mô hình **thượng tôn pháp luật**, đảm bảo tự do, bình đẳng và phúc lợi cho nhân dân.`,
   },
   {
     id: "room5-exhibit2",
-    title: "Kiểm soát quyền lực và trách nhiệm giải trình",
+    title: "Đặc điểm cơ bản",
     position: { x: 4300, y: 600 },
     roomNumber: 5,
-    content: `**Cơ chế kiểm soát:**
-• Kiểm soát ở cả ba nhánh: lập pháp, hành pháp, tư pháp
-• Giám sát của nhân dân, Mặt trận Tổ quốc và báo chí
-• Mọi quyền hạn phải gắn với trách nhiệm và giải trình công khai
-• Không ai, không tổ chức nào đứng trên pháp luật
-
-Chính phủ điện tử, chuyển đổi số, dữ liệu mở đang trở thành công cụ quan trọng giúp minh bạch hóa quản trị công.`,
+    content: `- Có **phân công, phối hợp và kiểm soát quyền lực**.  
+- Cơ quan nhà nước hoạt động minh bạch, có trách nhiệm.  
+- Mọi công dân, tổ chức đều phải tuân thủ pháp luật nghiêm minh.`,
   },
   {
     id: "room5-exhibit3",
-    title: "Xây dựng đội ngũ cán bộ liêm chính",
+    title: "Mục tiêu hướng tới",
     position: { x: 4300, y: 900 },
     roomNumber: 5,
-    content: `**Tập trung vào:**
-• Nâng cao bản lĩnh chính trị, phẩm chất đạo đức
-• Đào tạo – bồi dưỡng – tuyển chọn cán bộ dựa trên năng lực
-• Công khai hóa tiêu chuẩn đánh giá, thi tuyển, bổ nhiệm
-• Thiết lập cơ chế thưởng – phạt rõ ràng
-• Xây dựng môi trường hành chính liêm chính, chuyên nghiệp`,
+    content: `Nhà nước phục vụ nhân dân, đảm bảo công bằng xã hội, tôn trọng và bảo vệ quyền con người.`,
   },
   {
     id: "room5-exhibit4",
-    title: "Bảo vệ chế độ, củng cố niềm tin",
+    title: "Nhận thức của Đảng",
     position: { x: 4700, y: 600 },
     roomNumber: 5,
-    image: "/room5-trust.jpg",
-    content: `Phòng, chống tham nhũng không chỉ là bảo vệ pháp luật, mà là bảo vệ chế độ, bảo vệ lòng tin của nhân dân.
-
-Khi nhân dân tin tưởng vào sự công bằng và minh bạch, nền tảng chính trị – xã hội mới bền vững.
-
-"Dân biết, dân bàn, dân làm, dân kiểm tra, dân giám sát, dân thụ hưởng" là chuẩn mực dân chủ toàn diện.`,
+    content: `“Xây dựng Nhà nước pháp quyền Việt Nam của dân, do dân, vì dân” – quyền lực thống nhất, có kiểm soát giữa lập pháp, hành pháp, tư pháp.`,
   },
 
+  // ⚖️ PHÒNG 6: ĐẶC ĐIỂM NHÀ NƯỚC PHÁP QUYỀN XHCN VIỆT NAM
   {
     id: "room6-exhibit1",
-    title: "Đổi mới thể chế – Nền tảng cho dân chủ",
+    title: "Do nhân dân làm chủ",
     position: { x: 5300, y: 300 },
     roomNumber: 6,
-    content: `Đổi mới thể chế là quá trình cải tiến cơ cấu, phương thức và quy tắc vận hành của Nhà nước.
-
-**Các định hướng:**
-• Hoàn thiện pháp luật phù hợp với kinh tế thị trường
-• Tách bạch rõ quyền lực – trách nhiệm – quyền lợi
-• Cải cách hành chính toàn diện, hướng đến "chính phủ số"
-• Xây dựng thể chế minh bạch, khuyến khích người dân tham gia giám sát`,
+    content: `Nhà nước của dân, do dân, vì dân – chịu sự giám sát của nhân dân.`,
   },
   {
     id: "room6-exhibit2",
-    title: "Chuyển đổi số và chính phủ điện tử",
+    title: "Thượng tôn pháp luật",
     position: { x: 5300, y: 600 },
     roomNumber: 6,
-    image: "/room6-digital.jpg",
-    content: `Chuyển đổi số là bước nhảy vọt trong thực hiện dân chủ và pháp quyền.
-
-**Lợi ích:**
-• Chính phủ điện tử giúp người dân tiếp cận dịch vụ công nhanh, minh bạch
-• Dữ liệu mở tăng quyền giám sát của công dân
-• AI và Big Data hỗ trợ phát hiện sai phạm, phân tích chính sách
-
-"Chuyển đổi số là nền tảng để Nhà nước phục vụ, không phải cai trị."`,
+    content: `Hoạt động dựa trên Hiến pháp và pháp luật – pháp luật giữ vị trí tối thượng trong điều chỉnh xã hội.`,
   },
   {
     id: "room6-exhibit3",
-    title: "Minh bạch và trách nhiệm giải trình",
+    title: "Thống nhất quyền lực, có kiểm soát",
     position: { x: 5300, y: 900 },
     roomNumber: 6,
-    content: `Minh bạch và trách nhiệm giải trình là hai trụ cột đảm bảo niềm tin vào Nhà nước pháp quyền.
-
-**Yêu cầu:**
-• Mọi quyết định, chính sách, chi tiêu công phải được công khai
-• Cán bộ, công chức chịu trách nhiệm trước dân và pháp luật
-• Công nghệ số hỗ trợ công khai hóa thông tin
-• Tăng cường kiểm toán, thanh tra độc lập`,
+    content: `Ba quyền lập pháp – hành pháp – tư pháp có **phân công, phối hợp và kiểm soát**.`,
   },
   {
     id: "room6-exhibit4",
-    title: "Xây dựng nền hành chính phục vụ",
+    title: "Đảng lãnh đạo",
     position: { x: 5700, y: 600 },
     roomNumber: 6,
-    image: "/room6-service.jpg",
-    content: `Nhà nước trong kỷ nguyên mới là người phục vụ và kiến tạo môi trường phát triển.
-
-**Trọng tâm:**
-• Cải cách thủ tục hành chính: giảm giấy tờ, số hóa hồ sơ
-• Phát triển đội ngũ công chức 4.0
-• Lấy sự hài lòng của người dân làm thước đo hiệu quả
-• Tạo hệ sinh thái đổi mới sáng tạo`,
+    content: `Nhà nước XHCN do Đảng Cộng sản Việt Nam lãnh đạo, bảo đảm định hướng XHCN.`,
+  },
+  {
+    id: "room6-exhibit5",
+    title: "Tôn trọng quyền con người",
+    position: { x: 5700, y: 900 },
+    roomNumber: 6,
+    content: `Con người là trung tâm của phát triển; nhân dân có quyền bầu, bãi miễn, giám sát đại biểu.`,
   },
 
+  // 🚀 PHÒNG 7: PHÁT HUY DÂN CHỦ HIỆN NAY
   {
     id: "room7-exhibit1",
-    title: "Chấp hành pháp luật về phòng, chống tham nhũng",
+    title: "Cơ sở kinh tế",
     position: { x: 6300, y: 300 },
     roomNumber: 7,
-    image: "/room7-law.jpg",
-    content: `Công dân có trách nhiệm chấp hành nghiêm chỉnh pháp luật về phòng, chống tham nhũng.
-
-**Nghĩa vụ:**
-• Hiểu biết pháp luật, không tham gia, tiếp tay hoặc bao che
-• Nói không với hối lộ, môi giới hối lộ
-• Tuân thủ pháp luật để bảo vệ cá nhân và giữ gìn kỷ cương xã hội
-
-"Pháp luật nghiêm minh là tấm khiên bảo vệ công lý – và nhân dân là người giữ tấm khiên đó."`,
+    content: `Hoàn thiện thể chế kinh tế thị trường định hướng XHCN; bảo hộ quyền sở hữu; cải cách hành chính; phát triển đồng bộ các yếu tố thị trường.`,
   },
   {
     id: "room7-exhibit2",
-    title: "Phát hiện, phản ánh và tố cáo",
+    title: "Xây dựng Đảng vững mạnh",
     position: { x: 6300, y: 600 },
     roomNumber: 7,
-    content: `Công dân có quyền và trách nhiệm phát hiện, phản ánh, tố cáo hành vi tham nhũng.
-
-**Khi tố cáo:**
-• Nêu rõ họ tên, địa chỉ, nội dung tố cáo
-• Cung cấp chứng cứ rõ ràng
-• Gửi đến đúng cơ quan có thẩm quyền
-
-Người tố cáo được bảo vệ khỏi trả thù, trù dập, đồng thời được biểu dương nếu góp phần phát hiện hành vi tham nhũng.`,
+    content: `Đảng là điều kiện tiên quyết bảo đảm dân chủ; phải tự đổi mới, tự chỉnh đốn, thực hiện tập trung dân chủ, tự phê bình và phê bình.`,
   },
   {
     id: "room7-exhibit3",
-    title: "Tham gia giám sát và kiến nghị",
+    title: "Nhà nước pháp quyền vững mạnh",
     position: { x: 6300, y: 900 },
     roomNumber: 7,
-    image: "/room7-supervision.jpg",
-    content: `Công dân có nghĩa vụ hợp tác, giúp đỡ cơ quan chức năng trong phòng, chống tham nhũng.
-
-**Cách thức:**
-• Thông qua Ban Thanh tra nhân dân, Mặt trận Tổ quốc, báo chí
-• Giám sát việc thực hiện pháp luật
-• Phản ánh những bất cập
-• Kiến nghị hoàn thiện pháp luật
-
-"Nhân dân không đứng ngoài cuộc – mà là người đồng hành, giám sát và kiến tạo Nhà nước liêm chính."`,
+    content: `Nhà nước phải đảm bảo quyền con người, tự do, danh dự và lợi ích hợp pháp của công dân bằng pháp luật.`,
   },
+  {
+    id: "room7-exhibit4",
+    title: "Vai trò tổ chức chính trị – xã hội",
+    position: { x: 6700, y: 600 },
+    roomNumber: 7,
+    content: `Đổi mới phương thức hoạt động, tăng vai trò giám sát, phản biện, bảo vệ quyền lợi nhân dân, xây dựng khối đại đoàn kết toàn dân.`,
+  },
+  {
+    id: "room7-exhibit5",
+    title: "Giám sát & phản biện xã hội",
+    position: { x: 6700, y: 900 },
+    roomNumber: 7,
+    content: `Công khai, minh bạch, lắng nghe ý kiến nhân dân, nâng cao dân trí, văn hóa pháp luật.`,
+  },
+
+  // ⚖️ PHÒNG 8: XÂY DỰNG VÀ HOÀN THIỆN NHÀ NƯỚC PHÁP QUYỀN XHCN
   {
     id: "room8-exhibit1",
-    title: "Nội dung sẽ được cập nhật",
-    position: { x: 7300, y: 600 },
+    title: "Dưới sự lãnh đạo của Đảng",
+    position: { x: 7300, y: 300 },
     roomNumber: 8,
-    content: `Phòng 8 đang được xây dựng nội dung. Vui lòng quay lại sau.`,
+    content: `Nhà nước mang bản chất giai cấp công nhân, gắn bó chặt chẽ với dân tộc và nhân dân.`,
   },
   {
+    id: "room8-exhibit2",
+    title: "Cải cách thể chế",
+    position: { x: 7300, y: 600 },
+    roomNumber: 8,
+    content: `Kiện toàn tổ chức Quốc hội, cải cách hành chính, giảm thủ tục phiền hà, nâng cao hiệu quả quản lý.`,
+  },
+  {
+    id: "room8-exhibit3",
+    title: "Xây dựng đội ngũ cán bộ, công chức",
+    position: { x: 7300, y: 900 },
+    roomNumber: 8,
+    content: `Cán bộ phải có bản lĩnh chính trị, phẩm chất đạo đức, năng lực; có cơ chế loại bỏ người yếu kém, vi phạm.`,
+  },
+  {
+    id: "room8-exhibit4",
+    title: "Phòng chống tham nhũng, lãng phí",
+    position: { x: 7700, y: 600 },
+    roomNumber: 8,
+    content: `Hoàn thiện thể chế, bảo vệ người tố cáo, xử lý nghiêm vi phạm; toàn Đảng, toàn dân cùng thực hành tiết kiệm.`,
+  },
+
+  // 🕊️ PHÒNG 9: Ý NGHĨA & TỔNG KẾT
+  {
     id: "room9-exhibit1",
-    title: "Nội dung sẽ được cập nhật",
+    title: "Thành tựu",
+    position: { x: 8300, y: 300 },
+    roomNumber: 9,
+    content: `Dân chủ XHCN và Nhà nước pháp quyền XHCN là hai trụ cột của chế độ ta, bảo đảm nhân dân thật sự làm chủ.`,
+  },
+  {
+    id: "room9-exhibit2",
+    title: "Bản chất ưu việt",
     position: { x: 8300, y: 600 },
     roomNumber: 9,
-    content: `Phòng 9 đang được xây dựng nội dung. Vui lòng quay lại sau.`,
+    content: `Kết hợp hài hòa giữa dân chủ và kỷ cương, pháp quyền và nhân văn, phát huy sức mạnh toàn dân.`,
+  },
+  {
+    id: "room9-exhibit3",
+    title: "Ý nghĩa lịch sử",
+    position: { x: 8300, y: 900 },
+    roomNumber: 9,
+    content: `Thể hiện con đường phát triển đúng đắn của Việt Nam: vì con người, công bằng, tự do, tiến bộ.`,
+  },
+  {
+    id: "room9-exhibit4",
+    title: "Định hướng tương lai",
+    position: { x: 8700, y: 600 },
+    roomNumber: 9,
+    content: `Tiếp tục phát huy dân chủ, hoàn thiện nhà nước pháp quyền, xây dựng đất nước phát triển bền vững theo con đường XHCN.`,
   },
 ];
 
