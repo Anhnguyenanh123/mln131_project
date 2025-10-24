@@ -153,7 +153,19 @@ export const roomQuizzes: RoomQuiz[] = [
     roomNumber: 1,
     questions: [
       {
-        question: "Sau thống nhất đất nước, tên nước chính thức là gì?",
+        question:
+          "Sau Cách mạng Tháng Tám năm 1945, chế độ chính trị nào được xác lập ở Việt Nam?",
+        options: [
+          "Chế độ dân chủ nhân dân",
+          "Chế độ quân chủ lập hiến",
+          "Chế độ phong kiến cải lương",
+          "Chế độ tư sản dân quyền",
+        ],
+        correctAnswer: 0,
+      },
+      {
+        question:
+          "Sau khi thống nhất đất nước năm 1976, tên nước chính thức của Việt Nam là gì?",
         options: [
           "Việt Nam Dân chủ Cộng hòa",
           "Cộng hòa xã hội chủ nghĩa Việt Nam",
@@ -163,7 +175,8 @@ export const roomQuizzes: RoomQuiz[] = [
         correctAnswer: 1,
       },
       {
-        question: "Đại hội nào khởi xướng Đổi mới, nhấn mạnh phát huy dân chủ?",
+        question:
+          "Đại hội nào của Đảng khởi xướng công cuộc Đổi mới và nhấn mạnh phát huy dân chủ?",
         options: [
           "Đại hội V",
           "Đại hội VI (1986)",
@@ -173,14 +186,26 @@ export const roomQuizzes: RoomQuiz[] = [
         correctAnswer: 1,
       },
       {
-        question: "Dân chủ muốn bền vững cần gắn với điều gì?",
+        question:
+          'Theo Đảng ta, dân chủ xã hội chủ nghĩa là "bản chất của chế độ ta", đồng thời còn là gì?',
         options: [
-          "Tập quán địa phương",
-          "Kỷ luật, kỷ cương & pháp luật (thể chế hóa)",
-          "Phong tục truyền thống",
-          "Tình cảm xã hội",
+          "Công cụ đấu tranh chính trị",
+          "Mục tiêu và động lực phát triển đất nước",
+          "Biểu hiện của kinh tế thị trường",
+          "Cơ chế quản lý tập trung",
         ],
         correctAnswer: 1,
+      },
+      {
+        question:
+          "Để dân chủ phát huy hiệu quả, cần gắn liền với yếu tố nào sau đây?",
+        options: [
+          "Kỷ luật, kỷ cương và pháp luật (thể chế hóa)",
+          "Tập quán địa phương",
+          "Tình cảm xã hội",
+          "Truyền thống gia đình",
+        ],
+        correctAnswer: 0,
       },
     ],
   },
@@ -188,35 +213,57 @@ export const roomQuizzes: RoomQuiz[] = [
     roomNumber: 2,
     questions: [
       {
-        question: "Dân chủ xã hội chủ nghĩa ở Việt Nam có bản chất là gì?",
+        question: "Bản chất của nền dân chủ xã hội chủ nghĩa ở Việt Nam là gì?",
         options: [
           "Dân chủ do cá nhân lãnh đạo",
-          "Dân chủ dựa trên quyền lực của Đảng",
           "Dân chủ do nhân dân làm chủ, quyền lực thuộc về nhân dân",
           "Dân chủ dựa vào giai cấp tư sản",
-        ],
-        correctAnswer: 2,
-      },
-      {
-        question: "Dân chủ gián tiếp được thực hiện thông qua cơ quan nào?",
-        options: [
-          "Chính phủ",
-          "Quốc hội và Hội đồng nhân dân",
-          "Các tổ chức xã hội",
-          "Cơ quan hành pháp",
+          "Dân chủ tập trung vào nhà nước",
         ],
         correctAnswer: 1,
       },
       {
         question:
-          'Cơ chế "Đảng lãnh đạo – Nhà nước quản lý – Nhân dân làm chủ" thể hiện điều gì?',
+          "Tư tưởng Hồ Chí Minh về dân chủ thể hiện rõ nhất qua câu nói nào sau đây?",
         options: [
-          "Cơ cấu tổ chức nhà nước",
-          "Nguyên tắc phân quyền",
-          "Cơ chế vận hành của nền dân chủ xã hội chủ nghĩa",
-          "Mối quan hệ giữa ba quyền lập pháp, hành pháp, tư pháp",
+          '"Dân chủ là để dân bàn việc của dân"',
+          '"Nước ta là nước dân chủ, bao nhiêu lợi ích đều vì dân, bao nhiêu quyền hạn đều là của dân"',
+          '"Nhà nước là công cụ của Đảng"',
+          '"Nhân dân là đối tượng quản lý của Nhà nước"',
         ],
-        correctAnswer: 2,
+        correctAnswer: 1,
+      },
+      {
+        question:
+          "Dân chủ gián tiếp ở nước ta được thể hiện chủ yếu thông qua cơ quan nào?",
+        options: [
+          "Quốc hội và Hội đồng nhân dân các cấp",
+          "Chính phủ và các bộ ngành",
+          "Mặt trận Tổ quốc Việt Nam",
+          "Tổ chức Đảng và Đoàn thể",
+        ],
+        correctAnswer: 0,
+      },
+      {
+        question:
+          "Hình thức dân chủ trực tiếp được nhân dân thể hiện bằng cách nào?",
+        options: [
+          "Tham gia bầu cử, giám sát, phản biện, kiểm tra hoạt động của Nhà nước",
+          "Chỉ thông qua ý kiến gửi Đảng và Quốc hội",
+          "Qua mạng xã hội và báo chí",
+          "Qua đóng góp tài chính vào ngân sách",
+        ],
+        correctAnswer: 0,
+      },
+      {
+        question: "Phương châm cơ bản trong thực hiện dân chủ ở cơ sở là gì?",
+        options: [
+          "Dân biết, dân bàn, dân làm, dân kiểm tra",
+          "Dân hỏi – chính quyền trả lời",
+          "Đảng quyết – dân làm",
+          "Nhà nước làm – dân giám sát",
+        ],
+        correctAnswer: 0,
       },
     ],
   },
@@ -225,34 +272,57 @@ export const roomQuizzes: RoomQuiz[] = [
     questions: [
       {
         question:
-          '"Thượng tôn pháp luật" trong Nhà nước pháp quyền nghĩa là gì?',
+          "“Thượng tôn pháp luật” trong Nhà nước pháp quyền xã hội chủ nghĩa có nghĩa là gì?",
         options: [
-          "Luật phục tùng cơ quan hành pháp",
-          "Pháp luật giữ vị trí tối thượng trong điều chỉnh quan hệ xã hội",
-          "Địa phương tự quyết theo lệ làng",
-          "Đảng quyết định thay pháp luật",
+          "Pháp luật giữ vị trí tối thượng, điều chỉnh mọi quan hệ xã hội",
+          "Pháp luật phụ thuộc vào ý chí của Đảng",
+          "Mỗi địa phương có thể tự ra luật riêng",
+          "Luật chỉ áp dụng cho cơ quan nhà nước",
         ],
-        correctAnswer: 1,
+        correctAnswer: 0,
       },
       {
-        question: "Ở Việt Nam, quyền lực nhà nước được tổ chức như thế nào?",
+        question: "Quyền lực nhà nước ở Việt Nam được tổ chức như thế nào?",
         options: [
+          "Thống nhất quyền lực, có sự phân công – phối hợp – kiểm soát giữa lập pháp, hành pháp, tư pháp",
           "Phân lập cứng ba quyền, không phối hợp",
-          "Thống nhất quyền lực, có phân công – phối hợp – kiểm soát giữa lập pháp, hành pháp, tư pháp",
           "Tập trung tuyệt đối vào hành pháp",
-          "Ủy quyền cho tư nhân",
+          "Do Quốc hội nắm toàn bộ quyền lực",
         ],
-        correctAnswer: 1,
+        correctAnswer: 0,
       },
       {
-        question: "Phương châm giám sát xã hội do nhân dân thực hiện là:",
+        question:
+          "Nhà nước pháp quyền xã hội chủ nghĩa Việt Nam đặt dưới sự lãnh đạo của ai?",
         options: [
-          "Dân hỏi – Đảng trả lời",
-          "Dân góp – dân kiến nghị",
-          '"Dân biết, dân bàn, dân làm, dân kiểm tra."',
-          "Dân phản ánh qua mạng xã hội",
+          "Chính phủ",
+          "Quốc hội",
+          "Đảng Cộng sản Việt Nam",
+          "Nhân dân địa phương",
         ],
         correctAnswer: 2,
+      },
+      {
+        question:
+          "Đặc trưng nổi bật của Nhà nước pháp quyền xã hội chủ nghĩa Việt Nam là gì?",
+        options: [
+          "Tôn trọng và bảo vệ quyền con người, coi con người là trung tâm của sự phát triển",
+          "Tập trung mọi quyền vào một cơ quan duy nhất",
+          "Không có sự kiểm soát quyền lực",
+          "Phân quyền tuyệt đối giữa các cấp",
+        ],
+        correctAnswer: 0,
+      },
+      {
+        question:
+          "Đấu tranh phòng, chống tham nhũng và thực hành tiết kiệm nhằm mục tiêu gì?",
+        options: [
+          "Tăng nguồn thu ngân sách",
+          "Giữ vững kỷ cương, củng cố niềm tin của nhân dân và nâng cao hiệu lực của Nhà nước pháp quyền",
+          "Giảm chi phí hành chính",
+          "Tạo hình ảnh tốt với quốc tế",
+        ],
+        correctAnswer: 1,
       },
     ],
   },
