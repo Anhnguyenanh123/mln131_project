@@ -51,7 +51,7 @@ export default function StartScreen({
                         {player.username}
                       </p>
                       <p className="text-[#94a3b8] text-sm">
-                        Phòng: {player.unlockedRooms.length}/9 • Trưng bày:{" "}
+                        Phòng: {player.unlockedRooms.length}/3 • Trưng bày:{" "}
                         {player.visitedExhibits.length}
                       </p>
                     </div>

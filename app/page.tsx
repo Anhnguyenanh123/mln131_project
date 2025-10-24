@@ -217,18 +217,6 @@ export default function MuseumPage() {
               dung
             </p>
           </div>
-          <div className="flex items-center gap-4">
-            <div className="text-right">
-              <p className="text-[#e8e8e8] font-semibold">{currentPlayer}</p>
-              <p className="text-[#94a3b8] text-xs">Người chơi</p>
-            </div>
-            <button
-              onClick={handleLogout}
-              className="px-4 py-2 bg-[#0f3460] hover:bg-[#1e3a5f] text-[#e8e8e8] rounded-lg text-sm transition-colors"
-            >
-              Đổi người chơi
-            </button>
-          </div>
         </div>
       </header>
 
