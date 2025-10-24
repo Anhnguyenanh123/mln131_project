@@ -23,6 +23,10 @@ export default function MuseumPage() {
   const [showQuiz, setShowQuiz] = useState(false);
   const [currentQuizRoom, setCurrentQuizRoom] = useState<number | null>(null);
   const [showCongrats, setShowCongrats] = useState(false);
+  const [showComprehensiveQuiz, setShowComprehensiveQuiz] = useState(false);
+  const [comprehensiveQuestions, setComprehensiveQuestions] = useState<any[]>(
+    []
+  );
 
   const [currentPlayer, setCurrentPlayer] = useState<string | null>(null);
   const [allPlayers, setAllPlayers] = useState<Player[]>([]);
@@ -121,11 +125,6 @@ export default function MuseumPage() {
     setShowInstructions(false);
   }, []);
 
-  const handleStartQuiz = useCallback((roomNumber: number) => {
-    setCurrentQuizRoom(roomNumber);
-    setShowQuiz(true);
-  }, []);
-
   const handleQuizPass = useCallback(() => {
     if (currentQuizRoom !== null) {
       const roomToUnlock = currentQuizRoom + 1;
@@ -142,13 +141,18 @@ export default function MuseumPage() {
       setShowQuiz(false);
       setCurrentQuizRoom(null);
 
-      if (currentQuizRoom === 3) {
-        setShowCongrats(true);
-      } else if (roomToUnlock === 3) {
-        alert(`Chúc mừng! Bạn đã mở khóa Phòng ${roomToUnlock}`);
-      }
+      alert(`Chúc mừng! Bạn đã mở khóa Phòng ${roomToUnlock}`);
     }
   }, [currentQuizRoom]);
+
+  const handleComprehensiveQuizPass = useCallback(() => {
+    setShowComprehensiveQuiz(false);
+    setShowCongrats(true);
+  }, []);
+
+  const handleComprehensiveQuizClose = useCallback(() => {
+    setShowComprehensiveQuiz(false);
+  }, []);
 
   const handleQuizClose = useCallback(() => {
     setShowQuiz(false);
@@ -169,6 +173,24 @@ export default function MuseumPage() {
 
   const handleCongratsClose = useCallback(() => {
     setShowCongrats(false);
+  }, []);
+
+  useEffect(() => {
+    const handleQuizPointInteract = () => {
+      // Combine all questions from all 3 rooms
+      const allQuestions = roomQuizzes
+        .filter((quiz) => quiz.roomNumber <= 3)
+        .flatMap((quiz) => quiz.questions);
+
+      setComprehensiveQuestions(allQuestions);
+      setShowComprehensiveQuiz(true);
+    };
+
+    window.addEventListener("quizPointInteract", handleQuizPointInteract);
+
+    return () => {
+      window.removeEventListener("quizPointInteract", handleQuizPointInteract);
+    };
   }, []);
 
   if (showStartScreen) {
@@ -193,6 +215,18 @@ export default function MuseumPage() {
               Sử dụng phím mũi tên hoặc WASD để di chuyển • Nhấn E để xem nội
               dung
             </p>
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="text-right">
+              <p className="text-[#e8e8e8] font-semibold">{currentPlayer}</p>
+              <p className="text-[#94a3b8] text-xs">Người chơi</p>
+            </div>
+            <button
+              onClick={handleLogout}
+              className="px-4 py-2 bg-[#0f3460] hover:bg-[#1e3a5f] text-[#e8e8e8] rounded-lg text-sm transition-colors"
+            >
+              Đổi người chơi
+            </button>
           </div>
         </div>
       </header>
@@ -231,6 +265,16 @@ export default function MuseumPage() {
         />
       )}
 
+      {showComprehensiveQuiz && (
+        <QuizModal
+          isOpen={showComprehensiveQuiz}
+          roomNumber={0}
+          questions={comprehensiveQuestions}
+          onPass={handleComprehensiveQuizPass}
+          onClose={handleComprehensiveQuizClose}
+        />
+      )}
+
       {showCongrats && (
         <CongratsModal
           isOpen={showCongrats}
@@ -249,7 +293,7 @@ export default function MuseumPage() {
 
       {visitedExhibits.size > 0 && (
         <div className="fixed bottom-4 right-4 bg-[#16213e] border border-[#0f3460] rounded-lg px-4 py-2 text-[#e8e8e8]">
-          <p className="text-sm">Phòng đã mở: {unlockedRooms.size}/3</p>
+          <p className="text-sm">Phòng đã mở: {unlockedRooms.size}/9</p>
           <p className="text-sm">
             Đã tham quan: {visitedExhibits.size} khu trưng bày
           </p>

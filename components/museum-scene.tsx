@@ -59,6 +59,11 @@ export default function MuseumScene({
       private promptText!: Phaser.GameObjects.Text;
       private walls: Phaser.GameObjects.Rectangle[] = [];
       private exhibits: Phaser.Physics.Arcade.Sprite[] = [];
+      private quizPoint: {
+        collision: Phaser.GameObjects.Rectangle;
+        sprite: Phaser.GameObjects.Sprite;
+      } | null = null;
+      private nearQuizPoint: boolean = false;
       private lockedDoors: {
         collision: Phaser.GameObjects.Rectangle;
         roomNumber: number;
@@ -128,6 +133,7 @@ export default function MuseumScene({
         );
 
         this.createInfoPointGraphic();
+        this.createQuizPointGraphic();
       }
 
       createInfoPointGraphic() {
@@ -141,6 +147,19 @@ export default function MuseumScene({
         graphics.fillRect(35, 35, 10, 25);
 
         graphics.generateTexture("info-point", 80, 80);
+        graphics.destroy();
+      }
+
+      createQuizPointGraphic() {
+        const graphics = this.make.graphics({ x: 0, y: 0 });
+        graphics.fillStyle(0xf59e0b, 1);
+        graphics.fillCircle(40, 40, 35);
+
+        graphics.fillStyle(0xffffff, 1);
+        graphics.fillTriangle(40, 15, 30, 35, 50, 35);
+        graphics.fillTriangle(40, 65, 30, 45, 50, 45);
+
+        graphics.generateTexture("quiz-point", 80, 80);
         graphics.destroy();
       }
 
@@ -465,6 +484,7 @@ export default function MuseumScene({
         this.createRoomBorders();
         this.createPictures();
         this.createInfoPoints();
+        this.createComprehensiveQuizPoint();
 
         this.player = this.physics.add.sprite(
           playerPositionRef.current.x,
@@ -588,7 +608,9 @@ export default function MuseumScene({
           .setScrollFactor(0);
 
         this.interactKey.on("down", () => {
-          if (this.nearInfoPoint !== null) {
+          if (this.nearQuizPoint) {
+            window.dispatchEvent(new Event("quizPointInteract"));
+          } else if (this.nearInfoPoint !== null) {
             (window as any).handleExhibitInteract?.(this.nearInfoPoint);
           } else if (this.nearPicture !== null) {
             this.showPictureModal(
@@ -828,6 +850,41 @@ export default function MuseumScene({
           const pos = room3Positions[index];
           this.createInfoPoint(pos.x, pos.y, exhibit);
         });
+      }
+
+      createComprehensiveQuizPoint() {
+        const map3OffsetX = this.map.widthInPixels + this.map2.widthInPixels;
+        const x = map3OffsetX + this.map3.widthInPixels / 2;
+        const y = this.map3.heightInPixels / 2;
+
+        const sprite = this.add.sprite(x, y, "quiz-point");
+        sprite.setDepth(10);
+        sprite.setScale(0.9);
+        this.tweens.add({
+          targets: sprite,
+          scale: 1.05,
+          duration: 1200,
+          yoyo: true,
+          repeat: -1,
+          ease: "Sine.easeInOut",
+        });
+
+        const collision = this.add.rectangle(x, y, 120, 120, 0xff0000, 0);
+        this.physics.add.existing(collision, true);
+
+        this.add
+          .text(x, y + 80, "Quiz tổng hợp (Phòng 1–3)", {
+            fontSize: "14px",
+            color: "#e8e8e8",
+            backgroundColor: "#000000",
+            padding: { x: 8, y: 4 },
+            align: "center",
+            wordWrap: { width: 260 },
+          })
+          .setOrigin(0.5)
+          .setDepth(10);
+
+        this.quizPoint = { collision, sprite };
       }
 
       createInfoPoint(x: number, y: number, exhibit: ExhibitData) {
@@ -1375,6 +1432,19 @@ export default function MuseumScene({
           }
         }
 
+        this.nearQuizPoint = false;
+        if (this.quizPoint) {
+          const distance = Phaser.Math.Distance.Between(
+            this.player.x,
+            this.player.y,
+            this.quizPoint.collision.x,
+            this.quizPoint.collision.y
+          );
+          if (distance < 90) {
+            this.nearQuizPoint = true;
+          }
+        }
+
         this.nearPicture = null;
         for (const picture of this.pictures) {
           const distance = Phaser.Math.Distance.Between(
@@ -1409,7 +1479,14 @@ export default function MuseumScene({
           }
         }
 
-        if (this.nearInfoPoint !== null) {
+        if (this.nearQuizPoint) {
+          this.promptText.setText("Nhấn E để làm quiz tổng hợp");
+          this.promptText.setVisible(true);
+          this.promptText.setPosition(
+            this.cameras.main.width / 2,
+            this.cameras.main.height - 60
+          );
+        } else if (this.nearInfoPoint !== null) {
           this.promptText.setText("Nhấn E để xem thông tin");
           this.promptText.setVisible(true);
           this.promptText.setPosition(
