@@ -209,6 +209,7 @@ export default function MuseumPage() {
       />
 
       <InfoModal
+        key={selectedExhibit?.id ?? "info-modal"}
         exhibit={selectedExhibit}
         isOpen={!!selectedExhibit}
         onClose={handleCloseModal}

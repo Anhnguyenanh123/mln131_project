@@ -33,15 +33,6 @@ export default function StartScreen({
   return (
     <div className="fixed inset-0 bg-[#1a1a2e] flex items-center justify-center z-50">
       <div className="bg-[#16213e] border-2 border-[#0f3460] rounded-lg p-8 max-w-md w-full mx-4">
-        <div className="text-center mb-6">
-          <h1 className="text-3xl font-bold text-[#e8e8e8] mb-2">
-            BẢO TÀNG KHOA HỌC CHÍNH TRỊ
-          </h1>
-          <p className="text-[#94a3b8] text-sm">
-            Chào mừng đến với bảo tàng chủ nghĩa xã hội
-          </p>
-        </div>
-
         {!showNewPlayer && existingPlayers.length > 0 ? (
           <div className="space-y-4">
             <h2 className="text-xl font-semibold text-[#e8e8e8] mb-4">

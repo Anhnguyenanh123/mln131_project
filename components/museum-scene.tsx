@@ -160,9 +160,24 @@ export default function MuseumScene({
         const tileset1 = this.map.addTilesetImage("room", "room")!;
         const tileset2 = this.map.addTilesetImage("interior", "interior")!;
 
-        this.layer1 = this.map.createLayer("layer1", [tileset1, tileset2], 0, 0)!;
-        this.layer2 = this.map.createLayer("layer2", [tileset1, tileset2], 0, 0)!;
-        this.layer3 = this.map.createLayer("layer3", [tileset1, tileset2], 0, 0)!;
+        this.layer1 = this.map.createLayer(
+          "layer1",
+          [tileset1, tileset2],
+          0,
+          0
+        )!;
+        this.layer2 = this.map.createLayer(
+          "layer2",
+          [tileset1, tileset2],
+          0,
+          0
+        )!;
+        this.layer3 = this.map.createLayer(
+          "layer3",
+          [tileset1, tileset2],
+          0,
+          0
+        )!;
 
         this.layer1.setVisible(true);
         this.layer2.setVisible(true);
@@ -172,42 +187,34 @@ export default function MuseumScene({
         this.layer2.setDepth(1);
         this.layer1.setDepth(2);
 
-        this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
-
-        this.add.rectangle(720, 100, 600, 60, 0x0f3460);
-        this.add
-          .text(720, 100, "BẢO TÀNG KHOA HỌC CHÍNH TRỊ", {
-            fontSize: "24px",
-            color: "#e8e8e8",
-            fontStyle: "bold",
-          })
-          .setOrigin(0.5)
-          .setDepth(10);
+        this.physics.world.setBounds(
+          0,
+          0,
+          this.map.widthInPixels,
+          this.map.heightInPixels
+        );
 
         const columnPositions = [
-          { x: 250, y: 250, roomNumber: 1, title: "KHỞI NGUỒN\n& NỀN TẢNG" },
-          { x: 450, y: 250, roomNumber: 2, title: "BẢN CHẤT\n& HÌNH THỨC" },
-          { x: 650, y: 250, roomNumber: 3, title: "NHÀ NƯỚC\nPHÁP QUYỀN" },
-          { x: 950, y: 250, roomNumber: 4, title: "PHÁT HUY\nDÂN CHỦ" },
-          { x: 1150, y: 250, roomNumber: 5, title: "PHÒNG CHỐNG\nTHAM NHŨNG" },
-          { x: 250, y: 550, roomNumber: 6, title: "ĐỔI MỚI &\nCHUYỂN ĐỔI SỐ" },
-          { x: 450, y: 550, roomNumber: 7, title: "TRÁCH NHIỆM\nCÔNG DÂN" },
-          { x: 650, y: 550, roomNumber: 8, title: "ĐANG\nXÂY DỰNG" },
-          { x: 950, y: 550, roomNumber: 9, title: "ĐANG\nXÂY DỰNG" },
-          { x: 1150, y: 550, roomNumber: 10, title: "ĐANG\nXÂY DỰNG" }
+          { x: 350, y: 250, roomNumber: 1, title: "PHÒNG 1" },
+          { x: 450, y: 250, roomNumber: 1, title: "PHÒNG 1" },
+
+          { x: 700, y: 250, roomNumber: 2, title: "PHÒNG 2" },
+          { x: 800, y: 250, roomNumber: 2, title: "PHÒNG 2" },
+
+          { x: 1050, y: 250, roomNumber: 3, title: "PHÒNG 3" },
+          { x: 1150, y: 250, roomNumber: 3, title: "PHÒNG 3" },
         ];
 
-        columnPositions.forEach(pos => {
+        const r1r2BoundaryX = (columnPositions[1].x + columnPositions[2].x) / 2;
+        const r2r3BoundaryX = (columnPositions[3].x + columnPositions[4].x) / 2;
+        const getRoomNumberByX = (x: number) => {
+          if (x < r1r2BoundaryX) return 1;
+          if (x < r2r3BoundaryX) return 2;
+          return 3;
+        };
+
+        columnPositions.forEach((pos) => {
           this.createColumn(pos.x, pos.y, pos.roomNumber, pos.title);
-        });
-
-        const benchPositions = [
-          { x: 350, y: 400 }, { x: 550, y: 400 },
-          { x: 850, y: 400 }, { x: 1050, y: 400 }
-        ];
-
-        benchPositions.forEach(pos => {
-          this.addBench(pos.x, pos.y);
         });
 
         if (!unlockedRooms.has(2)) {
@@ -246,7 +253,11 @@ export default function MuseumScene({
             `exhibit-${exhibit.id}`
           );
           exhibitSprite.setImmovable(true);
-          exhibitSprite.setData("exhibitData", exhibit);
+
+          const mappedRoom = getRoomNumberByX(exhibit.position.x);
+          const exhibitForModal = { ...exhibit, roomNumber: mappedRoom };
+
+          exhibitSprite.setData("exhibitData", exhibitForModal);
           exhibitSprite.setDepth(5);
           this.exhibits.push(exhibitSprite);
         });
@@ -339,7 +350,12 @@ export default function MuseumScene({
           this.physics.add.collider(this.player, door.collision);
         });
 
-        this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
+        this.cameras.main.setBounds(
+          0,
+          0,
+          this.map.widthInPixels,
+          this.map.heightInPixels
+        );
         this.cameras.main.startFollow(this.player, true, 0.1, 0.1);
 
         this.cursors = this.input.keyboard!.createCursorKeys();
@@ -374,8 +390,13 @@ export default function MuseumScene({
           if (this.nearLockedDoor !== null) {
             window.handleDoorInteract?.(this.nearLockedDoor);
           } else if (this.nearColumn !== null) {
-            const column = this.nearColumn as { roomNumber: number; title: string };
-            alert(`Đây là ${column.title}\nPhòng ${column.roomNumber} - Thông tin chi tiết`);
+            const column = this.nearColumn as {
+              roomNumber: number;
+              title: string;
+            };
+            alert(
+              `Đây là ${column.title}\nPhòng ${column.roomNumber} - Thông tin chi tiết`
+            );
           } else if (this.nearExhibit) {
             window.handleExhibitInteract?.(this.nearExhibit);
           }
@@ -387,17 +408,17 @@ export default function MuseumScene({
         this.add.rectangle(x, y, 50, 50, 0xa67c52);
         this.add.rectangle(x, y, 40, 40, 0xd4af37);
         pillar.setDepth(3);
-        
+
         const columnCollision = this.add.rectangle(x, y, 60, 60, 0xff0000, 0);
         this.physics.add.existing(columnCollision, true);
         this.walls.push(columnCollision);
-        
+
         this.columns.push({
           collision: columnCollision,
           roomNumber: roomNumber,
-          title: title
+          title: title,
         });
-        
+
         this.add
           .text(x, y + 50, title, {
             fontSize: "10px",
@@ -488,7 +509,7 @@ export default function MuseumScene({
           if (distance < 100) {
             this.nearColumn = {
               roomNumber: column.roomNumber,
-              title: column.title
+              title: column.title,
             };
           }
         });
@@ -516,8 +537,13 @@ export default function MuseumScene({
             this.cameras.main.height - 60
           );
         } else if (this.nearColumn !== null) {
-          const column = this.nearColumn as { roomNumber: number; title: string };
-          this.promptText.setText(`Nhấn E để xem thông tin phòng ${column.roomNumber}`);
+          const column = this.nearColumn as {
+            roomNumber: number;
+            title: string;
+          };
+          this.promptText.setText(
+            `Nhấn E để xem thông tin phòng ${column.roomNumber}`
+          );
           this.promptText.setVisible(true);
           this.promptText.setPosition(
             this.cameras.main.width / 2,

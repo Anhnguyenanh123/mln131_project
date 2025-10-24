@@ -41,6 +41,10 @@ export default function InfoModal({
           <h2 className="text-xl font-bold text-[#e8e8e8] pr-8">
             {exhibit.title}
           </h2>
+
+          <div className="absolute left-6 top-4 text-xs text-[#94a3b8]">
+            Phòng {exhibit.roomNumber}
+          </div>
           <button
             onClick={onClose}
             className="absolute right-4 top-4 p-2 rounded-lg hover:bg-[#1a1a2e] transition-colors"
