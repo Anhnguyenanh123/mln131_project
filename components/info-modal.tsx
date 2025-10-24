@@ -36,7 +36,7 @@ export default function InfoModal({
         onClick={onClose}
       />
 
-      <div className="relative bg-[#16213e] border border-[#0f3460] rounded-lg max-w-3xl w-full max-h-[80vh] overflow-hidden shadow-2xl">
+      <div className="relative bg-[#16213e] border border-[#0f3460] rounded-lg max-w-3xl w-full max-h-[80vh] overflow-y-auto no-scrollbar shadow-2xl">
         <div className="sticky top-0 bg-[#0f3460] px-6 py-4 flex items-center justify-between border-b border-[#1a1a2e]">
           <h2 className="text-xl font-bold text-[#e8e8e8] pr-8">
             {exhibit.title}
@@ -50,7 +50,7 @@ export default function InfoModal({
           </button>
         </div>
 
-        <div className="p-6 overflow-y-auto max-h-[calc(80vh-80px)]">
+        <div className="p-6">
           {exhibit.image && (
             <div className="mb-6">
               <Image

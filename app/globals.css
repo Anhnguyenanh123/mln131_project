@@ -142,3 +142,11 @@
 .prose::-webkit-scrollbar-thumb:hover {
   background: oklch(0.45 0.03 250);
 }
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
