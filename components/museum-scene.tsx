@@ -50,6 +50,7 @@ export default function MuseumScene({
         D: Phaser.Input.Keyboard.Key;
       };
       private nearColumn: { roomNumber: number; title: string } | null = null;
+      private nearDoor: number | null = null;
       private interactKey!: Phaser.Input.Keyboard.Key;
       private promptText!: Phaser.GameObjects.Text;
       private walls: Phaser.GameObjects.Rectangle[] = [];
@@ -152,10 +153,10 @@ export default function MuseumScene({
         this.layer1.setDepth(2);
 
         this.map2 = this.make.tilemap({ key: "map2" });
-
+        const map2tileset = this.map2.addTilesetImage("Dungeon_Tileset", "Dungeon_Tileset")!;
 
         this.map2floor = this.map2.createLayer("Floor0", [map2tileset], this.map.widthInPixels, 0)!;
-        this.map2wall = this.map2.createLayer("Floor1", [map2tileset], this.map.widthInPixels, 0)!;
+        this.map2wall = this.map2.createLayer("Floor1", [map2tileset], this.map.widthInPixels, 0)!;;
         
 
         this.map2floor.setVisible(true);
@@ -380,7 +381,9 @@ export default function MuseumScene({
           .setScrollFactor(0);
 
         this.interactKey.on("down", () => {
-          if (this.nearColumn !== null) {
+          if (this.nearDoor !== null) {
+            window.handleDoorInteract?.(this.nearDoor);
+          } else if (this.nearColumn !== null) {
             const column = this.nearColumn as {
               roomNumber: number;
               title: string;
@@ -577,7 +580,43 @@ export default function MuseumScene({
           }
         });
 
-        if (this.nearColumn !== null) {
+        this.nearDoor = null;
+        if (this.roomBorders) {
+          const door2X = this.map.widthInPixels;
+          const door2Y = this.map.heightInPixels / 2;
+          const distanceToDoor2 = Phaser.Math.Distance.Between(
+            this.player.x,
+            this.player.y,
+            door2X,
+            door2Y
+          );
+          
+          const door3X = this.map.widthInPixels + this.map2.widthInPixels;
+          const door3Y = this.map2.heightInPixels / 2;
+          const distanceToDoor3 = Phaser.Math.Distance.Between(
+            this.player.x,
+            this.player.y,
+            door3X,
+            door3Y
+          );
+
+          if (distanceToDoor2 < 100) {
+            this.nearDoor = 2;
+          } else if (distanceToDoor3 < 100) {
+            this.nearDoor = 3;
+          }
+        }
+
+        if (this.nearDoor !== null) {
+          this.promptText.setText(
+            `Nhấn E để làm quiz mở khóa Phòng ${this.nearDoor}`
+          );
+          this.promptText.setVisible(true);
+          this.promptText.setPosition(
+            this.cameras.main.width / 2,
+            this.cameras.main.height - 60
+          );
+        } else if (this.nearColumn !== null) {
           const column = this.nearColumn as {
             roomNumber: number;
             title: string;
