@@ -7,15 +7,6 @@ import type { ExhibitData } from "@/types/museum";
 import { museumData } from "@/data/museum-data";
 import PictureModal from "@/components/picture-modal";
 
-// declare global {
-//   interface Window {
-//     handleExhibitInteract?: (exhibit: ExhibitData) => void;
-//     handleDoorInteract?: (roomNumber: number) => void;
-//     showPictureModal?: (imagePath: string, caption: string) => void;
-//     unlockRoom?: (roomNumber: number) => void;
-//   }
-// }
-
 interface MuseumSceneProps {
   onExhibitInteract: (exhibit: ExhibitData) => void;
   onDoorInteract: (roomNumber: number) => void;
@@ -58,7 +49,11 @@ export default function MuseumScene({
       };
       private nearExhibit: ExhibitData | null = null;
       private nearLockedDoor: number | null = null;
-      private nearPicture: { id: number; imagePath: string; caption: string } | null = null;
+      private nearPicture: {
+        id: number;
+        imagePath: string;
+        caption: string;
+      } | null = null;
       private nearInfoPoint: ExhibitData | null = null;
       private interactKey!: Phaser.Input.Keyboard.Key;
       private promptText!: Phaser.GameObjects.Text;
@@ -596,7 +591,10 @@ export default function MuseumScene({
           if (this.nearInfoPoint !== null) {
             (window as any).handleExhibitInteract?.(this.nearInfoPoint);
           } else if (this.nearPicture !== null) {
-            this.showPictureModal(this.nearPicture.imagePath, this.nearPicture.caption);
+            this.showPictureModal(
+              this.nearPicture.imagePath,
+              this.nearPicture.caption
+            );
           } else if (this.nearLockedDoor !== null) {
             (window as any).handleDoorInteract?.(this.nearLockedDoor);
           }
@@ -726,42 +724,48 @@ export default function MuseumScene({
             y: 100,
             id: 1,
             imagePath: "/pic/r1-e1.webp",
-            caption: "Lao động và bóc lột trong chế độ tư bản. Hình ảnh thể hiện sự tương phản giữa giai cấp tư sản và giai cấp vô sản trong xã hội tư bản."
+            caption:
+              "Lao động và bóc lột trong chế độ tư bản. Hình ảnh thể hiện sự tương phản giữa giai cấp tư sản và giai cấp vô sản trong xã hội tư bản.",
           },
-          { 
-            x: sectionWidth * 1.5, 
-            y: 100, 
-            id: 2, 
+          {
+            x: sectionWidth * 1.5,
+            y: 100,
+            id: 2,
             imagePath: "/pic/r1-e2.jpg",
-            caption: "Đại hội lần thứ nhất của Đảng Cộng sản Việt Nam năm 1935. Sự kiện quan trọng trong lịch sử cách mạng Việt Nam."
+            caption:
+              "Đại hội lần thứ nhất của Đảng Cộng sản Việt Nam năm 1935. Sự kiện quan trọng trong lịch sử cách mạng Việt Nam.",
           },
-          { 
-            x: sectionWidth * 2.5, 
-            y: 100, 
-            id: 3, 
+          {
+            x: sectionWidth * 2.5,
+            y: 100,
+            id: 3,
             imagePath: "/pic/r1-e3.jpg",
-            caption: "Chủ tịch Hồ Chí Minh - người anh hùng dân tộc và nhà cách mạng vĩ đại, người sáng lập Đảng Cộng sản Việt Nam."
+            caption:
+              "Chủ tịch Hồ Chí Minh - người anh hùng dân tộc và nhà cách mạng vĩ đại, người sáng lập Đảng Cộng sản Việt Nam.",
           },
           {
             x: sectionWidth * 3.5,
             y: 100,
             id: 4,
             imagePath: "/pic/r1-e4.webp",
-            caption: "Sự phát triển của lực lượng sản xuất và quan hệ sản xuất. Minh họa cho quy luật cơ bản của sự phát triển xã hội loài người."
+            caption:
+              "Sự phát triển của lực lượng sản xuất và quan hệ sản xuất. Minh họa cho quy luật cơ bản của sự phát triển xã hội loài người.",
           },
-          { 
-            x: sectionWidth * 4.5, 
-            y: 100, 
-            id: 5, 
+          {
+            x: sectionWidth * 4.5,
+            y: 100,
+            id: 5,
             imagePath: "/pic/r2-e1.jpg",
-            caption: "Cuộc cách mạng Tháng Mười Nga 1917. Sự kiện lịch sử đánh dấu sự ra đời của nhà nước xã hội chủ nghĩa đầu tiên trên thế giới."
+            caption:
+              "Cuộc cách mạng Tháng Mười Nga 1917. Sự kiện lịch sử đánh dấu sự ra đời của nhà nước xã hội chủ nghĩa đầu tiên trên thế giới.",
           },
-          { 
-            x: sectionWidth * 5.5, 
-            y: 100, 
-            id: 6, 
+          {
+            x: sectionWidth * 5.5,
+            y: 100,
+            id: 6,
             imagePath: "/pic/r2-e2.jpg",
-            caption: "Mác-Lênin chủ nghĩa và sự vận dụng sáng tạo trong điều kiện cụ thể của Việt Nam."
+            caption:
+              "Mác-Lênin chủ nghĩa và sự vận dụng sáng tạo trong điều kiện cụ thể của Việt Nam.",
           },
         ];
 
@@ -1150,9 +1154,6 @@ export default function MuseumScene({
       }
 
       unlockRoom(roomNumber: number) {
-        console.log("[v0] unlockRoom called for room", roomNumber);
-        console.log("[v0] Teleporting player to room", roomNumber);
-
         // Define teleport positions for each room
         const teleportPositions = {
           2: { x: this.map.widthInPixels + 100, y: 480 }, // Room 2 entrance
@@ -1163,7 +1164,6 @@ export default function MuseumScene({
         };
 
         if (roomNumber === 2) {
-          console.log("[v0] Teleporting to room 2");
           const targetPos = teleportPositions[2];
 
           // Create teleport effect
@@ -1223,7 +1223,6 @@ export default function MuseumScene({
             }
           });
         } else if (roomNumber === 3) {
-          console.log("[v0] Teleporting to room 3");
           const targetPos = teleportPositions[3];
 
           // Create teleport effect
@@ -1284,12 +1283,6 @@ export default function MuseumScene({
           });
         }
 
-        console.log(
-          "[v0] Player teleported to position:",
-          this.player.x,
-          this.player.y
-        );
-
         // Refresh back buttons after unlocking a room
         this.refreshBackButtons();
       }
@@ -1308,7 +1301,6 @@ export default function MuseumScene({
 
       update() {
         if (!this.player) {
-          console.error("Player not found in update!");
           return;
         }
 
@@ -1393,7 +1385,11 @@ export default function MuseumScene({
           );
 
           if (distance < 80) {
-            this.nearPicture = { id: picture.id, imagePath: picture.imagePath, caption: picture.caption };
+            this.nearPicture = {
+              id: picture.id,
+              imagePath: picture.imagePath,
+              caption: picture.caption,
+            };
             break;
           }
         }

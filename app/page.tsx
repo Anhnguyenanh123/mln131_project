@@ -130,26 +130,21 @@ export default function MuseumPage() {
     if (currentQuizRoom !== null) {
       const roomToUnlock = currentQuizRoom + 1;
 
-      console.log("[v0] Quiz passed for room", currentQuizRoom);
-      console.log("[v0] Unlocking room", roomToUnlock);
-
       setUnlockedRooms((prev) => {
         const newUnlocked = new Set([...prev, roomToUnlock]);
-        console.log("[v0] Updated unlockedRooms:", Array.from(newUnlocked));
         return newUnlocked;
       });
 
       if (window.unlockRoom) {
-        console.log("[v0] Calling window.unlockRoom for room", roomToUnlock);
         window.unlockRoom(roomToUnlock);
       }
 
       setShowQuiz(false);
       setCurrentQuizRoom(null);
 
-      if (roomToUnlock === 3) {
+      if (currentQuizRoom === 3) {
         setShowCongrats(true);
-      } else {
+      } else if (roomToUnlock === 3) {
         alert(`Chúc mừng! Bạn đã mở khóa Phòng ${roomToUnlock}`);
       }
     }
