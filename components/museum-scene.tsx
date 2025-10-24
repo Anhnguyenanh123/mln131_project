@@ -92,7 +92,10 @@ export default function MuseumScene({
         this.load.image("room", "/tiles/room.png");
         this.load.image("interior", "/tiles/interior.png");
         this.load.image("Dungeon_Tileset", "/tiles/Dungeon_Tileset.png");
-        this.load.image("antarcticbees_interior", "/tiles/antarcticbees_interior_free_sample-export.png");
+        this.load.image(
+          "antarcticbees_interior",
+          "/tiles/antarcticbees_interior_free_sample-export.png"
+        );
 
         this.createPlantGraphic();
         this.createBenchGraphic();
@@ -154,11 +157,23 @@ export default function MuseumScene({
         this.layer1.setDepth(2);
 
         this.map2 = this.make.tilemap({ key: "map2" });
-        const map2tileset = this.map2.addTilesetImage("Dungeon_Tileset", "Dungeon_Tileset")!;
+        const map2tileset = this.map2.addTilesetImage(
+          "Dungeon_Tileset",
+          "Dungeon_Tileset"
+        )!;
 
-        this.map2floor = this.map2.createLayer("Floor0", [map2tileset], this.map.widthInPixels, 0)!;
-        this.map2wall = this.map2.createLayer("Floor1", [map2tileset], this.map.widthInPixels, 0)!;;
-        
+        this.map2floor = this.map2.createLayer(
+          "Floor0",
+          [map2tileset],
+          this.map.widthInPixels,
+          0
+        )!;
+        this.map2wall = this.map2.createLayer(
+          "Floor1",
+          [map2tileset],
+          this.map.widthInPixels,
+          0
+        )!;
 
         this.map2floor.setVisible(true);
         this.map2wall.setVisible(true);
@@ -166,26 +181,44 @@ export default function MuseumScene({
         this.map2floor.setDepth(3);
         this.map2wall.setDepth(4);
 
-        this.add.rectangle(
-          this.map.widthInPixels + this.map2.widthInPixels/2, 
-          this.map2.heightInPixels/2, 
-          this.map2.widthInPixels, 
-          this.map2.heightInPixels, 
-          0xff0000, 
-          0.3
-        ).setDepth(6);
+        this.add
+          .rectangle(
+            this.map.widthInPixels + this.map2.widthInPixels / 2,
+            this.map2.heightInPixels / 2,
+            this.map2.widthInPixels,
+            this.map2.heightInPixels,
+            0xff0000,
+            0.3
+          )
+          .setDepth(6);
 
         this.map3 = this.make.tilemap({ key: "map3" });
-        
-        const map3tileset = this.map3.addTilesetImage("antarcticbees_interior_free_sample-export", "antarcticbees_interior")!;
 
-        
+        const map3tileset = this.map3.addTilesetImage(
+          "antarcticbees_interior_free_sample-export",
+          "antarcticbees_interior"
+        )!;
+
         const map3OffsetX = this.map.widthInPixels + this.map2.widthInPixels;
-        
-        this.map3floor1 = this.map3.createLayer("floor1", [map3tileset], map3OffsetX, 0)!;
-        this.map3floor2 = this.map3.createLayer("floor2", [map3tileset], map3OffsetX, 0)!;
-        this.map3wall = this.map3.createLayer("wall", [map3tileset], map3OffsetX, 0)!;
-        
+
+        this.map3floor1 = this.map3.createLayer(
+          "floor1",
+          [map3tileset],
+          map3OffsetX,
+          0
+        )!;
+        this.map3floor2 = this.map3.createLayer(
+          "floor2",
+          [map3tileset],
+          map3OffsetX,
+          0
+        )!;
+        this.map3wall = this.map3.createLayer(
+          "wall",
+          [map3tileset],
+          map3OffsetX,
+          0
+        )!;
 
         this.map3floor1.setVisible(true);
         this.map3floor2.setVisible(true);
@@ -195,59 +228,83 @@ export default function MuseumScene({
         this.map3floor2.setDepth(6);
         this.map3wall.setDepth(7);
 
-        this.add.rectangle(
-          map3OffsetX + this.map3.widthInPixels/2, 
-          this.map3.heightInPixels/2, 
-          this.map3.widthInPixels, 
-          this.map3.heightInPixels, 
-          0x00ff00, 
-          0.3
-        ).setDepth(8);
+        this.add
+          .rectangle(
+            map3OffsetX + this.map3.widthInPixels / 2,
+            this.map3.heightInPixels / 2,
+            this.map3.widthInPixels,
+            this.map3.heightInPixels,
+            0x00ff00,
+            0.3
+          )
+          .setDepth(8);
 
         this.physics.world.setBounds(
           0,
           0,
-          this.map.widthInPixels + this.map2.widthInPixels + this.map3.widthInPixels,
-          Math.max(this.map.heightInPixels, this.map2.heightInPixels, this.map3.heightInPixels)
+          this.map.widthInPixels +
+            this.map2.widthInPixels +
+            this.map3.widthInPixels,
+          Math.max(
+            this.map.heightInPixels,
+            this.map2.heightInPixels,
+            this.map3.heightInPixels
+          )
         );
 
-        this.add.rectangle(720, 100, 600, 60, 0x0f3460);
-        this.add
-          .text(720, 100, "BẢO TÀNG KHOA HỌC CHÍNH TRỊ", {
-            fontSize: "24px",
-            color: "#e8e8e8",
-            fontStyle: "bold",
-          })
-          .setOrigin(0.5)
-          .setDepth(10);
-
         this.topBorder = this.add.rectangle(
-          this.map.widthInPixels / 2 + this.map2.widthInPixels / 2 + this.map3.widthInPixels / 2,
+          this.map.widthInPixels / 2 +
+            this.map2.widthInPixels / 2 +
+            this.map3.widthInPixels / 2,
           70,
-          this.map.widthInPixels + this.map2.widthInPixels + this.map3.widthInPixels,
+          this.map.widthInPixels +
+            this.map2.widthInPixels +
+            this.map3.widthInPixels,
           20,
           0xff0000,
           0
         );
         this.physics.add.existing(this.topBorder, true);
 
-        this.add.rectangle(720 + this.map.widthInPixels, 100, 600, 60, 0x0f3460);
+        this.add.rectangle(
+          720 + this.map.widthInPixels,
+          100,
+          600,
+          60,
+          0x0f3460
+        );
         this.add
-          .text(720 + this.map.widthInPixels, 100, "PHÒNG 2: BẢN CHẤT & HÌNH THỨC", {
-            fontSize: "24px",
-            color: "#e8e8e8",
-            fontStyle: "bold",
-          })
+          .text(
+            720 + this.map.widthInPixels,
+            100,
+            "PHÒNG 2: BẢN CHẤT & HÌNH THỨC",
+            {
+              fontSize: "24px",
+              color: "#e8e8e8",
+              fontStyle: "bold",
+            }
+          )
           .setOrigin(0.5)
           .setDepth(10);
 
-        this.add.rectangle(720 + this.map.widthInPixels + this.map2.widthInPixels, 100, 600, 60, 0x0f3460);
+        this.add.rectangle(
+          720 + this.map.widthInPixels + this.map2.widthInPixels,
+          100,
+          600,
+          60,
+          0x0f3460
+        );
         this.add
-          .text(720 + this.map.widthInPixels + this.map2.widthInPixels, 100, "PHÒNG 3: NGHIÊN CỨU KHOA HỌC", {
-            fontSize: "24px",
-            color: "#e8e8e8",
-            fontStyle: "bold",
-          })
+          .text(
+            720 + this.map.widthInPixels + this.map2.widthInPixels,
+            100,
+            "PHÒNG 3: NGHIÊN CỨU KHOA HỌC",
+            {
+              fontSize: "24px",
+              color: "#e8e8e8",
+              fontStyle: "bold",
+            }
+          )
           .setOrigin(0.5)
           .setDepth(10);
 
@@ -364,8 +421,14 @@ export default function MuseumScene({
         this.cameras.main.setBounds(
           0,
           0,
-          this.map.widthInPixels + this.map2.widthInPixels + this.map3.widthInPixels,
-          Math.max(this.map.heightInPixels, this.map2.heightInPixels, this.map3.heightInPixels)
+          this.map.widthInPixels +
+            this.map2.widthInPixels +
+            this.map3.widthInPixels,
+          Math.max(
+            this.map.heightInPixels,
+            this.map2.heightInPixels,
+            this.map3.heightInPixels
+          )
         );
         this.cameras.main.startFollow(this.player, true, 0.1, 0.1);
 
@@ -406,13 +469,23 @@ export default function MuseumScene({
         });
 
         if (this.roomBorders) {
-
-          
-          if (this.roomBorders.room2Border && this.roomBorders.room2Border.body) {
-            this.physics.add.collider(this.player, this.roomBorders.room2Border);
+          if (
+            this.roomBorders.room2Border &&
+            this.roomBorders.room2Border.body
+          ) {
+            this.physics.add.collider(
+              this.player,
+              this.roomBorders.room2Border
+            );
           }
-          if (this.roomBorders.room3Border && this.roomBorders.room3Border.body) {
-            this.physics.add.collider(this.player, this.roomBorders.room3Border);
+          if (
+            this.roomBorders.room3Border &&
+            this.roomBorders.room3Border.body
+          ) {
+            this.physics.add.collider(
+              this.player,
+              this.roomBorders.room3Border
+            );
           }
         } else {
           console.log("Room borders not found!");
@@ -452,68 +525,98 @@ export default function MuseumScene({
         const room2BorderX = this.map.widthInPixels;
         const room2BorderY = this.map.heightInPixels / 2;
         const room2Border = this.add.rectangle(
-          room2BorderX, 
-          room2BorderY, 
-          20, 
-          this.map.heightInPixels, 
-          0xff0000, 
-          0 
+          room2BorderX,
+          room2BorderY,
+          20,
+          this.map.heightInPixels,
+          0xff0000,
+          0
         );
         this.physics.add.existing(room2Border, true);
 
         const room3BorderX = this.map.widthInPixels + this.map2.widthInPixels;
         const room3BorderY = this.map2.heightInPixels / 2;
         const room3Border = this.add.rectangle(
-          room3BorderX, 
-          room3BorderY, 
-          20, 
-          this.map2.heightInPixels, 
-          0xff0000, 
-          0 
+          room3BorderX,
+          room3BorderY,
+          20,
+          this.map2.heightInPixels,
+          0xff0000,
+          0
         );
         this.physics.add.existing(room3Border, true);
 
         this.roomBorders = {
           room2Border,
-          room3Border
+          room3Border,
         };
 
+        this.add
+          .text(
+            room2BorderX - 50,
+            room2BorderY - 100,
+            "ROOM 2\nLOCKED\nComplete Quiz to Enter",
+            {
+              fontSize: "16px",
+              color: "#ff0000",
+              fontStyle: "bold",
+              align: "center",
+            }
+          )
+          .setOrigin(0.5)
+          .setDepth(10);
 
-
-        this.add.text(room2BorderX - 50, room2BorderY - 100, "ROOM 2\nLOCKED\nComplete Quiz to Enter", {
-          fontSize: "16px",
-          color: "#ff0000",
-          fontStyle: "bold",
-          align: "center",
-        }).setOrigin(0.5).setDepth(10);
-
-        this.add.text(room3BorderX - 50, room3BorderY - 100, "ROOM 3\nLOCKED\nComplete Quiz to Enter", {
-          fontSize: "16px", 
-          color: "#ff0000",
-          fontStyle: "bold",
-          align: "center",
-        }).setOrigin(0.5).setDepth(10);
+        this.add
+          .text(
+            room3BorderX - 50,
+            room3BorderY - 100,
+            "ROOM 3\nLOCKED\nComplete Quiz to Enter",
+            {
+              fontSize: "16px",
+              color: "#ff0000",
+              fontStyle: "bold",
+              align: "center",
+            }
+          )
+          .setOrigin(0.5)
+          .setDepth(10);
       }
 
       unlockRoom(roomNumber: number) {
         if (!this.roomBorders) return;
-        
+
         if (roomNumber === 2) {
           this.roomBorders.room2Border.destroy();
-          this.add.text(this.map.widthInPixels - 50, this.map.heightInPixels / 2 - 100, "ROOM 2\nUNLOCKED!", {
-            fontSize: "16px",
-            color: "#00ff00", 
-            fontStyle: "bold",
-            align: "center",
-          }).setOrigin(0.5).setDepth(10);
+          this.add
+            .text(
+              this.map.widthInPixels - 50,
+              this.map.heightInPixels / 2 - 100,
+              "ROOM 2\nUNLOCKED!",
+              {
+                fontSize: "16px",
+                color: "#00ff00",
+                fontStyle: "bold",
+                align: "center",
+              }
+            )
+            .setOrigin(0.5)
+            .setDepth(10);
         } else if (roomNumber === 3) {
           this.roomBorders.room3Border.destroy();
-          this.add.text(this.map.widthInPixels + this.map2.widthInPixels - 50, this.map2.heightInPixels / 2 - 100, "ROOM 3\nUNLOCKED!", {
-            fontSize: "16px",
-            color: "#00ff00",
-            fontStyle: "bold", 
-            align: "center",
-          }).setOrigin(0.5).setDepth(10);
+          this.add
+            .text(
+              this.map.widthInPixels + this.map2.widthInPixels - 50,
+              this.map2.heightInPixels / 2 - 100,
+              "ROOM 3\nUNLOCKED!",
+              {
+                fontSize: "16px",
+                color: "#00ff00",
+                fontStyle: "bold",
+                align: "center",
+              }
+            )
+            .setOrigin(0.5)
+            .setDepth(10);
         }
       }
 
@@ -603,7 +706,7 @@ export default function MuseumScene({
             door2X,
             door2Y
           );
-          
+
           const door3X = this.map.widthInPixels + this.map2.widthInPixels;
           const door3Y = this.map2.heightInPixels / 2;
           const distanceToDoor3 = Phaser.Math.Distance.Between(
@@ -678,7 +781,7 @@ export default function MuseumScene({
     window.handleExhibitInteract = onExhibitInteract;
     window.handleDoorInteract = onDoorInteract;
     window.unlockRoom = (roomNumber: number) => {
-      const scene = game.scene.getScene('MainScene') as MainScene;
+      const scene = game.scene.getScene("MainScene") as MainScene;
       if (scene && scene.unlockRoom) {
         scene.unlockRoom(roomNumber);
       }
