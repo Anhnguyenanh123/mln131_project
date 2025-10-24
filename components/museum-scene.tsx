@@ -760,55 +760,76 @@ export default function MuseumScene({
         const room1Exhibits = museumData
           .filter((exhibit) => exhibit.roomNumber === 1)
           .slice(0, 2);
+        const room2Exhibits = museumData
+          .filter((exhibit) => exhibit.roomNumber === 2)
+          .slice(0, 2);
+        const room3Exhibits = museumData
+          .filter((exhibit) => exhibit.roomNumber === 3)
+          .slice(0, 2);
 
-        const infoPointPositions = [
+        const room1Positions = [
           { x: 300, y: 300 },
           { x: 300, y: 600 },
         ];
-
         room1Exhibits.forEach((exhibit, index) => {
-          const pos = infoPointPositions[index];
+          const pos = room1Positions[index];
+          this.createInfoPoint(pos.x, pos.y, exhibit);
+        });
 
-          const sprite = this.add.sprite(pos.x, pos.y, "info-point");
-          sprite.setDepth(5);
-          sprite.setScale(0.8);
+        const room2Positions = [
+          { x: this.map.widthInPixels + 300, y: 300 },
+          { x: this.map.widthInPixels + 300, y: 600 },
+        ];
 
-          this.tweens.add({
-            targets: sprite,
-            scale: 1,
-            duration: 1000,
-            yoyo: true,
-            repeat: -1,
-            ease: "Sine.easeInOut",
-          });
+        room2Exhibits.forEach((exhibit, index) => {
+          const pos = room2Positions[index];
+          this.createInfoPoint(pos.x, pos.y, exhibit);
+        });
 
-          this.add
-            .text(pos.x, pos.y + 60, exhibit.title, {
-              fontSize: "12px",
-              color: "#e8e8e8",
-              backgroundColor: "#000000",
-              padding: { x: 8, y: 4 },
-              align: "center",
-              wordWrap: { width: 200 },
-            })
-            .setOrigin(0.5)
-            .setDepth(5);
+        const room3Positions = [
+          { x: this.map.widthInPixels + this.map2.widthInPixels + 300, y: 300 },
+          { x: this.map.widthInPixels + this.map2.widthInPixels + 300, y: 600 },
+        ];
 
-          const collision = this.add.rectangle(
-            pos.x,
-            pos.y,
-            100,
-            100,
-            0xff0000,
-            0
-          );
-          this.physics.add.existing(collision, true);
+        room3Exhibits.forEach((exhibit, index) => {
+          const pos = room3Positions[index];
+          this.createInfoPoint(pos.x, pos.y, exhibit);
+        });
+      }
 
-          this.infoPoints.push({
-            collision: collision,
-            exhibit: exhibit,
-            sprite: sprite,
-          });
+      createInfoPoint(x: number, y: number, exhibit: ExhibitData) {
+        const sprite = this.add.sprite(x, y, "info-point");
+        sprite.setDepth(5);
+        sprite.setScale(0.8);
+
+        this.tweens.add({
+          targets: sprite,
+          scale: 1,
+          duration: 1000,
+          yoyo: true,
+          repeat: -1,
+          ease: "Sine.easeInOut",
+        });
+
+        this.add
+          .text(x, y + 60, exhibit.title, {
+            fontSize: "12px",
+            color: "#e8e8e8",
+            backgroundColor: "#000000",
+            padding: { x: 8, y: 4 },
+            align: "center",
+            wordWrap: { width: 200 },
+          })
+          .setOrigin(0.5)
+          .setDepth(5);
+
+        const collision = this.add.rectangle(x, y, 100, 100, 0xff0000, 0);
+        this.physics.add.existing(collision, true);
+
+        this.infoPoints.push({
+          collision: collision,
+          exhibit: exhibit,
+          sprite: sprite,
         });
       }
 
@@ -819,266 +840,313 @@ export default function MuseumScene({
       }
 
       createBackToRoom1Button(x: number, y: number, fromRoom: number) {
-    // Create back button background
-    const buttonBg = this.add.rectangle(x, y, 200, 50, 0x3366cc, 0.8);
-    buttonBg.setStrokeStyle(2, 0x4488ff);
-    buttonBg.setDepth(10);
-    buttonBg.setInteractive({ cursor: 'pointer' });
+        // Create back button background
+        const buttonBg = this.add.rectangle(x, y, 200, 50, 0x3366cc, 0.8);
+        buttonBg.setStrokeStyle(2, 0x4488ff);
+        buttonBg.setDepth(10);
+        buttonBg.setInteractive({ cursor: "pointer" });
 
-    // Create back button text
-    const buttonText = this.add.text(x, y, 'VỀ PHÒNG 1', {
-      fontSize: '16px',
-      color: '#ffffff',
-      fontStyle: 'bold'
-    });
-    buttonText.setOrigin(0.5);
-    buttonText.setDepth(11);
+        // Create back button text
+        const buttonText = this.add.text(x, y, "VỀ PHÒNG 1", {
+          fontSize: "16px",
+          color: "#ffffff",
+          fontStyle: "bold",
+        });
+        buttonText.setOrigin(0.5);
+        buttonText.setDepth(11);
 
-    // Store button references for later removal if needed
-    if (!this.backButtons) {
-      this.backButtons = [];
-    }
-    this.backButtons.push({ bg: buttonBg, text: buttonText, room: fromRoom });
+        // Store button references for later removal if needed
+        if (!this.backButtons) {
+          this.backButtons = [];
+        }
+        this.backButtons.push({
+          bg: buttonBg,
+          text: buttonText,
+          room: fromRoom,
+        });
 
-    // Add hover effects
-    buttonBg.on('pointerover', () => {
-      buttonBg.setFillStyle(0x4488ff, 0.9);
-      this.tweens.add({
-        targets: [buttonBg, buttonText],
-        scaleX: 1.05,
-        scaleY: 1.05,
-        duration: 100,
-        ease: 'Power2'
-      });
-    });
+        // Add hover effects
+        buttonBg.on("pointerover", () => {
+          buttonBg.setFillStyle(0x4488ff, 0.9);
+          this.tweens.add({
+            targets: [buttonBg, buttonText],
+            scaleX: 1.05,
+            scaleY: 1.05,
+            duration: 100,
+            ease: "Power2",
+          });
+        });
 
-    buttonBg.on('pointerout', () => {
-      buttonBg.setFillStyle(0x3366cc, 0.8);
-      this.tweens.add({
-        targets: [buttonBg, buttonText],
-        scaleX: 1,
-        scaleY: 1,
-        duration: 100,
-        ease: 'Power2'
-      });
-    });
+        buttonBg.on("pointerout", () => {
+          buttonBg.setFillStyle(0x3366cc, 0.8);
+          this.tweens.add({
+            targets: [buttonBg, buttonText],
+            scaleX: 1,
+            scaleY: 1,
+            duration: 100,
+            ease: "Power2",
+          });
+        });
 
-    // Add click event
-    buttonBg.on('pointerdown', () => {
-      this.teleportToRoom1(fromRoom);
-    });
-  }
-
-  createGoToRoomButton(x: number, y: number, toRoom: number) {
-    // Create button background
-    const buttonBg = this.add.rectangle(x, y, 200, 50, toRoom === 2 ? 0x22c55e : 0x3b82f6, 0.8);
-    buttonBg.setStrokeStyle(2, toRoom === 2 ? 0x16a34a : 0x2563eb);
-    buttonBg.setDepth(10);
-    buttonBg.setInteractive({ cursor: 'pointer' });
-
-    // Create button text
-    const buttonText = this.add.text(x, y, `ĐI TỚI PHÒNG ${toRoom}`, {
-      fontSize: '16px',
-      color: '#ffffff',
-      fontStyle: 'bold'
-    });
-    buttonText.setOrigin(0.5);
-    buttonText.setDepth(11);
-
-    // Add to tracking array
-    if (!this.goToRoomButtons) {
-      this.goToRoomButtons = [];
-    }
-    this.goToRoomButtons.push({ bg: buttonBg, text: buttonText, room: toRoom });
-
-    // Add hover effects
-    buttonBg.on('pointerover', () => {
-      buttonBg.setFillStyle(toRoom === 2 ? 0x16a34a : 0x2563eb, 0.9);
-      this.tweens.add({
-        targets: [buttonBg, buttonText],
-        scaleX: 1.05,
-        scaleY: 1.05,
-        duration: 100,
-        ease: 'Power2'
-      });
-    });
-
-    buttonBg.on('pointerout', () => {
-      buttonBg.setFillStyle(toRoom === 2 ? 0x22c55e : 0x3b82f6, 0.8);
-      this.tweens.add({
-        targets: [buttonBg, buttonText],
-        scaleX: 1,
-        scaleY: 1,
-        duration: 100,
-        ease: 'Power2'
-      });
-    });
-
-    // Add click event
-    buttonBg.on('pointerdown', () => {
-      this.teleportToRoom(toRoom);
-    });
-  }
-
-  teleportToRoom(roomNumber: number) {
-    // Create teleport effect
-    const teleportEffect = this.add.circle(this.player.x, this.player.y, 0, roomNumber === 2 ? 0x22c55e : 0x3b82f6, 0.6);
-    teleportEffect.setDepth(15);
-    
-    this.tweens.add({
-      targets: teleportEffect,
-      radius: 100,
-      alpha: 0,
-      duration: 500,
-      ease: 'Power2',
-      onComplete: () => {
-        teleportEffect.destroy();
+        // Add click event
+        buttonBg.on("pointerdown", () => {
+          this.teleportToRoom1(fromRoom);
+        });
       }
-    });
 
-    // Calculate target position
-    let targetX: number;
-    if (roomNumber === 2) {
-      targetX = this.map.widthInPixels + 100; // Room 2 position
-    } else if (roomNumber === 3) {
-      targetX = this.map.widthInPixels + this.map2.widthInPixels + 100; // Room 3 position
-    } else {
-      targetX = 720; // Default to room 1 center
-    }
-    
-    // Teleport player
-    this.player.setPosition(targetX, 480);
-    this.playerNameText.setPosition(targetX, 510);
-    
-    // Update position reference
-    (window as any).playerPositionRef.current = { x: targetX, y: 480 };
+      createGoToRoomButton(x: number, y: number, toRoom: number) {
+        // Create button background
+        const buttonBg = this.add.rectangle(
+          x,
+          y,
+          200,
+          50,
+          toRoom === 2 ? 0x22c55e : 0x3b82f6,
+          0.8
+        );
+        buttonBg.setStrokeStyle(2, toRoom === 2 ? 0x16a34a : 0x2563eb);
+        buttonBg.setDepth(10);
+        buttonBg.setInteractive({ cursor: "pointer" });
 
-    // Show success message
-    const roomNames = {
-      2: 'PHÒNG 2: BẢN CHẤT & HÌNH THỨC',
-      3: 'PHÒNG 3: NGHIÊN CỨU KHOA HỌC'
-    };
-    
-    const successMessage = this.add.text(targetX, 400, `✅ Chào mừng đến ${roomNames[roomNumber as keyof typeof roomNames]}!`, {
-      fontSize: '18px',
-      color: roomNumber === 2 ? '#22c55e' : '#3b82f6',
-      fontStyle: 'bold',
-      backgroundColor: '#000000',
-      padding: { x: 10, y: 5 }
-    });
-    successMessage.setOrigin(0.5);
-    successMessage.setDepth(20);
-    
-    // Auto remove success message
-    this.time.delayedCall(3000, () => {
-      if (successMessage && successMessage.scene) {
-        successMessage.destroy();
+        // Create button text
+        const buttonText = this.add.text(x, y, `ĐI TỚI PHÒNG ${toRoom}`, {
+          fontSize: "16px",
+          color: "#ffffff",
+          fontStyle: "bold",
+        });
+        buttonText.setOrigin(0.5);
+        buttonText.setDepth(11);
+
+        // Add to tracking array
+        if (!this.goToRoomButtons) {
+          this.goToRoomButtons = [];
+        }
+        this.goToRoomButtons.push({
+          bg: buttonBg,
+          text: buttonText,
+          room: toRoom,
+        });
+
+        // Add hover effects
+        buttonBg.on("pointerover", () => {
+          buttonBg.setFillStyle(toRoom === 2 ? 0x16a34a : 0x2563eb, 0.9);
+          this.tweens.add({
+            targets: [buttonBg, buttonText],
+            scaleX: 1.05,
+            scaleY: 1.05,
+            duration: 100,
+            ease: "Power2",
+          });
+        });
+
+        buttonBg.on("pointerout", () => {
+          buttonBg.setFillStyle(toRoom === 2 ? 0x22c55e : 0x3b82f6, 0.8);
+          this.tweens.add({
+            targets: [buttonBg, buttonText],
+            scaleX: 1,
+            scaleY: 1,
+            duration: 100,
+            ease: "Power2",
+          });
+        });
+
+        // Add click event
+        buttonBg.on("pointerdown", () => {
+          this.teleportToRoom(toRoom);
+        });
       }
-    });
-  }
 
-  refreshBackButtons() {
-    // Clear existing back buttons
-    if (this.backButtons) {
-      this.backButtons.forEach(button => {
-        button.bg.destroy();
-        button.text.destroy();
-      });
-      this.backButtons = [];
-    }
+      teleportToRoom(roomNumber: number) {
+        // Create teleport effect
+        const teleportEffect = this.add.circle(
+          this.player.x,
+          this.player.y,
+          0,
+          roomNumber === 2 ? 0x22c55e : 0x3b82f6,
+          0.6
+        );
+        teleportEffect.setDepth(15);
 
-    // Clear existing go-to-room buttons
-    if (this.goToRoomButtons) {
-      this.goToRoomButtons.forEach(button => {
-        button.bg.destroy();
-        button.text.destroy();
-      });
-      this.goToRoomButtons = [];
-    }
+        this.tweens.add({
+          targets: teleportEffect,
+          radius: 100,
+          alpha: 0,
+          duration: 500,
+          ease: "Power2",
+          onComplete: () => {
+            teleportEffect.destroy();
+          },
+        });
 
-    // Recreate back buttons for unlocked rooms (in rooms 2 and 3)
-    const currentUnlockedRooms = (window as any).unlockedRooms;
-    if (currentUnlockedRooms && currentUnlockedRooms.has(2)) {
-      this.createBackToRoom1Button(this.map.widthInPixels + 100, 200, 2);
-    }
-    if (currentUnlockedRooms && currentUnlockedRooms.has(3)) {
-      this.createBackToRoom1Button(this.map.widthInPixels + this.map2.widthInPixels + 100, 200, 3);
-    }
+        // Calculate target position
+        let targetX: number;
+        if (roomNumber === 2) {
+          targetX = this.map.widthInPixels + 100; // Room 2 position
+        } else if (roomNumber === 3) {
+          targetX = this.map.widthInPixels + this.map2.widthInPixels + 100; // Room 3 position
+        } else {
+          targetX = 720; // Default to room 1 center
+        }
 
-    // Create go-to-room buttons in room 1 for unlocked rooms
-    let buttonY = 300; // Starting Y position for buttons in room 1
-    if (currentUnlockedRooms && currentUnlockedRooms.has(2)) {
-      this.createGoToRoomButton(720, buttonY, 2); // Center of room 1, go to room 2
-      buttonY += 70; // Move next button down
-    }
-    if (currentUnlockedRooms && currentUnlockedRooms.has(3)) {
-      this.createGoToRoomButton(720, buttonY, 3); // Center of room 1, go to room 3
-    }
-  }
+        // Teleport player
+        this.player.setPosition(targetX, 480);
+        this.playerNameText.setPosition(targetX, 510);
 
-  teleportToRoom1(fromRoom: number) {
-    // Create teleport effect
-    const teleportEffect = this.add.circle(this.player.x, this.player.y, 0, 0x00aaff, 0.6);
-    teleportEffect.setDepth(15);
-    
-    this.tweens.add({
-      targets: teleportEffect,
-      radius: 100,
-      alpha: 0,
-      duration: 500,
-      ease: 'Power2',
-      onComplete: () => {
-        teleportEffect.destroy();
+        // Update position reference
+        (window as any).playerPositionRef.current = { x: targetX, y: 480 };
+
+        // Show success message
+        const roomNames = {
+          2: "PHÒNG 2: BẢN CHẤT & HÌNH THỨC",
+          3: "PHÒNG 3: NGHIÊN CỨU KHOA HỌC",
+        };
+
+        const successMessage = this.add.text(
+          targetX,
+          400,
+          `✅ Chào mừng đến ${
+            roomNames[roomNumber as keyof typeof roomNames]
+          }!`,
+          {
+            fontSize: "18px",
+            color: roomNumber === 2 ? "#22c55e" : "#3b82f6",
+            fontStyle: "bold",
+            backgroundColor: "#000000",
+            padding: { x: 10, y: 5 },
+          }
+        );
+        successMessage.setOrigin(0.5);
+        successMessage.setDepth(20);
+
+        // Auto remove success message
+        this.time.delayedCall(3000, () => {
+          if (successMessage && successMessage.scene) {
+            successMessage.destroy();
+          }
+        });
       }
-    });
 
-    // Teleport player to room 1 center
-    this.player.setPosition(720, 480); // Center of room 1
-    this.playerNameText.setPosition(720, 510);
-    
-    // Update position reference
-    (window as any).playerPositionRef.current = { x: 720, y: 480 };
+      refreshBackButtons() {
+        // Clear existing back buttons
+        if (this.backButtons) {
+          this.backButtons.forEach((button) => {
+            button.bg.destroy();
+            button.text.destroy();
+          });
+          this.backButtons = [];
+        }
 
-    // Refresh buttons to show available rooms
-    this.refreshBackButtons();
+        // Clear existing go-to-room buttons
+        if (this.goToRoomButtons) {
+          this.goToRoomButtons.forEach((button) => {
+            button.bg.destroy();
+            button.text.destroy();
+          });
+          this.goToRoomButtons = [];
+        }
 
-    // Show success message
-    const successMessage = this.add.text(720, 400, `Đã quay về Phòng 1!`, {
-      fontSize: '20px',
-      color: '#00ff88',
-      fontStyle: 'bold',
-      backgroundColor: '#000000',
-      padding: { x: 10, y: 5 }
-    });
-    successMessage.setOrigin(0.5);
-    successMessage.setDepth(20);
-    
-    // Auto remove success message
-    this.time.delayedCall(3000, () => {
-      if (successMessage && successMessage.scene) {
-        successMessage.destroy();
+        // Recreate back buttons for unlocked rooms (in rooms 2 and 3)
+        const currentUnlockedRooms = (window as any).unlockedRooms;
+        if (currentUnlockedRooms && currentUnlockedRooms.has(2)) {
+          this.createBackToRoom1Button(this.map.widthInPixels + 100, 200, 2);
+        }
+        if (currentUnlockedRooms && currentUnlockedRooms.has(3)) {
+          this.createBackToRoom1Button(
+            this.map.widthInPixels + this.map2.widthInPixels + 100,
+            200,
+            3
+          );
+        }
+
+        // Create go-to-room buttons in room 1 for unlocked rooms
+        let buttonY = 300; // Starting Y position for buttons in room 1
+        if (currentUnlockedRooms && currentUnlockedRooms.has(2)) {
+          this.createGoToRoomButton(720, buttonY, 2); // Center of room 1, go to room 2
+          buttonY += 70; // Move next button down
+        }
+        if (currentUnlockedRooms && currentUnlockedRooms.has(3)) {
+          this.createGoToRoomButton(720, buttonY, 3); // Center of room 1, go to room 3
+        }
       }
-    });
-  }
 
-  unlockRoom(roomNumber: number) {
+      teleportToRoom1(fromRoom: number) {
+        // Create teleport effect
+        const teleportEffect = this.add.circle(
+          this.player.x,
+          this.player.y,
+          0,
+          0x00aaff,
+          0.6
+        );
+        teleportEffect.setDepth(15);
+
+        this.tweens.add({
+          targets: teleportEffect,
+          radius: 100,
+          alpha: 0,
+          duration: 500,
+          ease: "Power2",
+          onComplete: () => {
+            teleportEffect.destroy();
+          },
+        });
+
+        // Teleport player to room 1 center
+        this.player.setPosition(720, 480); // Center of room 1
+        this.playerNameText.setPosition(720, 510);
+
+        // Update position reference
+        (window as any).playerPositionRef.current = { x: 720, y: 480 };
+
+        // Refresh buttons to show available rooms
+        this.refreshBackButtons();
+
+        // Show success message
+        const successMessage = this.add.text(720, 400, `Đã quay về Phòng 1!`, {
+          fontSize: "20px",
+          color: "#00ff88",
+          fontStyle: "bold",
+          backgroundColor: "#000000",
+          padding: { x: 10, y: 5 },
+        });
+        successMessage.setOrigin(0.5);
+        successMessage.setDepth(20);
+
+        // Auto remove success message
+        this.time.delayedCall(3000, () => {
+          if (successMessage && successMessage.scene) {
+            successMessage.destroy();
+          }
+        });
+      }
+
+      unlockRoom(roomNumber: number) {
         console.log("[v0] unlockRoom called for room", roomNumber);
         console.log("[v0] Teleporting player to room", roomNumber);
 
         // Define teleport positions for each room
         const teleportPositions = {
           2: { x: this.map.widthInPixels + 100, y: 480 }, // Room 2 entrance
-          3: { x: this.map.widthInPixels + this.map2.widthInPixels + 100, y: 480 }, // Room 3 entrance
+          3: {
+            x: this.map.widthInPixels + this.map2.widthInPixels + 100,
+            y: 480,
+          }, // Room 3 entrance
         };
 
         if (roomNumber === 2) {
           console.log("[v0] Teleporting to room 2");
           const targetPos = teleportPositions[2];
-          
+
           // Create teleport effect
-          const teleportEffect = this.add.circle(this.player.x, this.player.y, 50, 0x00ff00, 0.8);
+          const teleportEffect = this.add.circle(
+            this.player.x,
+            this.player.y,
+            50,
+            0x00ff00,
+            0.8
+          );
           teleportEffect.setDepth(200);
-          
+
           // Animate teleport effect
           this.tweens.add({
             targets: teleportEffect,
@@ -1088,15 +1156,18 @@ export default function MuseumScene({
             duration: 500,
             onComplete: () => {
               teleportEffect.destroy();
-            }
+            },
           });
 
           // Teleport player
           this.player.setPosition(targetPos.x, targetPos.y);
           this.playerNameText.setPosition(targetPos.x, targetPos.y + 30);
-          
+
           // Update player position ref for persistence
-          (window as any).playerPositionRef.current = { x: targetPos.x, y: targetPos.y };
+          (window as any).playerPositionRef.current = {
+            x: targetPos.x,
+            y: targetPos.y,
+          };
 
           // Show success message
           const successText = this.add
@@ -1115,22 +1186,27 @@ export default function MuseumScene({
             )
             .setOrigin(0.5)
             .setDepth(150);
-            
+
           // Remove success message after 3 seconds
           this.time.delayedCall(3000, () => {
             if (successText) {
               successText.destroy();
             }
           });
-
         } else if (roomNumber === 3) {
           console.log("[v0] Teleporting to room 3");
           const targetPos = teleportPositions[3];
-          
+
           // Create teleport effect
-          const teleportEffect = this.add.circle(this.player.x, this.player.y, 50, 0x0099ff, 0.8);
+          const teleportEffect = this.add.circle(
+            this.player.x,
+            this.player.y,
+            50,
+            0x0099ff,
+            0.8
+          );
           teleportEffect.setDepth(200);
-          
+
           // Animate teleport effect
           this.tweens.add({
             targets: teleportEffect,
@@ -1140,15 +1216,18 @@ export default function MuseumScene({
             duration: 500,
             onComplete: () => {
               teleportEffect.destroy();
-            }
+            },
           });
 
           // Teleport player
           this.player.setPosition(targetPos.x, targetPos.y);
           this.playerNameText.setPosition(targetPos.x, targetPos.y + 30);
-          
+
           // Update player position ref for persistence
-          (window as any).playerPositionRef.current = { x: targetPos.x, y: targetPos.y };
+          (window as any).playerPositionRef.current = {
+            x: targetPos.x,
+            y: targetPos.y,
+          };
 
           // Show success message
           const successText = this.add
@@ -1167,7 +1246,7 @@ export default function MuseumScene({
             )
             .setOrigin(0.5)
             .setDepth(150);
-            
+
           // Remove success message after 3 seconds
           this.time.delayedCall(3000, () => {
             if (successText) {
@@ -1176,8 +1255,12 @@ export default function MuseumScene({
           });
         }
 
-        console.log("[v0] Player teleported to position:", this.player.x, this.player.y);
-        
+        console.log(
+          "[v0] Player teleported to position:",
+          this.player.x,
+          this.player.y
+        );
+
         // Refresh back buttons after unlocking a room
         this.refreshBackButtons();
       }
@@ -1328,7 +1411,10 @@ export default function MuseumScene({
           this.promptText.setVisible(false);
         }
 
-        (window as any).playerPositionRef.current = { x: this.player.x, y: this.player.y };
+        (window as any).playerPositionRef.current = {
+          x: this.player.x,
+          y: this.player.y,
+        };
 
         window.dispatchEvent(
           new CustomEvent("playerMove", {

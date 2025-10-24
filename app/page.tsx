@@ -5,6 +5,7 @@ import MuseumScene from "@/components/museum-scene";
 import InfoModal from "@/components/info-modal";
 import InstructionModal from "@/components/instruction-modal";
 import QuizModal from "@/components/quiz-modal";
+import CongratsModal from "@/components/congrats-modal";
 import Minimap from "@/components/minimap";
 import StartScreen from "@/components/start-screen";
 import type { ExhibitData, Player } from "@/types/museum";
@@ -21,6 +22,7 @@ export default function MuseumPage() {
   const [unlockedRooms, setUnlockedRooms] = useState<Set<number>>(new Set([1]));
   const [showQuiz, setShowQuiz] = useState(false);
   const [currentQuizRoom, setCurrentQuizRoom] = useState<number | null>(null);
+  const [showCongrats, setShowCongrats] = useState(false);
 
   const [currentPlayer, setCurrentPlayer] = useState<string | null>(null);
   const [allPlayers, setAllPlayers] = useState<Player[]>([]);
@@ -49,7 +51,6 @@ export default function MuseumPage() {
         }, 0);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPlayer]);
 
   useEffect(() => {
@@ -120,6 +121,11 @@ export default function MuseumPage() {
     setShowInstructions(false);
   }, []);
 
+  const handleStartQuiz = useCallback((roomNumber: number) => {
+    setCurrentQuizRoom(roomNumber);
+    setShowQuiz(true);
+  }, []);
+
   const handleQuizPass = useCallback(() => {
     if (currentQuizRoom !== null) {
       const roomToUnlock = currentQuizRoom + 1;
@@ -140,7 +146,12 @@ export default function MuseumPage() {
 
       setShowQuiz(false);
       setCurrentQuizRoom(null);
-      alert(`Chúc mừng! Bạn đã mở khóa Phòng ${roomToUnlock}`);
+
+      if (roomToUnlock === 3) {
+        setShowCongrats(true);
+      } else {
+        alert(`Chúc mừng! Bạn đã mở khóa Phòng ${roomToUnlock}`);
+      }
     }
   }, [currentQuizRoom]);
 
@@ -149,11 +160,20 @@ export default function MuseumPage() {
     setCurrentQuizRoom(null);
   }, []);
 
+  const handleLogout = useCallback(() => {
+    setCurrentPlayer(null);
+    setShowStartScreen(true);
+    setShowInstructions(false);
+  }, []);
+
   const handleDoorInteract = useCallback((roomNumber: number) => {
-    // The door leads to roomNumber, so we need to pass quiz for roomNumber - 1
     const quizRoomNumber = roomNumber - 1;
     setCurrentQuizRoom(quizRoomNumber);
     setShowQuiz(true);
+  }, []);
+
+  const handleCongratsClose = useCallback(() => {
+    setShowCongrats(false);
   }, []);
 
   if (showStartScreen) {
@@ -216,6 +236,15 @@ export default function MuseumPage() {
         />
       )}
 
+      {showCongrats && (
+        <CongratsModal
+          isOpen={showCongrats}
+          unlockedCount={unlockedRooms.size}
+          visitedCount={visitedExhibits.size}
+          onClose={handleCongratsClose}
+        />
+      )}
+
       {!showInstructions && (
         <Minimap
           visitedExhibits={visitedExhibits}
@@ -225,7 +254,7 @@ export default function MuseumPage() {
 
       {visitedExhibits.size > 0 && (
         <div className="fixed bottom-4 right-4 bg-[#16213e] border border-[#0f3460] rounded-lg px-4 py-2 text-[#e8e8e8]">
-          <p className="text-sm">Phòng đã mở: {unlockedRooms.size}/9</p>
+          <p className="text-sm">Phòng đã mở: {unlockedRooms.size}/3</p>
           <p className="text-sm">
             Đã tham quan: {visitedExhibits.size} khu trưng bày
           </p>

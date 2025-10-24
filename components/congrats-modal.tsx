@@ -31,7 +31,10 @@ export default function CongratsModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} />
+      <div
+        className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+        onClick={onClose}
+      />
 
       <div className="relative bg-[#16213e] border-2 border-[#0f3460] rounded-lg max-w-xl w-full shadow-2xl">
         <div className="sticky top-0 bg-[#0f3460] px-6 py-4 flex items-center justify-between border-b border-[#1a1a2e] rounded-t-lg">
@@ -50,18 +53,23 @@ export default function CongratsModal({
 
         <div className="p-6 space-y-4">
           <p className="text-[#e8e8e8] text-lg">
-            Bạn đã mở khóa tất cả <span className="font-semibold text-[#4ade80]">3 phòng</span>
+            Bạn đã mở khóa tất cả{" "}
+            <span className="font-semibold text-[#4ade80]">3 phòng</span>
             trong bảo tàng.
           </p>
           <p className="text-[#94a3b8] text-sm">
-            Tình trạng hiện tại: Phòng mở <span className="font-semibold text-[#e8e8e8]">{unlockedCount}/3</span> •
-            Trưng bày đã tham quan <span className="font-semibold text-[#e8e8e8]">{visitedCount}</span>
+            Tình trạng hiện tại: Phòng mở{" "}
+            <span className="font-semibold text-[#e8e8e8]">
+              {unlockedCount}/3
+            </span>{" "}
+            • Trưng bày đã tham quan{" "}
+            <span className="font-semibold text-[#e8e8e8]">{visitedCount}</span>
           </p>
 
           <div className="mt-4 p-4 bg-[#0f3460] rounded-lg border border-[#1a1a2e]">
             <p className="text-[#cbd5e1]">
-              Tuyệt vời! Bạn có thể tiếp tục khám phá các khu trưng bày hoặc đổi người chơi
-              để bắt đầu lại hành trình.
+              Tuyệt vời! Bạn có thể tiếp tục khám phá các khu trưng bày hoặc đổi
+              người chơi để bắt đầu lại hành trình.
             </p>
           </div>
         </div>
