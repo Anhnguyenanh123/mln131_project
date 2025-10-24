@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 const PhaserLib = typeof window !== "undefined" ? require("phaser") : null;
 type Phaser = typeof import("phaser");
 import type { ExhibitData } from "@/types/museum";
 import { museumData } from "@/data/museum-data";
+import PictureModal from "@/components/picture-modal";
 
 declare global {
   interface Window {
@@ -29,6 +30,8 @@ export default function MuseumScene({
 }: MuseumSceneProps) {
   const gameRef = useRef<HTMLDivElement>(null);
   const phaserGameRef = useRef<any>(null);
+  const [pictureModalOpen, setPictureModalOpen] = useState(false);
+  const [currentPicture, setCurrentPicture] = useState<string>("");
   const playerPositionRef = useRef<{ x: number; y: number }>({
     x: 100,
     y: 480,
@@ -51,9 +54,15 @@ export default function MuseumScene({
       };
       private nearColumn: { roomNumber: number; title: string } | null = null;
       private nearDoor: number | null = null;
+      private nearPicture: { id: number; imagePath: string } | null = null;
       private interactKey!: Phaser.Input.Keyboard.Key;
       private promptText!: Phaser.GameObjects.Text;
       private walls: Phaser.GameObjects.Rectangle[] = [];
+      private pictures: {
+        collision: Phaser.GameObjects.Rectangle;
+        id: number;
+        imagePath: string;
+      }[] = [];
       private columns: {
         collision: Phaser.GameObjects.Rectangle;
         roomNumber: number;
@@ -324,6 +333,7 @@ export default function MuseumScene({
         });
 
         this.createRoomBorders();
+        this.createPictures();
 
         this.player = this.physics.add.sprite(
           playerPositionRef.current.x,
@@ -447,7 +457,9 @@ export default function MuseumScene({
           .setScrollFactor(0);
 
         this.interactKey.on("down", () => {
-          if (this.nearDoor !== null) {
+          if (this.nearPicture !== null) {
+            this.showPictureModal(this.nearPicture.imagePath);
+          } else if (this.nearDoor !== null) {
             window.handleDoorInteract?.(this.nearDoor);
           }
         });
@@ -564,6 +576,37 @@ export default function MuseumScene({
           )
           .setOrigin(0.5)
           .setDepth(10);
+      }
+
+      createPictures() {
+        const roomWidth = this.map.widthInPixels; 
+        const sectionWidth = roomWidth / 6; 
+        
+        const picturePositions = [
+          { x: sectionWidth * 0.5, y: 100, id: 1, imagePath: "/pic/r1-e1.webp" },
+          { x: sectionWidth * 1.5, y: 100, id: 2, imagePath: "/pic/r1-e2.jpg" },
+          { x: sectionWidth * 2.5, y: 100, id: 3, imagePath: "/pic/r1-e3.jpg" },
+          { x: sectionWidth * 3.5, y: 100, id: 4, imagePath: "/pic/r1-e4.webp" },
+          { x: sectionWidth * 4.5, y: 100, id: 5, imagePath: "/pic/r2-e1.jpg" },
+          { x: sectionWidth * 5.5, y: 100, id: 6, imagePath: "/pic/r2-e2.jpg" }
+        ];
+
+        picturePositions.forEach(pos => {
+          const collision = this.add.rectangle(pos.x, pos.y, 100, 60, 0xff0000, 0);
+          this.physics.add.existing(collision, true);
+
+          this.pictures.push({
+            collision: collision,
+            id: pos.id,
+            imagePath: pos.imagePath
+          });
+        });
+      }
+
+      showPictureModal(imagePath: string) {
+        this.scene.pause();
+        
+        window.showPictureModal?.(imagePath);
       }
 
       unlockRoom(roomNumber: number) {
@@ -691,7 +734,29 @@ export default function MuseumScene({
           }
         }
 
-        if (this.nearDoor !== null) {
+        this.nearPicture = null;
+        for (const picture of this.pictures) {
+          const distance = Phaser.Math.Distance.Between(
+            this.player.x,
+            this.player.y,
+            picture.collision.x,
+            picture.collision.y
+          );
+
+          if (distance < 80) {
+            this.nearPicture = { id: picture.id, imagePath: picture.imagePath };
+            break;
+          }
+        }
+
+        if (this.nearPicture !== null) {
+          this.promptText.setText("Nhấn E để xem bức tranh");
+          this.promptText.setVisible(true);
+          this.promptText.setPosition(
+            this.cameras.main.width / 2,
+            this.cameras.main.height - 60
+          );
+        } else if (this.nearDoor !== null) {
           this.promptText.setText(
             `Nhấn E để làm quiz mở khóa Phòng ${this.nearDoor}`
           );
@@ -735,6 +800,10 @@ export default function MuseumScene({
 
     window.handleExhibitInteract = onExhibitInteract;
     window.handleDoorInteract = onDoorInteract;
+    window.showPictureModal = (imagePath: string) => {
+      setCurrentPicture(imagePath);
+      setPictureModalOpen(true);
+    };
     window.unlockRoom = (roomNumber: number) => {
       const scene = game.scene.getScene("MainScene") as MainScene;
       if (scene && scene.unlockRoom) {
@@ -748,5 +817,24 @@ export default function MuseumScene({
     };
   }, [onExhibitInteract, onDoorInteract, unlockedRooms, username]);
 
-  return <div ref={gameRef} className="w-full h-full" />;
+  const handlePictureModalClose = () => {
+    setPictureModalOpen(false);
+    if (phaserGameRef.current) {
+      const scene = phaserGameRef.current.scene.getScene("MainScene");
+      if (scene) {
+        scene.scene.resume();
+      }
+    }
+  };
+
+  return (
+    <>
+      <div ref={gameRef} className="w-full h-full" />
+      <PictureModal
+        isOpen={pictureModalOpen}
+        onClose={handlePictureModalClose}
+        imagePath={currentPicture}
+      />
+    </>
+  );
 }

@@ -8,5 +8,6 @@ declare global {
     handleDoorInteract?: (roomNumber: number) => void;
     unlockRoom?: (roomNumber: number) => void;
     currentUsername?: string;
+    showPictureModal?: (imagePath: string) => void;
   }
 }
