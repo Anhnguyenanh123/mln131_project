@@ -5,7 +5,6 @@ import MuseumScene from "@/components/museum-scene";
 import InfoModal from "@/components/info-modal";
 import InstructionModal from "@/components/instruction-modal";
 import QuizModal from "@/components/quiz-modal";
-import CongratsModal from "@/components/congrats-modal";
 import Minimap from "@/components/minimap";
 import StartScreen from "@/components/start-screen";
 import type { ExhibitData, Player } from "@/types/museum";
@@ -26,7 +25,6 @@ export default function MuseumPage() {
   const [currentPlayer, setCurrentPlayer] = useState<string | null>(null);
   const [allPlayers, setAllPlayers] = useState<Player[]>([]);
   const [showStartScreen, setShowStartScreen] = useState(true);
-  const [showCongrats, setShowCongrats] = useState(false);
 
   const isLoadingPlayer = useRef(false);
 
@@ -51,8 +49,7 @@ export default function MuseumPage() {
         }, 0);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPlayer]);
+  }, [currentPlayer]); // Removed allPlayers from dependencies to break the loop
 
   useEffect(() => {
     if (currentPlayer && !isLoadingPlayer.current && allPlayers.length > 0) {
@@ -122,19 +119,32 @@ export default function MuseumPage() {
     setShowInstructions(false);
   }, []);
 
+  const handleStartQuiz = useCallback((roomNumber: number) => {
+    setCurrentQuizRoom(roomNumber);
+    setShowQuiz(true);
+  }, []);
+
   const handleQuizPass = useCallback(() => {
     if (currentQuizRoom !== null) {
+      const roomToUnlock = currentQuizRoom + 1;
+
+      console.log("[v0] Quiz passed for room", currentQuizRoom);
+      console.log("[v0] Unlocking room", roomToUnlock);
+
       setUnlockedRooms((prev) => {
-        const nextRoom = currentQuizRoom + 1;
-        const newUnlocked = new Set([...prev, nextRoom]);
-        if (newUnlocked.size >= 3) {
-          setShowCongrats(true);
-        }
+        const newUnlocked = new Set([...prev, roomToUnlock]);
+        console.log("[v0] Updated unlockedRooms:", Array.from(newUnlocked));
         return newUnlocked;
       });
+
+      if (window.unlockRoom) {
+        console.log("[v0] Calling window.unlockRoom for room", roomToUnlock);
+        window.unlockRoom(roomToUnlock);
+      }
+
       setShowQuiz(false);
       setCurrentQuizRoom(null);
-      alert(`Chúc mừng! Bạn đã mở khóa Phòng ${currentQuizRoom + 1}`);
+      alert(`Chúc mừng! Bạn đã mở khóa Phòng ${roomToUnlock}`);
     }
   }, [currentQuizRoom]);
 
@@ -150,6 +160,7 @@ export default function MuseumPage() {
   }, []);
 
   const handleDoorInteract = useCallback((roomNumber: number) => {
+    // The door leads to roomNumber, so we need to pass quiz for roomNumber - 1
     const quizRoomNumber = roomNumber - 1;
     setCurrentQuizRoom(quizRoomNumber);
     setShowQuiz(true);
@@ -197,7 +208,6 @@ export default function MuseumPage() {
       />
 
       <InfoModal
-        key={selectedExhibit?.id ?? "info-modal"}
         exhibit={selectedExhibit}
         isOpen={!!selectedExhibit}
         onClose={handleCloseModal}
@@ -225,19 +235,12 @@ export default function MuseumPage() {
 
       {visitedExhibits.size > 0 && (
         <div className="fixed bottom-4 right-4 bg-[#16213e] border border-[#0f3460] rounded-lg px-4 py-2 text-[#e8e8e8]">
-          <p className="text-sm">Phòng đã mở: {unlockedRooms.size}/3</p>
+          <p className="text-sm">Phòng đã mở: {unlockedRooms.size}/9</p>
           <p className="text-sm">
             Đã tham quan: {visitedExhibits.size} khu trưng bày
           </p>
         </div>
       )}
-
-      <CongratsModal
-        isOpen={showCongrats}
-        unlockedCount={unlockedRooms.size}
-        visitedCount={visitedExhibits.size}
-        onClose={() => setShowCongrats(false)}
-      />
     </div>
   );
 }

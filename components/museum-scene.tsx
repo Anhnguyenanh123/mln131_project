@@ -11,6 +11,8 @@ declare global {
   interface Window {
     handleExhibitInteract?: (exhibit: ExhibitData) => void;
     handleDoorInteract?: (roomNumber: number) => void;
+    showPictureModal?: (imagePath: string) => void;
+    unlockRoom?: (roomNumber: number) => void;
   }
 }
 
@@ -25,6 +27,7 @@ interface MuseumSceneProps {
 export default function MuseumScene({
   onExhibitInteract,
   onDoorInteract,
+  visitedExhibits,
   unlockedRooms,
   username,
 }: MuseumSceneProps) {
@@ -52,16 +55,27 @@ export default function MuseumScene({
         S: Phaser.Input.Keyboard.Key;
         D: Phaser.Input.Keyboard.Key;
       };
-      private nearColumn: { roomNumber: number; title: string } | null = null;
-      private nearDoor: number | null = null;
+      private nearExhibit: ExhibitData | null = null;
+      private nearLockedDoor: number | null = null;
       private nearPicture: { id: number; imagePath: string } | null = null;
+      private nearInfoPoint: ExhibitData | null = null;
       private interactKey!: Phaser.Input.Keyboard.Key;
       private promptText!: Phaser.GameObjects.Text;
       private walls: Phaser.GameObjects.Rectangle[] = [];
+      private exhibits: Phaser.Physics.Arcade.Sprite[] = [];
+      private lockedDoors: {
+        collision: Phaser.GameObjects.Rectangle;
+        roomNumber: number;
+      }[] = [];
       private pictures: {
         collision: Phaser.GameObjects.Rectangle;
         id: number;
         imagePath: string;
+      }[] = [];
+      private infoPoints: {
+        collision: Phaser.GameObjects.Rectangle;
+        exhibit: ExhibitData;
+        sprite: Phaser.GameObjects.Sprite;
       }[] = [];
       private columns: {
         collision: Phaser.GameObjects.Rectangle;
@@ -106,34 +120,151 @@ export default function MuseumScene({
           "/tiles/antarcticbees_interior_free_sample-export.png"
         );
 
-        this.createPlantGraphic();
-        this.createBenchGraphic();
+        this.createInfoPointGraphic();
       }
 
-      createPlantGraphic() {
+      createInfoPointGraphic() {
         const graphics = this.make.graphics({ x: 0, y: 0 });
-        graphics.fillStyle(0x8b4513, 1);
-        graphics.fillRect(8, 20, 24, 20);
-        graphics.fillStyle(0x22c55e, 1);
-        graphics.fillCircle(12, 15, 8);
-        graphics.fillCircle(20, 12, 8);
-        graphics.fillCircle(28, 15, 8);
-        graphics.fillCircle(20, 20, 8);
-        graphics.generateTexture("plant", 40, 40);
-        graphics.destroy();
-      }
 
-      createBenchGraphic() {
-        const graphics = this.make.graphics({ x: 0, y: 0 });
-        graphics.fillStyle(0x8b4513, 1);
-        graphics.fillRect(0, 10, 80, 20);
-        graphics.fillStyle(0x654321, 1);
-        graphics.fillRect(0, 0, 80, 10);
-        graphics.generateTexture("bench", 80, 30);
+        graphics.fillStyle(0x3b82f6, 1);
+        graphics.fillCircle(40, 40, 35);
+
+        graphics.fillStyle(0xffffff, 1);
+        graphics.fillCircle(40, 25, 5);
+        graphics.fillRect(35, 35, 10, 25);
+
+        graphics.generateTexture("info-point", 80, 80);
         graphics.destroy();
       }
 
       create() {
+        this.physics.world.setBounds(0, 0, 9000, 1200);
+
+        for (let x = 0; x < 9000; x += 120) {
+          for (let y = 0; y < 1200; y += 120) {
+            const baseColor = (x + y) % 240 === 0 ? 0x374151 : 0x2d3748;
+            this.add.rectangle(x + 60, y + 60, 118, 118, baseColor);
+          }
+        }
+
+        this.add.rectangle(4500, 100, 800, 80, 0x0f3460);
+        this.add
+          .text(4500, 100, "BẢO TÀNG KHOA HỌC CHÍNH TRỊ", {
+            fontSize: "32px",
+            color: "#e8e8e8",
+            fontStyle: "bold",
+          })
+          .setOrigin(0.5);
+
+        this.createWall(4500, 20, 9000, 40, 0x1e293b);
+        this.createWall(4500, 1180, 9000, 40, 0x1e293b);
+        this.createWall(20, 600, 40, 1200, 0x1e293b);
+        this.createWall(8980, 600, 40, 1200, 0x1e293b);
+
+        for (let i = 1; i <= 8; i++) {
+          const x = i * 1000;
+
+          this.createWall(x, 250, 40, 460, 0x1e293b);
+          this.createWall(x, 950, 40, 460, 0x1e293b);
+
+          if (!unlockedRooms.has(i + 1)) {
+            const door = this.add.sprite(x, 600, "locked-door");
+
+            const doorCollision = this.add.rectangle(
+              x,
+              600,
+              40,
+              200,
+              0xff0000,
+              0
+            );
+            this.physics.add.existing(doorCollision, true);
+            this.lockedDoors.push({
+              collision: doorCollision,
+              roomNumber: i + 1,
+            });
+
+            this.add
+              .text(x, 500, `PHÒNG ${i + 1}\nĐANG KHÓA`, {
+                fontSize: "18px",
+                color: "#fbbf24",
+                fontStyle: "bold",
+                align: "center",
+              })
+              .setOrigin(0.5);
+          }
+        }
+
+        for (let room = 0; room < 9; room++) {
+          const baseX = room * 1000;
+          this.createPillar(baseX + 250, 250);
+          this.createPillar(baseX + 250, 950);
+          this.createPillar(baseX + 450, 250);
+          this.createPillar(baseX + 450, 950);
+          this.createPillar(baseX + 650, 250);
+          this.createPillar(baseX + 650, 950);
+        }
+
+        museumData.forEach((exhibit) => {
+          const exhibitSprite = this.physics.add.sprite(
+            exhibit.position.x,
+            exhibit.position.y,
+            `exhibit-${exhibit.id}`
+          );
+          exhibitSprite.setImmovable(true);
+          exhibitSprite.setData("exhibitData", exhibit);
+          this.exhibits.push(exhibitSprite);
+
+          const roomLabels = [
+            "PHÒNG 1: KHỞI NGUỒN & NỀN TẢNG",
+            "PHÒNG 2: BẢN CHẤT & HÌNH THỨC",
+            "PHÒNG 3: NHÀ NƯỚC PHÁP QUYỀN",
+            "PHÒNG 4: PHÁT HUY DÂN CHỦ",
+            "PHÒNG 5: PHÒNG CHỐNG THAM NHŨNG",
+            "PHÒNG 6: ĐỔI MỚI & CHUYỂN ĐỔI SỐ",
+            "PHÒNG 7: TRÁCH NHIỆM CÔNG DÂN",
+            "PHÒNG 8: ĐANG XÂY DỰNG",
+            "PHÒNG 9: ĐANG XÂY DỰNG",
+          ];
+
+          this.add
+            .text(
+              exhibit.position.x,
+              exhibit.position.y - 120,
+              roomLabels[exhibit.roomNumber - 1],
+              {
+                fontSize: "18px",
+                color: "#fbbf24",
+                fontStyle: "bold",
+              }
+            )
+            .setOrigin(0.5);
+
+          this.add
+            .text(exhibit.position.x, exhibit.position.y + 100, exhibit.title, {
+              fontSize: "13px",
+              color: "#e8e8e8",
+              align: "center",
+              wordWrap: { width: 180 },
+            })
+            .setOrigin(0.5);
+
+          const spotlight = this.add.circle(
+            exhibit.position.x,
+            exhibit.position.y,
+            120,
+            0xffffff,
+            0.1
+          );
+          this.tweens.add({
+            targets: spotlight,
+            alpha: 0.2,
+            duration: 2000,
+            yoyo: true,
+            repeat: -1,
+          });
+        });
+
         this.map = this.make.tilemap({ key: "map1" });
         const tileset1 = this.map.addTilesetImage("room", "room")!;
         const tileset2 = this.map.addTilesetImage("interior", "interior")!;
@@ -317,8 +448,7 @@ export default function MuseumScene({
           .setOrigin(0.5)
           .setDepth(10);
 
-        const columnPositions: any[] = [
-        ];
+        const columnPositions: any[] = [];
 
         const r1r2BoundaryX = this.map.widthInPixels;
         const r2r3BoundaryX = this.map.widthInPixels + this.map2.widthInPixels;
@@ -334,6 +464,7 @@ export default function MuseumScene({
 
         this.createRoomBorders();
         this.createPictures();
+        this.createInfoPoints();
 
         this.player = this.physics.add.sprite(
           playerPositionRef.current.x,
@@ -457,10 +588,12 @@ export default function MuseumScene({
           .setScrollFactor(0);
 
         this.interactKey.on("down", () => {
-          if (this.nearPicture !== null) {
+          if (this.nearInfoPoint !== null) {
+            window.handleExhibitInteract?.(this.nearInfoPoint);
+          } else if (this.nearPicture !== null) {
             this.showPictureModal(this.nearPicture.imagePath);
-          } else if (this.nearDoor !== null) {
-            window.handleDoorInteract?.(this.nearDoor);
+          } else if (this.nearLockedDoor !== null) {
+            window.handleDoorInteract?.(this.nearLockedDoor);
           }
         });
 
@@ -579,41 +712,121 @@ export default function MuseumScene({
       }
 
       createPictures() {
-        const roomWidth = this.map.widthInPixels; 
-        const sectionWidth = roomWidth / 6; 
-        
+        const roomWidth = this.map.widthInPixels;
+        const sectionWidth = roomWidth / 6;
+
         const picturePositions = [
-          { x: sectionWidth * 0.5, y: 100, id: 1, imagePath: "/pic/r1-e1.webp" },
+          {
+            x: sectionWidth * 0.5,
+            y: 100,
+            id: 1,
+            imagePath: "/pic/r1-e1.webp",
+          },
           { x: sectionWidth * 1.5, y: 100, id: 2, imagePath: "/pic/r1-e2.jpg" },
           { x: sectionWidth * 2.5, y: 100, id: 3, imagePath: "/pic/r1-e3.jpg" },
-          { x: sectionWidth * 3.5, y: 100, id: 4, imagePath: "/pic/r1-e4.webp" },
+          {
+            x: sectionWidth * 3.5,
+            y: 100,
+            id: 4,
+            imagePath: "/pic/r1-e4.webp",
+          },
           { x: sectionWidth * 4.5, y: 100, id: 5, imagePath: "/pic/r2-e1.jpg" },
-          { x: sectionWidth * 5.5, y: 100, id: 6, imagePath: "/pic/r2-e2.jpg" }
+          { x: sectionWidth * 5.5, y: 100, id: 6, imagePath: "/pic/r2-e2.jpg" },
         ];
 
-        picturePositions.forEach(pos => {
-          const collision = this.add.rectangle(pos.x, pos.y, 100, 60, 0xff0000, 0);
+        picturePositions.forEach((pos) => {
+          const collision = this.add.rectangle(
+            pos.x,
+            pos.y,
+            100,
+            60,
+            0xff0000,
+            0
+          );
           this.physics.add.existing(collision, true);
 
           this.pictures.push({
             collision: collision,
             id: pos.id,
-            imagePath: pos.imagePath
+            imagePath: pos.imagePath,
+          });
+        });
+      }
+
+      createInfoPoints() {
+        const room1Exhibits = museumData
+          .filter((exhibit) => exhibit.roomNumber === 1)
+          .slice(0, 2);
+
+        const infoPointPositions = [
+          { x: 300, y: 300 },
+          { x: 300, y: 600 },
+        ];
+
+        room1Exhibits.forEach((exhibit, index) => {
+          const pos = infoPointPositions[index];
+
+          const sprite = this.add.sprite(pos.x, pos.y, "info-point");
+          sprite.setDepth(5);
+          sprite.setScale(0.8);
+
+          this.tweens.add({
+            targets: sprite,
+            scale: 1,
+            duration: 1000,
+            yoyo: true,
+            repeat: -1,
+            ease: "Sine.easeInOut",
+          });
+
+          this.add
+            .text(pos.x, pos.y + 60, exhibit.title, {
+              fontSize: "12px",
+              color: "#e8e8e8",
+              backgroundColor: "#000000",
+              padding: { x: 8, y: 4 },
+              align: "center",
+              wordWrap: { width: 200 },
+            })
+            .setOrigin(0.5)
+            .setDepth(5);
+
+          const collision = this.add.rectangle(
+            pos.x,
+            pos.y,
+            100,
+            100,
+            0xff0000,
+            0
+          );
+          this.physics.add.existing(collision, true);
+
+          this.infoPoints.push({
+            collision: collision,
+            exhibit: exhibit,
+            sprite: sprite,
           });
         });
       }
 
       showPictureModal(imagePath: string) {
         this.scene.pause();
-        
+
         window.showPictureModal?.(imagePath);
       }
 
       unlockRoom(roomNumber: number) {
+        console.log("[v0] unlockRoom called for room", roomNumber);
+        console.log("[v0] roomBorders exists:", !!this.roomBorders);
+
         if (!this.roomBorders) return;
 
         if (roomNumber === 2) {
-          this.roomBorders.room2Border.destroy();
+          console.log("[v0] Destroying room 2 border");
+          if (this.roomBorders.room2Border) {
+            this.roomBorders.room2Border.destroy();
+            this.roomBorders.room2Border = null as any;
+          }
           this.add
             .text(
               this.map.widthInPixels - 50,
@@ -629,7 +842,11 @@ export default function MuseumScene({
             .setOrigin(0.5)
             .setDepth(10);
         } else if (roomNumber === 3) {
-          this.roomBorders.room3Border.destroy();
+          console.log("[v0] Destroying room 3 border");
+          if (this.roomBorders.room3Border) {
+            this.roomBorders.room3Border.destroy();
+            this.roomBorders.room3Border = null as any;
+          }
           this.add
             .text(
               this.map.widthInPixels + this.map2.widthInPixels - 50,
@@ -647,14 +864,16 @@ export default function MuseumScene({
         }
       }
 
-      addPlant(x: number, y: number) {
-        const plant = this.add.sprite(x, y, "plant");
-        plant.setDepth(2);
-      }
+      createPillar(x: number, y: number) {
+        const pillar = this.add.rectangle(x, y, 40, 40, 0x8b7355);
+        this.add.rectangle(x, y, 35, 35, 0xa67c52);
+        pillar.setDepth(2);
 
-      addBench(x: number, y: number) {
-        const bench = this.add.sprite(x, y, "bench");
-        bench.setDepth(2);
+        const pillarCollision = this.add.rectangle(x, y, 40, 40, 0xff0000, 0);
+        this.physics.add.existing(pillarCollision, true);
+        this.walls.push(pillarCollision);
+
+        return pillar;
       }
 
       update() {
@@ -707,7 +926,7 @@ export default function MuseumScene({
 
         this.playerNameText.setPosition(this.player.x, this.player.y + 30);
 
-        this.nearDoor = null;
+        this.nearLockedDoor = null;
         if (this.roomBorders) {
           const door2X = this.map.widthInPixels;
           const door2Y = this.map.heightInPixels / 2;
@@ -728,9 +947,9 @@ export default function MuseumScene({
           );
 
           if (distanceToDoor2 < 100) {
-            this.nearDoor = 2;
+            this.nearLockedDoor = 2;
           } else if (distanceToDoor3 < 100) {
-            this.nearDoor = 3;
+            this.nearLockedDoor = 3;
           }
         }
 
@@ -749,16 +968,38 @@ export default function MuseumScene({
           }
         }
 
-        if (this.nearPicture !== null) {
+        this.nearInfoPoint = null;
+        for (const infoPoint of this.infoPoints) {
+          const distance = Phaser.Math.Distance.Between(
+            this.player.x,
+            this.player.y,
+            infoPoint.collision.x,
+            infoPoint.collision.y
+          );
+
+          if (distance < 80) {
+            this.nearInfoPoint = infoPoint.exhibit;
+            break;
+          }
+        }
+
+        if (this.nearInfoPoint !== null) {
+          this.promptText.setText("Nhấn E để xem thông tin");
+          this.promptText.setVisible(true);
+          this.promptText.setPosition(
+            this.cameras.main.width / 2,
+            this.cameras.main.height - 60
+          );
+        } else if (this.nearPicture !== null) {
           this.promptText.setText("Nhấn E để xem bức tranh");
           this.promptText.setVisible(true);
           this.promptText.setPosition(
             this.cameras.main.width / 2,
             this.cameras.main.height - 60
           );
-        } else if (this.nearDoor !== null) {
+        } else if (this.nearLockedDoor !== null) {
           this.promptText.setText(
-            `Nhấn E để làm quiz mở khóa Phòng ${this.nearDoor}`
+            `Nhấn E để làm quiz mở khóa Phòng ${this.nearLockedDoor}`
           );
           this.promptText.setVisible(true);
           this.promptText.setPosition(
@@ -776,6 +1017,19 @@ export default function MuseumScene({
             detail: { x: this.player.x, y: this.player.y },
           })
         );
+      }
+
+      createWall(
+        x: number,
+        y: number,
+        width: number,
+        height: number,
+        color: number
+      ) {
+        const wall = this.add.rectangle(x, y, width, height, color);
+        this.physics.add.existing(wall, true);
+        this.walls.push(wall);
+        return wall;
       }
     }
 
@@ -815,7 +1069,13 @@ export default function MuseumScene({
       game.destroy(true);
       phaserGameRef.current = null;
     };
-  }, [onExhibitInteract, onDoorInteract, unlockedRooms, username]);
+  }, [
+    onExhibitInteract,
+    onDoorInteract,
+    visitedExhibits,
+    unlockedRooms,
+    username,
+  ]);
 
   const handlePictureModalClose = () => {
     setPictureModalOpen(false);
