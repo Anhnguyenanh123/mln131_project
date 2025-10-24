@@ -66,7 +66,7 @@ export default function InfoModal({
           <div className="prose prose-invert max-w-none">
             <div className="text-[#cbd5e1] leading-relaxed space-y-4">
               {exhibit.content.split("\n\n").map((paragraph, index) => (
-                <p key={index} className="text-base">
+                <p key={index} className="text-base whitespace-pre-line">
                   {paragraph}
                 </p>
               ))}
