@@ -24,8 +24,8 @@ export default function Minimap({
     return () => window.removeEventListener("playerMove", handlePlayerMove);
   }, []);
 
-  const scaleX = 480 / 4320; // 480px width for 3 maps (4320px total)
-  const scaleY = 110 / 960;  // 110px height for 960px map height
+  const scaleX = 480 / 4320; 
+  const scaleY = 110 / 960; 
 
   return (
     <div className="fixed top-20 right-4 bg-[#16213e]/90 border-2 border-[#0f3460] rounded-lg p-3 backdrop-blur-sm max-w-[520px]">
@@ -38,9 +38,9 @@ export default function Minimap({
         {[1, 2].map((i) => (
           <div
             key={i}
-            className="absolute top-2 bottom-2 w-[2px]"
+            className="absolute top-2 bottom-2 w-0.5"
             style={{
-              left: `${i * 160}px`, // 480px / 3 maps = 160px per map
+              left: `${i * 160}px`,
               backgroundColor: unlockedRooms.has(i + 1) ? "#374151" : "#7f1d1d",
             }}
           />

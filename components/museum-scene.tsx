@@ -539,10 +539,10 @@ export default function MuseumScene({
           .text(
             room2BorderX - 50,
             room2BorderY - 100,
-            "ROOM 2\nLOCKED\nComplete Quiz to Enter",
+            "🔒 PHÒNG 2\nLàm quiz để mở",
             {
-              fontSize: "16px",
-              color: "#ff0000",
+              fontSize: "14px",
+              color: "#fbbf24",
               fontStyle: "bold",
               align: "center",
             }
@@ -554,10 +554,10 @@ export default function MuseumScene({
           .text(
             room3BorderX - 50,
             room3BorderY - 100,
-            "ROOM 3\nLOCKED\nComplete Quiz to Enter",
+            "🔒 PHÒNG 3\nLàm quiz để mở",
             {
-              fontSize: "16px",
-              color: "#ff0000",
+              fontSize: "14px",
+              color: "#fbbf24",
               fontStyle: "bold",
               align: "center",
             }
@@ -575,10 +575,10 @@ export default function MuseumScene({
             .text(
               this.map.widthInPixels - 50,
               this.map.heightInPixels / 2 - 100,
-              "ROOM 2\nUNLOCKED!",
+              "✅ PHÒNG 2\nĐÃ MỞ KHÓA!",
               {
-                fontSize: "16px",
-                color: "#00ff00",
+                fontSize: "14px",
+                color: "#22c55e",
                 fontStyle: "bold",
                 align: "center",
               }
@@ -591,10 +591,10 @@ export default function MuseumScene({
             .text(
               this.map.widthInPixels + this.map2.widthInPixels - 50,
               this.map2.heightInPixels / 2 - 100,
-              "ROOM 3\nUNLOCKED!",
+              "✅ PHÒNG 3\nĐÃ MỞ KHÓA!",
               {
-                fontSize: "16px",
-                color: "#00ff00",
+                fontSize: "14px",
+                color: "#22c55e",
                 fontStyle: "bold",
                 align: "center",
               }
