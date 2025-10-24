@@ -63,6 +63,7 @@ export default function MuseumScene({
         room2Border: Phaser.GameObjects.Rectangle;
         room3Border: Phaser.GameObjects.Rectangle;
       } | null = null;
+      private topBorder!: Phaser.GameObjects.Rectangle;
       private map!: Phaser.Tilemaps.Tilemap;
       private layer1!: Phaser.Tilemaps.TilemapLayer;
       private layer2!: Phaser.Tilemaps.TilemapLayer;
@@ -219,6 +220,16 @@ export default function MuseumScene({
           })
           .setOrigin(0.5)
           .setDepth(10);
+
+        this.topBorder = this.add.rectangle(
+          this.map.widthInPixels / 2 + this.map2.widthInPixels / 2 + this.map3.widthInPixels / 2,
+          70,
+          this.map.widthInPixels + this.map2.widthInPixels + this.map3.widthInPixels,
+          20,
+          0xff0000,
+          0
+        );
+        this.physics.add.existing(this.topBorder, true);
 
         this.add.rectangle(720 + this.map.widthInPixels, 100, 600, 60, 0x0f3460);
         this.add
@@ -406,6 +417,8 @@ export default function MuseumScene({
         } else {
           console.log("Room borders not found!");
         }
+
+        this.physics.add.collider(this.player, this.topBorder);
       }
 
       createColumn(x: number, y: number, roomNumber: number, title: string) {
