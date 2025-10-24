@@ -49,7 +49,7 @@ export default function MuseumPage() {
         }, 0);
       }
     }
-  }, [currentPlayer]); // Removed allPlayers from dependencies to break the loop
+  }, [currentPlayer]);
 
   useEffect(() => {
     if (currentPlayer && !isLoadingPlayer.current && allPlayers.length > 0) {
@@ -119,11 +119,6 @@ export default function MuseumPage() {
     setShowInstructions(false);
   }, []);
 
-  const handleStartQuiz = useCallback((roomNumber: number) => {
-    setCurrentQuizRoom(roomNumber);
-    setShowQuiz(true);
-  }, []);
-
   const handleQuizPass = useCallback(() => {
     if (currentQuizRoom !== null) {
       const roomToUnlock = currentQuizRoom + 1;
@@ -151,12 +146,6 @@ export default function MuseumPage() {
   const handleQuizClose = useCallback(() => {
     setShowQuiz(false);
     setCurrentQuizRoom(null);
-  }, []);
-
-  const handleLogout = useCallback(() => {
-    setCurrentPlayer(null);
-    setShowStartScreen(true);
-    setShowInstructions(false);
   }, []);
 
   const handleDoorInteract = useCallback((roomNumber: number) => {
