@@ -168,8 +168,6 @@ export default function MuseumScene({
           this.createWall(x, 950, 40, 460, 0x1e293b);
 
           if (!unlockedRooms.has(i + 1)) {
-            const door = this.add.sprite(x, 600, "locked-door");
-
             const doorCollision = this.add.rectangle(
               x,
               600,
@@ -449,14 +447,6 @@ export default function MuseumScene({
           .setDepth(10);
 
         const columnPositions: any[] = [];
-
-        const r1r2BoundaryX = this.map.widthInPixels;
-        const r2r3BoundaryX = this.map.widthInPixels + this.map2.widthInPixels;
-        const getRoomNumberByX = (x: number) => {
-          if (x < r1r2BoundaryX) return 1;
-          if (x < r2r3BoundaryX) return 2;
-          return 3;
-        };
 
         columnPositions.forEach((pos) => {
           this.createColumn(pos.x, pos.y, pos.roomNumber, pos.title);
