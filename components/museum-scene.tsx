@@ -575,13 +575,14 @@ export default function MuseumScene({
         this.player.anims.play("idle-down");
 
         this.playerNameText = this.add
-          .text(this.player.x, this.player.y + 30, username, {
+          .text(this.player.x, this.player.y + 45, username, {
             fontSize: "14px",
             color: "#ffffff",
             backgroundColor: "#000000",
             padding: { x: 6, y: 3 },
           })
-          .setOrigin(0.5);
+          .setOrigin(0.5)
+          .setDepth(100);
 
         this.cameras.main.setBounds(
           0,
@@ -1260,7 +1261,7 @@ export default function MuseumScene({
 
           // Teleport player
           this.player.setPosition(targetPos.x, targetPos.y);
-          this.playerNameText.setPosition(targetPos.x, targetPos.y + 30);
+          this.playerNameText.setPosition(targetPos.x, targetPos.y + 45);
 
           // Update player position ref for persistence
           (window as any).playerPositionRef.current = {
@@ -1319,7 +1320,7 @@ export default function MuseumScene({
 
           // Teleport player
           this.player.setPosition(targetPos.x, targetPos.y);
-          this.playerNameText.setPosition(targetPos.x, targetPos.y + 30);
+          this.playerNameText.setPosition(targetPos.x, targetPos.y + 45);
 
           // Update player position ref for persistence
           (window as any).playerPositionRef.current = {
@@ -1416,7 +1417,7 @@ export default function MuseumScene({
           this.player.anims.play(`idle-${lastDirection}`, true);
         }
 
-        this.playerNameText.setPosition(this.player.x, this.player.y + 30);
+        this.playerNameText.setPosition(this.player.x, this.player.y + 45);
 
         this.nearLockedDoor = null;
         if (this.roomBorders) {
