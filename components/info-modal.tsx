@@ -36,14 +36,14 @@ export default function InfoModal({
         onClick={onClose}
       />
 
-      <div className="relative bg-[#16213e] border border-[#0f3460] rounded-lg max-w-3xl w-full max-h-[80vh] overflow-y-auto no-scrollbar shadow-2xl">
+      <div className="relative bg-[#16213e] border border-[#0f3460] rounded-lg max-w-5xl w-full max-h-[80vh] overflow-y-auto no-scrollbar shadow-2xl">
+        {/* Header */}
         <div className="sticky top-0 bg-[#0f3460] px-6 py-4 flex items-center justify-between border-b border-[#1a1a2e]">
           <h2 className="text-xl font-bold text-[#e8e8e8] pr-8">
-            {exhibit.title}
+            {exhibit?.title}
           </h2>
-
           <div className="absolute left-6 top-4 text-xs text-[#94a3b8]">
-            Phòng {exhibit.roomNumber}
+            Phòng {exhibit?.roomNumber}
           </div>
           <button
             onClick={onClose}
@@ -54,46 +54,52 @@ export default function InfoModal({
           </button>
         </div>
 
+        {/* Split content: image + text */}
         <div className="p-6">
-          {exhibit.image && (
-            <div className="mb-6">
-              <Image
-                width={800}
-                height={256}
-                src={exhibit.image || "/placeholder.svg"}
-                alt={exhibit.title}
-                className="w-full h-64 object-cover rounded-lg border-2 border-[#0f3460]"
-              />
-            </div>
-          )}
-
-          <div className="prose prose-invert max-w-none">
-            <div className="text-[#cbd5e1] leading-relaxed space-y-4">
-              {exhibit.content.split("\n\n").map((paragraph, index) => (
-                <p key={index} className="text-base whitespace-pre-line">
-                  {paragraph}
-                </p>
-              ))}
-            </div>
-
-            {exhibit.examples && exhibit.examples.length > 0 && (
-              <div className="mt-6 p-4 bg-[#0f3460] rounded-lg border border-[#1a1a2e]">
-                <h3 className="text-lg font-semibold text-[#e8e8e8] mb-3">
-                  Dẫn chứng thực tiễn:
-                </h3>
-                <ul className="space-y-2 text-[#cbd5e1]">
-                  {exhibit.examples.map((example, index) => (
-                    <li key={index} className="flex gap-2">
-                      <span className="text-[#4ade80] mt-1">•</span>
-                      <span>{example}</span>
-                    </li>
-                  ))}
-                </ul>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+            {/* Left: Image */}
+            {exhibit?.image && (
+              <div className="md:sticky md:top-16">
+                <Image
+                  width={800}
+                  height={600}
+                  src={exhibit.image}
+                  alt={exhibit.title}
+                  className="w-full h-64 md:h-[420px] object-cover rounded-lg border-2 border-[#0f3460]"
+                />
               </div>
             )}
+
+            {/* Right: Text */}
+            <div className="prose prose-invert max-w-none">
+              <div className="text-[#cbd5e1] leading-relaxed space-y-4">
+                {exhibit?.content.split("\n\n").map((paragraph, index) => (
+                  <p key={index} className="text-base whitespace-pre-line">
+                    {paragraph}
+                  </p>
+                ))}
+              </div>
+
+              {exhibit?.examples && exhibit.examples.length > 0 && (
+                <div className="mt-6 p-4 bg-[#0f3460] rounded-lg border border-[#1a1a2e]">
+                  <h3 className="text-lg font-semibold text-[#e8e8e8] mb-3">
+                    Dẫn chứng thực tiễn:
+                  </h3>
+                  <ul className="space-y-2 text-[#cbd5e1]">
+                    {exhibit.examples.map((example, index) => (
+                      <li key={index} className="flex gap-2">
+                        <span className="text-[#4ade80] mt-1">•</span>
+                        <span>{example}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
+        {/* Footer */}
         <div className="sticky bottom-0 bg-[#0f3460] px-6 py-4 border-t border-[#1a1a2e]">
           <button
             onClick={onClose}

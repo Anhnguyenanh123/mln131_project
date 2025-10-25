@@ -6,10 +6,11 @@ export const museumData: ExhibitData[] = [
     title: "Sự ra đời, phát triển của nền dân chủ xã hội chủ nghĩa ở Việt Nam",
     position: { x: 300, y: 300 },
     roomNumber: 1,
+    image: "/pic/r1-e1.webp",
     content: `Chế độ dân chủ nhân dân ở nước ta được xác lập sau Cách mạng Tháng Tám năm 1945. 
 Đến năm 1976, tên nước được đổi thành Cộng hòa xã hội chủ nghĩa Việt Nam, nhưng trong các Văn kiện Đảng hầu như chưa sử dụng cụm từ "dân chủ xã hội chủ nghĩa" mà thường nêu quan điểm "xây dựng chế độ làm chủ tập thể xã hội chủ nghĩa" gắn với "nắm vững chuyên chính vô sản". 
 Bản chất của dân chủ xã hội chủ nghĩa, mối quan hệ giữa dân chủ xã hội chủ nghĩa và nhà nước pháp quyền xã hội chủ nghĩa, cũng chưa được xác định rõ ràng. 
-Việc xây dựng nền dân chủ xã hội chủ nghĩa, đặc biệt là thực hiện dân chủ trong thời kỳ quá độ lên chủ nghĩa xã hội ở Việt Nam như thế nào cho phù hợp với đặc điểm kinh tế, xã hội, văn hóa, đạo đức của xã hội Việt Nam, gắn với hoàn thiện hệ thống pháp luật, kỷ cương cũng chưa được đặt ra một cách cụ thể, thiết thực. 
+Việc xây dựng nền dân chủ xã hội chủ nghĩa, đặc biệt là thực hiện dân chủ trong thời kỳ quá độ lên chủ nghĩa xã hội ở Việt Nam như thế nào cho phù hợp với đặc điểm kinh tế, xã hội, văn hóa, đạo đức của xã hội Việt Nam, gắn với hoàn thiện hệ thống pháp luật, kỷ cương cũa được đặt ra một cách cụ thể, thiết thực. 
 Nhiều lĩnh vực liên quan mật thiết đến dân chủ xã hội chủ nghĩa như dân sinh, dân trí, dân quyền... chưa được đặt đúng vị trí và giải quyết đúng để thúc đẩy việc xây dựng nền dân chủ xã hội chủ nghĩa.
 
 Đại hội VI của Đảng (năm 1986) đã đề ra đường lối đổi mới toàn diện đất nước, nhấn mạnh phát huy dân chủ để tạo ra một động lực mạnh mẽ cho phát triển đất nước. 
@@ -32,6 +33,7 @@ Dân chủ gắn liền với kỷ luật, kỷ cương và phải được th�
     title: "Bản chất của nền dân chủ xã hội chủ nghĩa ở Việt Nam",
     position: { x: 300, y: 600 },
     roomNumber: 1,
+    image: "/pic/r1-e2.jpg",
     content: `Cũng như bản chất của nền dân chủ xã hội chủ nghĩa nói chung, ở Việt Nam, bản chất dân chủ xã hội chủ nghĩa là dựa vào Nhà nước xã hội chủ nghĩa và sự ủng hộ, giúp đỡ của nhân dân. 
 Đây là nền dân chủ mà con người là thành viên trong xã hội với tư cách công dân, tư cách của người làm chủ. 
 Quyền làm chủ của nhân dân là tất cả quyền lực đều thuộc về nhân dân, dân là gốc, là chủ, dân làm chủ. 
@@ -71,6 +73,7 @@ Bản chất ưu việt của nền dân chủ xã hội chủ nghĩa Việt Nam
     title: "Quan niệm về Nhà nước pháp quyền xã hội chủ nghĩa ở Việt Nam",
     position: { x: 300, y: 900 },
     roomNumber: 2,
+    image: "/pic/r2-e1.jpg",
     content: `Nhà nước pháp quyền là nhà nước thượng tôn pháp luật, hướng tới phúc lợi, tự do, bình đẳng cho mọi người. 
 Trong đó, quyền lực nhà nước được phân công, phối hợp và kiểm soát lẫn nhau; mọi công dân phải hiểu biết, tuân thủ pháp luật.
 
@@ -91,6 +94,7 @@ Nhà nước quản lý xã hội bằng pháp luật; mọi tổ chức, cán b
     title: "Đặc điểm của Nhà nước pháp quyền xã hội chủ nghĩa Việt Nam",
     position: { x: 700, y: 600 },
     roomNumber: 2,
+    image: "/pic/r2-e2.jpg",
     content: `Đặc điểm cơ bản của Nhà nước pháp quyền xã hội chủ nghĩa Việt Nam:
 
 1. Là nhà nước của dân, do dân, vì dân – nhân dân lao động làm chủ.
@@ -108,6 +112,7 @@ Nhà nước quản lý xã hội bằng pháp luật; mọi tổ chức, cán b
     title: "Phát huy dân chủ xã hội chủ nghĩa ở Việt Nam hiện nay",
     position: { x: 1300, y: 300 },
     roomNumber: 3,
+    image: "/pic/r3-e1.jpg",
     content: `Để phát huy dân chủ xã hội chủ nghĩa hiện nay, cần:
 
 1. **Hoàn thiện thể chế kinh tế thị trường định hướng XHCN:** 
@@ -132,6 +137,7 @@ Nhà nước quản lý xã hội bằng pháp luật; mọi tổ chức, cán b
       "Tiếp tục xây dựng và hoàn thiện Nhà nước pháp quyền xã hội chủ nghĩa",
     position: { x: 1300, y: 600 },
     roomNumber: 3,
+    image: "/pic/r4-e2.jpg",
     content: `Các nhiệm vụ trọng tâm:
 
 1. **Xây dựng Nhà nước pháp quyền dưới sự lãnh đạo của Đảng:** 
