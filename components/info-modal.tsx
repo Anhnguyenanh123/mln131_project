@@ -37,7 +37,7 @@ export default function InfoModal({
         onClose();
       }
     };
-    
+
     document.addEventListener("keydown", handleEscape);
     return () => document.removeEventListener("keydown", handleEscape);
   }, [isOpen, onClose]);
@@ -53,7 +53,7 @@ export default function InfoModal({
 
       <div className="relative bg-[#16213e] border border-[#0f3460] rounded-lg max-w-4xl w-full max-h-[85vh] overflow-hidden shadow-2xl">
         {/* Header */}
-        <div className="sticky top-0 bg-gradient-to-r from-[#0f3460] to-[#16213e] px-6 py-4 flex items-center justify-between border-b border-[#1a1a2e] z-10">
+        <div className="sticky top-0 bg-linear-to-r from-[#0f3460] to-[#16213e] px-6 py-4 flex items-center justify-between border-b border-[#1a1a2e] z-10">
           <div className="flex-1">
             <div className="text-xs text-[#4ade80] font-medium mb-1">
               Phòng {exhibit.roomNumber}
@@ -62,7 +62,7 @@ export default function InfoModal({
               {exhibit.title}
             </h2>
           </div>
-          
+
           <button
             onClick={onClose}
             className="ml-4 p-2 rounded-lg hover:bg-[#1a1a2e] transition-colors group"
@@ -94,96 +94,83 @@ export default function InfoModal({
                 components={{
                   // Headings
                   h1: ({ node, ...props }) => (
-                    <h1 
-                      className="text-3xl font-bold text-[#e8e8e8] mb-4 mt-8 pb-3 border-b-2 border-[#4ade80]" 
-                      {...props} 
+                    <h1
+                      className="text-3xl font-bold text-[#e8e8e8] mb-4 mt-8 pb-3 border-b-2 border-[#4ade80]"
+                      {...props}
                     />
                   ),
                   h2: ({ node, ...props }) => (
-                    <h2 
-                      className="text-2xl font-bold text-[#e8e8e8] mb-3 mt-6 pb-2 border-b border-[#0f3460]" 
-                      {...props} 
+                    <h2
+                      className="text-2xl font-bold text-[#e8e8e8] mb-3 mt-6 pb-2 border-b border-[#0f3460]"
+                      {...props}
                     />
                   ),
                   h3: ({ node, ...props }) => (
-                    <h3 
-                      className="text-xl font-semibold text-[#e8e8e8] mb-3 mt-5" 
-                      {...props} 
+                    <h3
+                      className="text-xl font-semibold text-[#e8e8e8] mb-3 mt-5"
+                      {...props}
                     />
                   ),
                   h4: ({ node, ...props }) => (
-                    <h4 
-                      className="text-lg font-semibold text-[#cbd5e1] mb-2 mt-4" 
-                      {...props} 
+                    <h4
+                      className="text-lg font-semibold text-[#cbd5e1] mb-2 mt-4"
+                      {...props}
                     />
                   ),
                   h5: ({ node, ...props }) => (
-                    <h5 
-                      className="text-base font-semibold text-[#cbd5e1] mb-2 mt-3" 
-                      {...props} 
+                    <h5
+                      className="text-base font-semibold text-[#cbd5e1] mb-2 mt-3"
+                      {...props}
                     />
                   ),
                   h6: ({ node, ...props }) => (
-                    <h6 
-                      className="text-sm font-semibold text-[#94a3b8] mb-2 mt-3" 
-                      {...props} 
+                    <h6
+                      className="text-sm font-semibold text-[#94a3b8] mb-2 mt-3"
+                      {...props}
                     />
                   ),
 
                   // Paragraphs
                   p: ({ node, ...props }) => (
-                    <p 
-                      className="text-base leading-relaxed mb-4 text-[#cbd5e1]" 
-                      {...props} 
+                    <p
+                      className="text-base leading-relaxed mb-4 text-[#cbd5e1]"
+                      {...props}
                     />
                   ),
 
                   // Text formatting
                   strong: ({ node, ...props }) => (
-                    <strong 
-                      className="font-bold text-[#e8e8e8]" 
-                      {...props} 
-                    />
+                    <strong className="font-bold text-[#e8e8e8]" {...props} />
                   ),
                   em: ({ node, ...props }) => (
-                    <em 
-                      className="italic text-[#94a3b8]" 
-                      {...props} 
-                    />
+                    <em className="italic text-[#94a3b8]" {...props} />
                   ),
 
                   // Lists
                   ul: ({ node, ...props }) => (
-                    <ul 
-                      className="list-none mb-5 space-y-2 text-[#cbd5e1] pl-0" 
-                      {...props} 
+                    <ul
+                      className="list-none mb-5 space-y-2 text-[#cbd5e1] pl-0"
+                      {...props}
                     />
                   ),
                   ol: ({ node, ...props }) => (
-                    <ol 
-                      className="list-none mb-5 space-y-2 text-[#cbd5e1] pl-0 counter-reset-list" 
-                      {...props} 
+                    <ol
+                      className="list-none mb-5 space-y-2 text-[#cbd5e1] pl-0 counter-reset-list"
+                      {...props}
                     />
                   ),
-                  li: ({ node, ordered, ...props }) => (
-                    <li 
-                      className={`text-base flex gap-3 ${
-                        ordered ? "counter-increment-list" : ""
-                      }`}
-                      {...props}
-                    >
-                      <span className="text-[#4ade80] font-bold mt-0.5 flex-shrink-0">
-                        {ordered ? <span className="counter-content" /> : "•"}
-                      </span>
+                  li: ({ node, ...props }) => (
+                    <li className="text-base flex gap-3" {...props}>
+                      <span className="marker text-[#4ade80] font-bold mt-0.5 shrink-0" />
                       <span className="flex-1">{props.children}</span>
                     </li>
                   ),
 
                   // Blockquote
                   blockquote: ({ node, ...props }) => (
-                    <blockquote 
-                      className="border-l-4 border-[#4ade80] pl-4 py-3 my-5 bg-[#0f3460]/30 rounded-r-lg italic text-[#94a3b8]" 
-                      {...props} 
+                    <blockquote
+                      className="border-l-4 border-[#4ade80] pl-4 py-3 my-5 bg-[#0f3460]/30 rounded-r-lg italic text-[#94a3b8]"
+                      {...props}
                     />
                   ),
 
@@ -191,9 +178,9 @@ export default function InfoModal({
                   code: ({ node, inline, className, ...props }: any) => {
                     const match = /language-(\w+)/.exec(className || "");
                     return inline ? (
-                      <code 
-                        className="bg-[#0f3460] px-2 py-0.5 rounded text-[#4ade80] text-sm font-mono" 
-                        {...props} 
+                      <code
+                        className="bg-[#0f3460] px-2 py-0.5 rounded text-[#4ade80] text-sm font-mono"
+                        {...props}
                       />
                     ) : (
                       <div className="my-5">
@@ -202,11 +189,11 @@ export default function InfoModal({
                             {match[1]}
                           </div>
                         )}
-                        <code 
+                        <code
                           className={`block bg-[#0f3460] p-4 ${
                             match ? "rounded-b-lg" : "rounded-lg"
                           } text-[#4ade80] text-sm overflow-x-auto font-mono leading-relaxed`}
-                          {...props} 
+                          {...props}
                         />
                       </div>
                     );
@@ -214,67 +201,58 @@ export default function InfoModal({
 
                   // Links
                   a: ({ node, ...props }) => (
-                    <a 
-                      className="text-[#4ade80] hover:text-[#22c55e] underline decoration-2 underline-offset-2 transition-colors" 
+                    <a
+                      className="text-[#4ade80] hover:text-[#22c55e] underline decoration-2 underline-offset-2 transition-colors"
                       target="_blank"
                       rel="noopener noreferrer"
-                      {...props} 
+                      {...props}
                     />
                   ),
 
                   // Horizontal rule
                   hr: ({ node, ...props }) => (
-                    <hr 
-                      className="my-8 border-t-2 border-[#0f3460]" 
-                      {...props} 
+                    <hr
+                      className="my-8 border-t-2 border-[#0f3460]"
+                      {...props}
                     />
                   ),
 
                   // Tables
                   table: ({ node, ...props }) => (
                     <div className="overflow-x-auto my-5">
-                      <table 
-                        className="w-full border-collapse border border-[#0f3460] rounded-lg" 
-                        {...props} 
+                      <table
+                        className="w-full border-collapse border border-[#0f3460] rounded-lg"
+                        {...props}
                       />
                     </div>
                   ),
                   thead: ({ node, ...props }) => (
-                    <thead 
-                      className="bg-[#0f3460]" 
-                      {...props} 
-                    />
+                    <thead className="bg-[#0f3460]" {...props} />
                   ),
                   tbody: ({ node, ...props }) => (
-                    <tbody 
-                      className="bg-[#16213e]" 
-                      {...props} 
-                    />
+                    <tbody className="bg-[#16213e]" {...props} />
                   ),
                   tr: ({ node, ...props }) => (
-                    <tr 
-                      className="border-b border-[#0f3460]" 
-                      {...props} 
-                    />
+                    <tr className="border-b border-[#0f3460]" {...props} />
                   ),
                   th: ({ node, ...props }) => (
-                    <th 
-                      className="px-4 py-3 text-left text-[#e8e8e8] font-semibold border border-[#0f3460]" 
-                      {...props} 
+                    <th
+                      className="px-4 py-3 text-left text-[#e8e8e8] font-semibold border border-[#0f3460]"
+                      {...props}
                     />
                   ),
                   td: ({ node, ...props }) => (
-                    <td 
-                      className="px-4 py-3 text-[#cbd5e1] border border-[#0f3460]" 
-                      {...props} 
+                    <td
+                      className="px-4 py-3 text-[#cbd5e1] border border-[#0f3460]"
+                      {...props}
                     />
                   ),
 
                   // Images
                   img: ({ node, ...props }) => (
-                    <img 
-                      className="rounded-lg border-2 border-[#0f3460] my-5 max-w-full h-auto" 
-                      {...props} 
+                    <img
+                      className="rounded-lg border-2 border-[#0f3460] my-5 max-w-full h-auto"
+                      {...props}
                     />
                   ),
                 }}
@@ -285,7 +263,7 @@ export default function InfoModal({
 
             {/* Examples Section */}
             {exhibit.examples && exhibit.examples.length > 0 && (
-              <div className="mt-8 p-5 bg-gradient-to-br from-[#0f3460] to-[#0a1929] rounded-lg border-2 border-[#4ade80]/30 shadow-lg">
+              <div className="mt-8 p-5 bg-linear-to-br from-[#0f3460] to-[#0a1929] rounded-lg border-2 border-[#4ade80]/30 shadow-lg">
                 <h3 className="text-xl font-semibold text-[#4ade80] mb-4 flex items-center gap-2">
                   <span className="text-2xl">💡</span>
                   Dẫn chứng thực tiễn
@@ -293,7 +271,7 @@ export default function InfoModal({
                 <ul className="space-y-3 text-[#cbd5e1]">
                   {exhibit.examples.map((example, index) => (
                     <li key={index} className="flex gap-3">
-                      <span className="text-[#4ade80] font-bold mt-1 flex-shrink-0">
+                      <span className="text-[#4ade80] font-bold mt-1 shrink-0">
                         {index + 1}.
                       </span>
                       <span className="flex-1 leading-relaxed">{example}</span>
@@ -306,26 +284,29 @@ export default function InfoModal({
         </div>
 
         {/* Footer */}
-        <div className="sticky bottom-0 bg-gradient-to-r from-[#0f3460] to-[#16213e] px-6 py-4 border-t border-[#1a1a2e]">
+        <div className="sticky bottom-0 bg-linear-to-r from-[#0f3460] to-[#16213e] px-6 py-4 border-t border-[#1a1a2e]">
           <button
             onClick={onClose}
-            className="w-full bg-gradient-to-r from-[#4ade80] to-[#22c55e] hover:from-[#22c55e] hover:to-[#16a34a] text-[#1a1a2e] font-semibold py-3 rounded-lg transition-all transform hover:scale-[1.02] active:scale-[0.98]"
+            className="w-full bg-linear-to-r from-[#4ade80] to-[#22c55e] hover:from-[#22c55e] hover:to-[#16a34a] text-[#1a1a2e] font-semibold py-3 rounded-lg transition-all transform hover:scale-[1.02] active:scale-[0.98]"
           >
             Đóng
           </button>
         </div>
       </div>
 
-      {/* Custom CSS for ordered list counters */}
+      {/* Custom CSS for list markers */}
       <style jsx global>{`
         .counter-reset-list {
           counter-reset: list-counter;
         }
-        .counter-increment-list {
+        .markdown-content ol li {
           counter-increment: list-counter;
         }
-        .counter-content::before {
+        .markdown-content ol li .marker::before {
           content: counter(list-counter) ".";
+        }
+        .markdown-content ul li .marker::before {
+          content: "•";
         }
         .no-scrollbar::-webkit-scrollbar {
           display: none;
