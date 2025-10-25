@@ -118,7 +118,7 @@ export default function MuseumScene({
       preload() {
         this.load.spritesheet("player", "/sprites/Adam_run.png", {
           frameWidth: 16,
-          frameHeight: 16,
+          frameHeight: 32,
         });
 
         this.load.tilemapTiledJSON("map1", "/tiles/map1.json");
@@ -499,8 +499,8 @@ export default function MuseumScene({
         this.anims.create({
           key: "walk-down",
           frames: this.anims.generateFrameNumbers("player", {
-            start: 0,
-            end: 2,
+            start: 18,
+            end: 23,
           }),
           frameRate: 8,
           repeat: -1,
@@ -510,7 +510,7 @@ export default function MuseumScene({
           key: "walk-left",
           frames: this.anims.generateFrameNumbers("player", {
             start: 12,
-            end: 14,
+            end: 17,
           }),
           frameRate: 8,
           repeat: -1,
@@ -519,8 +519,8 @@ export default function MuseumScene({
         this.anims.create({
           key: "walk-right",
           frames: this.anims.generateFrameNumbers("player", {
-            start: 24,
-            end: 26,
+            start: 0,
+            end: 5,
           }),
           frameRate: 8,
           repeat: -1,
@@ -529,8 +529,8 @@ export default function MuseumScene({
         this.anims.create({
           key: "walk-up",
           frames: this.anims.generateFrameNumbers("player", {
-            start: 36,
-            end: 38,
+            start: 6,
+            end: 11,
           }),
           frameRate: 8,
           repeat: -1,
@@ -538,13 +538,25 @@ export default function MuseumScene({
 
         this.anims.create({
           key: "idle-down",
-          frames: [{ key: "player", frame: 1 }],
+          frames: [{ key: "player", frame: 21 }],
           frameRate: 1,
         });
 
         this.anims.create({
           key: "idle-left",
-          frames: [{ key: "player", frame: 13 }],
+          frames: [{ key: "player", frame: 15 }],
+          frameRate: 1,
+        });
+
+        this.anims.create({
+          key: "idle-right",
+          frames: [{ key: "player", frame: 3 }],
+          frameRate: 1,
+        });
+
+        this.anims.create({
+          key: "idle-up",
+          frames: [{ key: "player", frame: 9 }],
           frameRate: 1,
         });
 
@@ -556,7 +568,7 @@ export default function MuseumScene({
 
         this.anims.create({
           key: "idle-up",
-          frames: [{ key: "player", frame: 37 }],
+          frames: [{ key: "player", frame: 10 }],
           frameRate: 1,
         });
 
