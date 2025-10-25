@@ -128,35 +128,17 @@ export default function QuizModal({
   const correctAnswerText = shuffledQuestions[currentQuestion].options[shuffledQuestions[currentQuestion].correctAnswer];
 
   return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-[#16213e] border-2 border-[#0f3460] rounded-xl max-w-3xl w-full max-h-[90vh] overflow-hidden shadow-2xl">
-        {/* Header */}
-        <div className="sticky top-0 bg-gradient-to-r from-[#0f3460] to-[#16213e] border-b-2 border-[#1a1a2e] p-6 z-10">
-          <div className="flex justify-between items-start mb-4">
-            <div className="flex-1">
-              <h2 className="text-2xl font-bold text-[#e8e8e8] mb-1">
-                🎯 Quiz Phòng {roomNumber}
-              </h2>
-              <p className="text-sm text-[#94a3b8]">
-                Trả lời đúng tất cả câu hỏi để mở khóa phòng tiếp theo
-              </p>
-            </div>
-            <button
-              onClick={onClose}
-              className="ml-4 p-2 hover:bg-[#1a1a2e] rounded-lg transition-colors text-[#94a3b8] hover:text-[#e8e8e8] group"
-              aria-label="Đóng"
-            >
-              <X className="w-6 h-6" />
-            </button>
-          </div>
-
-          {/* Progress Bar */}
-          <div className="space-y-2">
-            <div className="flex justify-between text-xs text-[#94a3b8]">
-              <span>Tiến độ</span>
-              <span>{currentQuestion + 1}/{shuffledQuestions.length}</span>
-            </div>
-            <div className="bg-[#1a1a2e] rounded-full h-3 overflow-hidden border border-[#0f3460]">
+    <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+      <div className="bg-[#16213e] border-2 border-[#0f3460] rounded-lg max-w-2xl w-full max-h-[95vh] overflow-y-auto no-scrollbar">
+        <div className="sticky top-0 bg-[#16213e] border-b border-[#0f3460] p-6 flex justify-between items-center">
+          <div className="flex-1">
+            <h2 className="text-2xl font-bold text-[#e8e8e8]">
+              Câu hỏi Phòng {roomNumber}
+            </h2>
+            <p className="text-sm text-[#94a3b8] mt-1">
+              Trả lời đúng tất cả câu hỏi để mở khóa phòng tiếp theo
+            </p>
+            <div className="mt-3 bg-[#1a1a2e] rounded-full h-2 overflow-hidden">
               <div
                 className="bg-gradient-to-r from-[#4ade80] to-[#22c55e] h-full transition-all duration-500 ease-out"
                 style={{ width: `${progress}%` }}
