@@ -69,7 +69,7 @@ export default function QuizModal({
 
   return (
     <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
-      <div className="bg-[#16213e] border-2 border-[#0f3460] rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+      <div className="bg-[#16213e] border-2 border-[#0f3460] rounded-lg max-w-2xl w-full max-h-[95vh] overflow-y-auto no-scrollbar">
         <div className="sticky top-0 bg-[#16213e] border-b border-[#0f3460] p-6 flex justify-between items-center">
           <div className="flex-1">
             <h2 className="text-2xl font-bold text-[#e8e8e8]">

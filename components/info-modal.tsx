@@ -62,14 +62,6 @@ export default function InfoModal({
               {exhibit.title}
             </h2>
           </div>
-
-          <button
-            onClick={onClose}
-            className="ml-4 p-2 rounded-lg hover:bg-[#1a1a2e] transition-colors group"
-            aria-label="Đóng"
-          >
-            <X className="w-6 h-6 text-[#94a3b8] group-hover:text-[#e8e8e8]" />
-          </button>
         </div>
 
         {/* Content */}
@@ -281,16 +273,6 @@ export default function InfoModal({
               </div>
             )}
           </div>
-        </div>
-
-        {/* Footer */}
-        <div className="sticky bottom-0 bg-linear-to-r from-[#0f3460] to-[#16213e] px-6 py-4 border-t border-[#1a1a2e]">
-          <button
-            onClick={onClose}
-            className="w-full bg-linear-to-r from-[#4ade80] to-[#22c55e] hover:from-[#22c55e] hover:to-[#16a34a] text-[#1a1a2e] font-semibold py-3 rounded-lg transition-all transform hover:scale-[1.02] active:scale-[0.98]"
-          >
-            Đóng
-          </button>
         </div>
       </div>
 
