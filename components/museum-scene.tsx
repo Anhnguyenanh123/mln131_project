@@ -617,7 +617,8 @@ export default function MuseumScene({
           })
           .setOrigin(0.5)
           .setVisible(false)
-          .setScrollFactor(0);
+          .setScrollFactor(0)
+          .setDepth(100);
 
         this.interactKey.on("down", () => {
           if (this.nearQuizPoint) {
