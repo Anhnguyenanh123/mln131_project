@@ -24,8 +24,8 @@ export default function Minimap({
     return () => window.removeEventListener("playerMove", handlePlayerMove);
   }, []);
 
-  const scaleX = 480 / 4320; 
-  const scaleY = 110 / 960; 
+  const scaleX = 480 / 4320;
+  const scaleY = 110 / 960;
 
   return (
     <div className="fixed top-20 right-4 bg-[#16213e]/90 border-2 border-[#0f3460] rounded-lg p-3 backdrop-blur-sm max-w-[520px]">
@@ -124,21 +124,25 @@ export default function Minimap({
               unlockedRooms.has(1) ? "text-[#3b82f6]" : "text-[#64748b]"
             }`}
           >
-            Phòng 1: Khởi nguồn {unlockedRooms.has(1) ? "✓" : "🔒"}
+            3.1. Dân chủ xã hội chủ nghĩa ở Việt Nam{" "}
+            {unlockedRooms.has(1) ? "✓" : "🔒"}
           </div>
           <div
             className={`font-semibold ${
               unlockedRooms.has(2) ? "text-[#ef4444]" : "text-[#64748b]"
             }`}
           >
-            Phòng 2: Bản chất {unlockedRooms.has(2) ? "✓" : "🔒"}
+            3.2. Nhà nước pháp quyền xã hội chủ nghĩa ở Việt Nam{" "}
+            {unlockedRooms.has(2) ? "✓" : "🔒"}
           </div>
           <div
             className={`font-semibold ${
               unlockedRooms.has(3) ? "text-[#f59e0b]" : "text-[#64748b]"
             }`}
           >
-            Phòng 3: Pháp quyền {unlockedRooms.has(3) ? "✓" : "🔒"}
+            3.3. Phát huy dân chủ xã hội chủ nghĩa, xây dựng Nhà nước pháp quyền
+            xã hội chủ nghĩa ở Việt Nam hiện nay{" "}
+            {unlockedRooms.has(3) ? "✓" : "🔒"}
           </div>
         </div>
       </div>
